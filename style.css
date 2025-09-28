@@ -1,5 +1,5 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
 }
@@ -20,7 +20,6 @@ header {
   gap: 20px;
   padding: 2rem;
 }
-
 
 /* En pantallas pequeñas (celulares) forzar 2 columnas */
 @media (max-width: 768px) {
@@ -56,8 +55,6 @@ header {
   border-radius: 5px;
 }
 
-
-
 button {
   background: #102D69;
   color: white;
@@ -65,6 +62,7 @@ button {
   padding: 10px;
   cursor: pointer;
   border-radius: 5px;
+  transition: background 0.3s ease;
 }
 
 button:hover {
@@ -86,6 +84,13 @@ button:hover {
   border-radius: 50%;
   font-size: 24px;
   text-decoration: none;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: background 0.3s ease, transform 0.2s;
+}
+
+.whatsapp-float:hover {
+  background: #1ebe5b;
+  transform: translateY(-2px);
 }
 
 /* ========================
@@ -112,22 +117,30 @@ button:hover {
   width: 100%;
   max-height: 500px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .detail-right h2 {
-  font-size: 24px;
-  margin-bottom: 10px;
-}
-
-.price {
-  font-size: 20px;
+  font-size: 28px;
   font-weight: bold;
   color: #102D69;
   margin-bottom: 15px;
 }
 
+.price {
+  font-size: 20px;
+  font-weight: bold;
+  color: #00A0B7;
+  margin-bottom: 15px;
+}
+
 .description {
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 8px;
+  line-height: 1.6;
+  color: #444;
   font-size: 16px;
   margin-bottom: 20px;
 }
@@ -136,14 +149,18 @@ button:hover {
   display: inline-block;
   background: #25D366;
   color: white;
-  padding: 12px 20px;
-  border-radius: 5px;
-  font-size: 16px;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
   text-decoration: none;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  transition: background 0.3s ease, transform 0.2s;
 }
 
 .btn-whatsapp:hover {
   background: #1ebe5b;
+  transform: translateY(-2px);
 }
 
 /* Responsive para móviles */
@@ -169,14 +186,16 @@ button:hover {
   width: 80px;
   height: 80px;
   object-fit: cover;
-  border-radius: 5px;
+  border-radius: 6px;
   border: 2px solid transparent;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   cursor: pointer;
-  transition: border 0.2s;
+  transition: transform 0.2s, border 0.2s;
 }
 
 .gallery img.thumb:hover {
-  border: 2px solid #102D69;
+  border: 2px solid #00A0B7;
+  transform: scale(1.05);
 }
 
 .prices-table {
@@ -187,7 +206,7 @@ button:hover {
 
 .prices-table th, .prices-table td {
   border: 1px solid #ccc;
-  padding: 8px;
+  padding: 10px;
   text-align: center;
 }
 
@@ -199,4 +218,3 @@ button:hover {
 .prices-table tr:nth-child(even) {
   background: #f9f9f9;
 }
-
