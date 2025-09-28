@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "nombre": "Pijama Rosada",
+    "precio": 49900,
+    "descripcion": "Pijama de algodón suave, fresca y cómoda.",
+    "imagen": "img/3301.png"
+  },
+  {
+    "id": 2,
+    "nombre": "Vestido Floral",
+    "precio": 79900,
+    "descripcion": "Vestido largo con estampado floral ideal para verano.",
+    "imagen": "img/3303.jpg"
+  },
+  {
+    "id": 3,
+    "nombre": "Short Aguacates",
+    "precio": 39900,
+    "descripcion": "Short deportivo con diseño divertido de aguacates.",
+    "imagen": "img/3305.jpg"
+  }
+]
