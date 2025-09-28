@@ -1,20 +1,15 @@
 [
   {
-    "id": 1,
-    "nombre": "Ref 3301",
-    
-    "precio": Desde $8.999,
-    "descripcion": "TELA: Piel de durazno.
-		   Estampados surtidos.
-   	           Precios por Cantidad:
-                   - Valor x 1: $18.000
-                   - Valor x 6: $69.000 ($11.500 c/u)
-                   - Valor x 12: $114.000 ($9.500 c/u)
-                   - Valor x 120+: $8.999c/u`,",
-      "imagenes": [
-      "img/3301.png",
-      "img/3301(1).png",
-      "img/3301(2).png"
+   {
+  "id": 1,
+  "nombre": "Ref 3301",
+  "precio": 8999,
+  "descripcion": "TELA: Piel de durazno.\nEstampados surtidos.\nPrecios por Cantidad:\n- Valor x 1: $18.000\n- Valor x 6: $69.000 ($11.500 c/u)\n- Valor x 12: $114.000 ($9.500 c/u)\n- Valor x 120+: $8.999 c/u",
+  "imagenes": [
+    "img/3301-1.png",
+    "img/3301-2.png"
+  ]
+}"
   },
   {
     "id": 2,
