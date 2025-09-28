@@ -14,20 +14,27 @@
     </nav>
   </header>
 
- <main class="product-detail">
-<div class="detail-right">
-  <h2 id="product-name"></h2>
-  <p id="product-description" class="description"></p>
+<main class="product-detail">
+  <!-- Imagen principal -->
+  <img id="product-img" class="detail-img" src="" alt="Imagen del producto">
 
-  <!-- Aquí se insertará la tabla de precios -->
-  <div id="product-prices"></div>
+  <!-- Columna derecha -->
+  <div class="detail-right">
+    <h2 id="product-name"></h2>
+    <p id="product-description" class="description"></p>
 
-  <a id="whatsapp-link" target="_blank" class="btn-whatsapp">Comprar por WhatsApp</a>
-</div>
+    <!-- Tabla dinámica de precios -->
+    <div id="product-prices"></div>
 
+    <!-- Galería de miniaturas -->
+    <div id="gallery" class="gallery"></div>
+
+    <!-- Botón WhatsApp -->
+    <a id="whatsapp-link" target="_blank" class="btn-whatsapp">Comprar por WhatsApp</a>
+  </div>
 </main>
 
+<script src="producto.js"></script>
 
-  <script src="producto.js"></script>
 </body>
 </html>
