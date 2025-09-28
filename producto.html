@@ -14,13 +14,22 @@
     </nav>
   </header>
 
-  <main class="product-detail">
+ <main class="product-detail">
+  <div class="detail-left">
+    <!-- Imagen principal -->
     <img id="product-img" class="detail-img" src="" alt="Imagen del producto">
+    <!-- Aquí aparecerán las miniaturas -->
+    <div id="gallery" class="gallery"></div>
+  </div>
+
+  <div class="detail-right">
     <h2 id="product-name"></h2>
     <p id="product-price" class="price"></p>
     <p id="product-description" class="description"></p>
     <a id="whatsapp-link" target="_blank" class="btn-whatsapp">Comprar por WhatsApp</a>
-  </main>
+  </div>
+</main>
+
 
   <script src="producto.js"></script>
 </body>

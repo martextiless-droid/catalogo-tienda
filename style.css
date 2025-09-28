@@ -157,3 +157,24 @@ button:hover {
     flex: 1 1 100%;
   }
 }
+
+.gallery {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.gallery img.thumb {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 5px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: border 0.2s;
+}
+
+.gallery img.thumb:hover {
+  border: 2px solid #102D69;
+}
