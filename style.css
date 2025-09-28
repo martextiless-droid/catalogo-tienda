@@ -14,10 +14,13 @@ header {
 
 .products {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  max-width: 1200px; /* evita que se estire demasiado */
+  margin: 0 auto;    /* centra la grilla */
   gap: 20px;
   padding: 2rem;
 }
+
 
 /* En pantallas pequeñas (celulares) forzar 2 columnas */
 @media (max-width: 768px) {
@@ -48,8 +51,8 @@ header {
 
 .product img {
   width: 100%;
-  height: 200px;          /* Alto estándar para todas las imágenes */
-  object-fit: cover;      /* Recorta/ajusta sin deformar */
+  height: 200px;   /* Alto estándar para todas las imágenes */
+  object-fit: cover;  /* Recorta/ajusta sin deformar */
   border-radius: 5px;
 }
 
