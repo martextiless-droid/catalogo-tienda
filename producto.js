@@ -28,13 +28,31 @@ fetch("productos.json")
   });
 
   // Resto de datos
-  document.getElementById("product-name").textContent = producto.nombre;
-  document.getElementById("product-price").textContent = "$" + producto.precio.toLocaleString("es-CO");
-  document.getElementById("product-description").textContent = producto.descripcion;
+document.getElementById("product-name").textContent = producto.nombre;
+document.getElementById("product-description").textContent = producto.descripcion;
+
+// Tabla de precios
+const pricesContainer = document.getElementById("product-prices");
+if (producto.precios && producto.precios.length > 0) {
+  let html = "<h3>Precios por Cantidad:</h3><table class='prices-table'>";
+  html += "<tr><th>Cantidad</th><th>Valor</th><th>Detalle</th></tr>";
+
+  producto.precios.forEach(p => {
+    html += `<tr>
+      <td>${p.cantidad}</td>
+      <td>$${p.valor.toLocaleString("es-CO")}</td>
+      <td>${p.detalle ? p.detalle : ""}</td>
+    </tr>`;
+  });
+
+  html += "</table>";
+  pricesContainer.innerHTML = html;
+}
+
 
   // WhatsApp link dinámico
   const mensaje = `Hola, quiero comprar el producto: ${producto.nombre} por $${producto.precio.toLocaleString("es-CO")}`;
-  document.getElementById("whatsapp-link").href = `https://wa.me/573001112233?text=${encodeURIComponent(mensaje)}`;
+  document.getElementById("whatsapp-link").href = `https://wa.me/573015547616?text=${encodeURIComponent(mensaje)}`;
 }
 
   });

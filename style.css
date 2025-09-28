@@ -178,3 +178,25 @@ button:hover {
 .gallery img.thumb:hover {
   border: 2px solid #102D69;
 }
+
+.prices-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+}
+
+.prices-table th, .prices-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+.prices-table th {
+  background: #102D69;
+  color: white;
+}
+
+.prices-table tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
