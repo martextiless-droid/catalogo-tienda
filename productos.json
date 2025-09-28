@@ -26,8 +26,8 @@
   ],
   "imagenes": [
     "img/3303.jpg",
-    "img/3301-1.png",
-    "img/3301-2.png"
+    "img/3303-1.jpg",
+    "img/3303-2.jpg"
   ]
 },
 {
@@ -41,9 +41,9 @@
     { "cantidad": 120, "valor": 8999, "detalle": "$8.999 c/u" }
   ],
   "imagenes": [
-    "img/3301.jpg",
-    "img/3301-1.png",
-    "img/3301-2.png"
+    "img/3305.jpg",
+    "img/3305-1.jpg",
+    "img/3305-2.jpg"
   ]
 }
 ]
