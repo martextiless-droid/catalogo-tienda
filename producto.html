@@ -15,10 +15,13 @@
   </header>
 
 <main class="product-detail">
-  <!-- Imagen principal -->
-  <img id="product-img" class="detail-img" src="" alt="Imagen del producto">
+  <!-- Columna izquierda: imagen grande + miniaturas -->
+  <div class="detail-left">
+    <img id="product-img" class="detail-img" src="" alt="Imagen del producto">
+    <div id="gallery" class="gallery"></div>
+  </div>
 
-  <!-- Columna derecha -->
+  <!-- Columna derecha: texto + precios + botón -->
   <div class="detail-right">
     <h2 id="product-name"></h2>
     <p id="product-description" class="description"></p>
@@ -26,13 +29,11 @@
     <!-- Tabla dinámica de precios -->
     <div id="product-prices"></div>
 
-    <!-- Galería de miniaturas -->
-    <div id="gallery" class="gallery"></div>
-
     <!-- Botón WhatsApp -->
     <a id="whatsapp-link" target="_blank" class="btn-whatsapp">Comprar por WhatsApp</a>
   </div>
 </main>
+
 
 <script src="producto.js"></script>
 
