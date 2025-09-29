@@ -87,8 +87,8 @@ header h1 {
 
 .btn {
   display: inline-block;
-  background: #102D69;
-  color: white;
+  background: #111;   /* negro */
+  color: white;       /* letras blancas */
   padding: 8px 12px;
   border-radius: 5px;
   font-size: 14px;
@@ -97,8 +97,10 @@ header h1 {
 }
 
 .btn:hover {
-  background: #00A0B7;
+  background: #333;   /* gris oscuro al pasar el mouse */
+  color: white;
 }
+
 
 /* ========================
    Detalle de producto
@@ -214,8 +216,8 @@ header h1 {
 }
 
 .prices-table th {
-  background: #102D69;
-  color: white;
+  background: #111; /* negro */
+  color: white;     /* letras blancas */
   font-weight: bold;
 }
 
