@@ -1,34 +1,45 @@
+/* ========================
+   Estilos globales
+   ======================== */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  background: #f9f9f9;
+  color: #333;
 }
 
 header {
   background: #102D69;
   color: white;
-  padding: 1rem;
+  padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
+header h1 {
+  margin: 0;
+}
+
+/* ========================
+   Grilla de productos
+   ======================== */
 .products {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  max-width: 1200px; /* evita que se estire demasiado */
-  margin: 0 auto;    /* centra la grilla */
+  max-width: 1200px;
+  margin: 0 auto;
   gap: 20px;
   padding: 2rem;
 }
 
-/* En pantallas pequeñas (celulares) forzar 2 columnas */
 @media (max-width: 768px) {
   .products {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* En pantallas muy pequeñas (menos de 400px) 1 sola columna */
 @media (max-width: 400px) {
   .products {
     grid-template-columns: 1fr;
@@ -36,65 +47,61 @@ header {
 }
 
 .product {
-  border: 1px solid #ccc;
-  padding: 1rem;
-  text-align: center;
+  border: 1px solid #ddd;
   border-radius: 8px;
   background: white;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 350px; /* Alto fijo de las tarjetas */
+  padding: 1rem;
+  height: 380px; /* altura uniforme */
+  transition: transform 0.2s ease;
+}
+
+.product:hover {
+  transform: translateY(-5px);
 }
 
 .product img {
   width: 100%;
-  height: 200px;   /* Alto estándar para todas las imágenes */
-  object-fit: cover;  /* Recorta/ajusta sin deformar */
+  height: 200px;
+  object-fit: cover;
   border-radius: 5px;
+  transition: transform 0.3s ease;
 }
 
-button {
+.product img:hover {
+  transform: scale(1.05);
+}
+
+.product h3 {
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+}
+
+.product p {
+  margin: 0.3rem 0;
+  color: #555;
+}
+
+.btn {
+  display: inline-block;
   background: #102D69;
   color: white;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
+  padding: 8px 12px;
   border-radius: 5px;
-  transition: background 0.3s ease;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background 0.2s;
 }
 
-button:hover {
+.btn:hover {
   background: #00A0B7;
 }
 
-#cart {
-  background: #f8f8f8;
-  padding: 2rem;
-}
-
-.whatsapp-float {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #25D366;
-  color: white;
-  padding: 15px;
-  border-radius: 50%;
-  font-size: 24px;
-  text-decoration: none;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  transition: background 0.3s ease, transform 0.2s;
-}
-
-.whatsapp-float:hover {
-  background: #1ebe5b;
-  transform: translateY(-2px);
-}
-
 /* ========================
-   Estilos para detalle producto
+   Detalle de producto
    ======================== */
 .product-detail {
   display: flex;
@@ -103,6 +110,7 @@ button:hover {
   max-width: 1000px;
   margin: 2rem auto;
   align-items: flex-start;
+  padding: 0 1rem;
 }
 
 .detail-left {
@@ -117,64 +125,55 @@ button:hover {
   width: 100%;
   max-height: 500px;
   object-fit: cover;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.detail-img:hover {
+  transform: scale(1.03);
 }
 
 .detail-right h2 {
-  font-size: 28px;
-  font-weight: bold;
-  color: #102D69;
-  margin-bottom: 15px;
-}
-
-.price {
-  font-size: 20px;
-  font-weight: bold;
-  color: #00A0B7;
-  margin-bottom: 15px;
+  font-size: 24px;
+  margin-bottom: 10px;
 }
 
 .description {
-  background: #f9f9f9;
-  padding: 1rem;
-  border-radius: 8px;
-  line-height: 1.6;
-  color: #444;
   font-size: 16px;
   margin-bottom: 20px;
+  line-height: 1.5;
 }
 
 .btn-whatsapp {
   display: inline-block;
   background: #25D366;
   color: white;
-  padding: 14px 28px;
-  border-radius: 8px;
-  font-size: 18px;
-  font-weight: bold;
+  padding: 12px 20px;
+  border-radius: 5px;
+  font-size: 16px;
   text-decoration: none;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-  transition: background 0.3s ease, transform 0.2s;
+  font-weight: bold;
+  transition: background 0.2s;
 }
 
 .btn-whatsapp:hover {
   background: #1ebe5b;
-  transform: translateY(-2px);
 }
 
-/* Responsive para móviles */
+/* Responsive móviles */
 @media (max-width: 768px) {
   .product-detail {
     flex-direction: column;
     text-align: center;
   }
-
   .detail-left, .detail-right {
     flex: 1 1 100%;
   }
 }
 
+/* ========================
+   Galería de miniaturas
+   ======================== */
 .gallery {
   margin-top: 15px;
   display: flex;
@@ -186,26 +185,30 @@ button:hover {
   width: 80px;
   height: 80px;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 5px;
   border: 2px solid transparent;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   cursor: pointer;
-  transition: transform 0.2s, border 0.2s;
+  transition: border 0.2s, transform 0.2s;
 }
 
 .gallery img.thumb:hover {
-  border: 2px solid #00A0B7;
+  border: 2px solid #102D69;
   transform: scale(1.05);
 }
 
+/* ========================
+   Tabla de precios
+   ======================== */
 .prices-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 15px 0;
+  margin: 20px 0;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .prices-table th, .prices-table td {
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
   padding: 10px;
   text-align: center;
 }
@@ -213,6 +216,7 @@ button:hover {
 .prices-table th {
   background: #102D69;
   color: white;
+  font-weight: bold;
 }
 
 .prices-table tr:nth-child(even) {
