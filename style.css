@@ -10,8 +10,8 @@ body {
 }
 
 header {
-  background: #102D69;
-  color: white;
+  background: #111;   /* negro */
+  color: white;       /* letras blancas */
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
@@ -20,6 +20,8 @@ header {
 
 header h1 {
   margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 /* ========================
