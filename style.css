@@ -230,3 +230,15 @@ header h1 {
 .prices-table tr:nth-child(even) {
   background: #f9f9f9;
 }
+
+/* Estilo del link "Volver al catálogo" */
+header nav a {
+  color: white;              /* texto blanco */
+  text-decoration: none;     /* sin subrayado */
+  font-weight: bold;         /* en negrilla */
+}
+
+header nav a:hover {
+  color: #00A0B7;            /* azul elegante cuando pasas el mouse */
+  text-decoration: underline; 
+}
