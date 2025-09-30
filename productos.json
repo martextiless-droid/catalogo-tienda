@@ -792,7 +792,7 @@
            { "cantidad": 120, "valor": 8999, "detalle": "$8.999 c/u" }
         ],
            "imagenes": [
-           "img/1210.jpg"
+           "img/1210.png"
         ]
 
         },
@@ -807,7 +807,7 @@
            { "cantidad": 120, "valor": 8999, "detalle": "$8.999 c/u" }
         ],
            "imagenes": [
-           "img/1218.jpg"
+           "img/1218.png"
         ]
 
         },
@@ -852,7 +852,7 @@
            { "cantidad": 120, "valor": 8999, "detalle": "$8.999 c/u" }
         ],
            "imagenes": [
-           "img/1061.jpg"
+           "img/1061.png"
         ]
 
         },
@@ -867,7 +867,7 @@
            { "cantidad": 120, "valor": 8999, "detalle": "$8.999 c/u" }
         ],
            "imagenes": [
-           "img/1063.jpg"
+           "img/1063.png"
         ]
 
         },
@@ -882,7 +882,7 @@
            { "cantidad": 120, "valor": 8999, "detalle": "$8.999 c/u" }
         ],
            "imagenes": [
-           "img/1065.jpg"
+           "img/1065.png"
         ]
 
         },
@@ -897,7 +897,7 @@
            { "cantidad": 120, "valor": 8999, "detalle": "$8.999 c/u" }
         ],
            "imagenes": [
-           "img/1067.jpg"
+           "img/1067.png"
         ]
 
 
