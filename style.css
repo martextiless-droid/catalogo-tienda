@@ -59,6 +59,7 @@ header h1 {
   padding: 1rem;
   height: 380px; /* altura uniforme */
   transition: transform 0.2s ease;
+  text-align: center;
 }
 
 .product:hover {
@@ -80,11 +81,13 @@ header h1 {
 .product h3 {
   font-size: 1.1rem;
   margin: 0.5rem 0;
+  text-align: center;
 }
 
 .product p {
   margin: 0.3rem 0;
   color: #555;
+  text-align: center;
 }
 
 .btn {
