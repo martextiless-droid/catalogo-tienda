@@ -44,5 +44,20 @@
     "img/3305.jpg"
 
   ]
+},
+{
+  "id": 4,
+  "nombre": "Ref 3306",
+  "descripcion": "TELA: Piel de durazno. Estampados surtidos.",
+  "precios": [
+    { "cantidad": 1, "valor": 18000 },
+    { "cantidad": 6, "valor": 69000, "detalle": "$11.500 c/u" },
+    { "cantidad": 12, "valor": 114000, "detalle": "$9.500 c/u" },
+    { "cantidad": 120, "valor": 8999, "detalle": "$8.999 c/u" }
+  ],
+  "imagenes": [
+    "img/3306.png"
+
+  ]
 }
 ]
