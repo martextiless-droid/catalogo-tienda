@@ -47,7 +47,7 @@
 },
 {
   "id": 4,
-  "nombre": "Ref 3306",
+  "nombre": "Ref 3305XL",
   "descripcion": "TELA: Piel de durazno. Estampados surtidos.",
   "precios": [
     { "cantidad": 1, "valor": 18000 },
@@ -56,7 +56,7 @@
     { "cantidad": 120, "valor": 8999, "detalle": "$8.999 c/u" }
   ],
   "imagenes": [
-    "img/3306.png"
+    "img/3305XL.jpg"
 
   ]
 }
