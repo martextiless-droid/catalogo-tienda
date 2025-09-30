@@ -468,6 +468,21 @@
         },
         {
            "id": 32,
+           "nombre": "Ref 3338XL",
+           "descripcion": "TELA: Piel de durazno. Estampados surtidos.",
+           "precios": [
+           { "cantidad": 1, "valor": 18000 },
+           { "cantidad": 6, "valor": 69000, "detalle": "$11.500 c/u" },
+           { "cantidad": 12, "valor": 114000, "detalle": "$9.500 c/u" },
+           { "cantidad": 120, "valor": 8999, "detalle": "$8.999 c/u" }
+        ],
+           "imagenes": [
+           "img/3338XL.jpg"
+        ]
+
+        },
+        {
+           "id": 33,
            "nombre": "Ref 3339",
            "descripcion": "TELA: Piel de durazno. Estampados surtidos.",
            "precios": [
@@ -478,6 +493,111 @@
         ],
            "imagenes": [
            "img/3339.jpg"
+        ]
+
+        },
+        {
+           "id": 34,
+           "nombre": "Ref 3344",
+           "descripcion": "TELA: Piel de durazno. Estampados surtidos.",
+           "precios": [
+           { "cantidad": 1, "valor": 18000 },
+           { "cantidad": 6, "valor": 69000, "detalle": "$11.500 c/u" },
+           { "cantidad": 12, "valor": 114000, "detalle": "$9.500 c/u" },
+           { "cantidad": 120, "valor": 8999, "detalle": "$8.999 c/u" }
+        ],
+           "imagenes": [
+           "img/3344.png"
+        ]
+
+        },
+        {
+           "id": 35,
+           "nombre": "Ref 3345",
+           "descripcion": "TELA: Piel de durazno. Estampados surtidos.",
+           "precios": [
+           { "cantidad": 1, "valor": 18000 },
+           { "cantidad": 6, "valor": 69000, "detalle": "$11.500 c/u" },
+           { "cantidad": 12, "valor": 114000, "detalle": "$9.500 c/u" },
+           { "cantidad": 120, "valor": 8999, "detalle": "$8.999 c/u" }
+        ],
+           "imagenes": [
+           "img/3345.jpg"
+        ]
+
+        },
+        {
+           "id": 36,
+           "nombre": "Ref 3348",
+           "descripcion": "TELA: Piel de durazno. Estampados surtidos.",
+           "precios": [
+           { "cantidad": 1, "valor": 18000 },
+           { "cantidad": 6, "valor": 69000, "detalle": "$11.500 c/u" },
+           { "cantidad": 12, "valor": 114000, "detalle": "$9.500 c/u" },
+           { "cantidad": 120, "valor": 8999, "detalle": "$8.999 c/u" }
+        ],
+           "imagenes": [
+           "img/3348.jpg"
+        ]
+
+        },
+        {
+           "id": 37,
+           "nombre": "Ref 3351",
+           "descripcion": "TELA: Piel de durazno. Estampados surtidos.",
+           "precios": [
+           { "cantidad": 1, "valor": 18000 },
+           { "cantidad": 6, "valor": 69000, "detalle": "$11.500 c/u" },
+           { "cantidad": 12, "valor": 114000, "detalle": "$9.500 c/u" },
+           { "cantidad": 120, "valor": 8999, "detalle": "$8.999 c/u" }
+        ],
+           "imagenes": [
+           "img/3351.jpg"
+        ]
+
+        },
+        {
+           "id": 38,
+           "nombre": "Ref 3356",
+           "descripcion": "TELA: Piel de durazno. Estampados surtidos.",
+           "precios": [
+           { "cantidad": 1, "valor": 18000 },
+           { "cantidad": 6, "valor": 69000, "detalle": "$11.500 c/u" },
+           { "cantidad": 12, "valor": 114000, "detalle": "$9.500 c/u" },
+           { "cantidad": 120, "valor": 8999, "detalle": "$8.999 c/u" }
+        ],
+           "imagenes": [
+           "img/3356.jpg"
+        ]
+
+        },
+        {
+           "id": 39,
+           "nombre": "Ref 3358",
+           "descripcion": "TELA: Piel de durazno. Estampados surtidos.",
+           "precios": [
+           { "cantidad": 1, "valor": 18000 },
+           { "cantidad": 6, "valor": 69000, "detalle": "$11.500 c/u" },
+           { "cantidad": 12, "valor": 114000, "detalle": "$9.500 c/u" },
+           { "cantidad": 120, "valor": 8999, "detalle": "$8.999 c/u" }
+        ],
+           "imagenes": [
+           "img/3358.jpg"
+        ]
+
+        },
+        {
+           "id": 40,
+           "nombre": "Ref 3360",
+           "descripcion": "TELA: Piel de durazno. Estampados surtidos.",
+           "precios": [
+           { "cantidad": 1, "valor": 18000 },
+           { "cantidad": 6, "valor": 69000, "detalle": "$11.500 c/u" },
+           { "cantidad": 12, "valor": 114000, "detalle": "$9.500 c/u" },
+           { "cantidad": 120, "valor": 8999, "detalle": "$8.999 c/u" }
+        ],
+           "imagenes": [
+           "img/3360.jpg"
         ]
 }
 ]
