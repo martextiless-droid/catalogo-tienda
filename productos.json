@@ -597,7 +597,7 @@
            { "cantidad": 120, "valor": 8999, "detalle": "$8.999 c/u" }
         ],
            "imagenes": [
-           "img/3360.jpg"
+           "img/3360.png"
         ]
 
         },
@@ -732,7 +732,7 @@
            { "cantidad": 120, "valor": 8999, "detalle": "$8.999 c/u" }
         ],
            "imagenes": [
-           "img/1208.jpg"
+           "img/1208.png"
         ]
 
         },
