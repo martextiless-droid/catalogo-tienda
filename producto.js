@@ -35,7 +35,7 @@ fetch("productos.json")
       const preciosContainer = document.getElementById("product-prices");
       if (producto.precios && producto.precios.length > 0) {
         let html = "<h3>Precios por cantidad:</h3><table class='prices-table'>";
-        html += "<tr><th>Cantidad</th><th>Valor</th><th>Detalle</th></tr>";
+        html += "<tr><th>Cantidad</th><th>Valor</th><th>Unidad</th></tr>";
 
         producto.precios.forEach(p => {
           html += `
