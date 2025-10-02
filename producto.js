@@ -54,7 +54,7 @@ fetch("productos.json")
       // WhatsApp link dinámico (ahora solo nombre)
       const mensaje = `Hola, quiero comprar el producto: ${producto.nombre}`;
       document.getElementById("whatsapp-link").href =
-        `https://wa.me/573001112233?text=${encodeURIComponent(mensaje)}`;
+        `https://wa.me/573015547616?text=${encodeURIComponent(mensaje)}`;
     }
   });
 
