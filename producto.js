@@ -42,7 +42,7 @@ fetch("productos.json")
             <tr>
               <td>${p.cantidad}</td>
               <td>$${p.valor.toLocaleString("es-CO")}</td>
-              <td>${p.detalle ? p.detalle : "-"}</td>
+              <td>${p.Unidad ? p.Unidad : "-"}</td>
             </tr>
           `;
         });
