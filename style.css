@@ -246,3 +246,43 @@ header nav a:hover {
   color: #00A0B7;            /* azul elegante cuando pasas el mouse */
   text-decoration: underline; 
 }
+
+/* Ajustes responsive para móviles */
+@media (max-width: 768px) {
+  .product-detail {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+
+  .detail-left, 
+  .detail-right {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+
+  .detail-img {
+    margin: 0 auto;
+    display: block;
+  }
+
+  #product-name, 
+  #product-description, 
+  #product-prices, 
+  #gallery, 
+  #whatsapp-link {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .prices-table {
+    width: 95%; /* un poco más angosto en móvil */
+    margin: 15px auto;
+  }
+
+  .btn-whatsapp {
+    display: inline-block;
+    margin: 20px auto;
+  }
+}
