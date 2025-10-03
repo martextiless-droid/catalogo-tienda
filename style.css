@@ -276,10 +276,14 @@ header nav a:hover {
     margin-right: auto;
   }
 
+@media (max-width: 768px) {
   .prices-table {
-    width: 95%; /* un poco más angosto en móvil */
+    width: 100%;      /* ocupar todo el ancho del contenedor */
+    max-width: 600px; /* límite para que no se estire mucho */
     margin: 15px auto;
   }
+}
+
 
   .btn-whatsapp {
     display: inline-block;
