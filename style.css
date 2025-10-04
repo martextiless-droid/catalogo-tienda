@@ -133,11 +133,11 @@ header h1 {
 
 .detail-img {
   width: 100%;
-  max-height: 500px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 1rem;
+  height: auto;        /* dejar que mantenga proporción */
+  max-height: none;    /* quitar el límite que recorta */
+  object-fit: contain; /* mostrar la imagen completa sin recorte */
 }
+
 
 .detail-img:hover {
   transform: scale(1.03);
@@ -223,6 +223,8 @@ header h1 {
   border: 1px solid #ddd;
   padding: 10px;
   text-align: center;
+   min-width: 100px; /* ✅ asegura que no se encoja demasiado */
+  white-space: nowrap; /* ✅ evita que el texto se corte en varias líneas */
 }
 
 .prices-table th {

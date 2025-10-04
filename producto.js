@@ -13,16 +13,50 @@ fetch("productos.json")
       const mainImg = document.getElementById("product-img");
       mainImg.src = producto.imagenes[0]; // la primera imagen del array
 
-      // Galería de miniaturas
-      const gallery = document.getElementById("gallery");
-      gallery.innerHTML = ""; // limpio la galería
+      // =====================
+// Zoom de imagen principal
+// =====================
+  const modal = document.getElementById("myModal");
+  const modalImg = document.getElementById("imgZoom");
+  const span = document.getElementsByClassName("close")[0];
 
+  mainImg.onclick = () => {
+    modal.style.display = "block";
+    modalImg.src = mainImg.src;
+  };
+
+  span.onclick = () => {
+    modal.style.display = "none";
+  };
+
+  modal.onclick = (e) => {
+    if (e.target === modal) modal.style.display = "none";
+  };
+
+  // Galería de miniaturas
+  const gallery = document.getElementById("gallery");
+  gallery.innerHTML = ""; // limpio la galería
+
+  producto.imagenes.forEach(img => {
+    const thumb = document.createElement("img");
+    thumb.src = img;
+    thumb.classList.add("thumb");
+    thumb.onclick = () => {
+      mainImg.src = img; // cambia la imagen principal al hacer clic
+      modalImg.src = img;
+    };
+    gallery.appendChild(thumb);
+  });
+
+      // Galería de miniaturas
+      
       producto.imagenes.forEach(img => {
         const thumb = document.createElement("img");
         thumb.src = img;
         thumb.classList.add("thumb");
         thumb.onclick = () => {
           mainImg.src = img; // cambia la imagen principal al hacer clic
+          modalImg.src = img;
         };
         gallery.appendChild(thumb);
       });
@@ -58,32 +92,4 @@ fetch("productos.json")
     }
   });
 
-// =====================
-// Zoom de imagen principal
-// =====================
-const modal = document.getElementById("myModal");
-const img = document.getElementById("mainImg");
-const modalImg = document.getElementById("imgZoom");
-const span = document.getElementsByClassName("close")[0];
 
-// Abrir modal al hacer clic en la imagen grande
-if (img) {
-  img.onclick = function() {
-    modal.style.display = "block";
-    modalImg.src = this.src;
-  }
-}
-
-// Cerrar modal al hacer clic en la X
-if (span) {
-  span.onclick = function() {
-    modal.style.display = "none";
-  }
-}
-
-// Cerrar modal al hacer clic fuera de la imagen
-modal.onclick = function(e) {
-  if (e.target === modal) {
-    modal.style.display = "none";
-  }
-}
