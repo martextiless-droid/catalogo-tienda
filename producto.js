@@ -49,14 +49,14 @@ fetch("productos.json")
   });
 
       // Galería de miniaturas
-      
+
       producto.imagenes.forEach(img => {
         const thumb = document.createElement("img");
         thumb.src = img;
         thumb.classList.add("thumb");
         thumb.onclick = () => {
           mainImg.src = img; // cambia la imagen principal al hacer clic
-          modalImg.src = img;
+
         };
         gallery.appendChild(thumb);
       });
