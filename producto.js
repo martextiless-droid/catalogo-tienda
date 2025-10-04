@@ -58,3 +58,32 @@ fetch("productos.json")
     }
   });
 
+// =====================
+// Zoom de imagen principal
+// =====================
+const modal = document.getElementById("myModal");
+const img = document.getElementById("mainImg");
+const modalImg = document.getElementById("imgZoom");
+const span = document.getElementsByClassName("close")[0];
+
+// Abrir modal al hacer clic en la imagen grande
+if (img) {
+  img.onclick = function() {
+    modal.style.display = "block";
+    modalImg.src = this.src;
+  }
+}
+
+// Cerrar modal al hacer clic en la X
+if (span) {
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+}
+
+// Cerrar modal al hacer clic fuera de la imagen
+modal.onclick = function(e) {
+  if (e.target === modal) {
+    modal.style.display = "none";
+  }
+}
