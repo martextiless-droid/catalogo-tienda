@@ -48,18 +48,7 @@ fetch("productos.json")
     gallery.appendChild(thumb);
   });
 
-      // Galería de miniaturas
 
-      producto.imagenes.forEach(img => {
-        const thumb = document.createElement("img");
-        thumb.src = img;
-        thumb.classList.add("thumb");
-        thumb.onclick = () => {
-          mainImg.src = img; // cambia la imagen principal al hacer clic
-
-        };
-        gallery.appendChild(thumb);
-      });
 
       // Resto de datos
       document.getElementById("product-name").textContent = producto.nombre;
