@@ -4,7 +4,6 @@
     "nombre": "Ref:3301",
     "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
     "precios": [
-    { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
     { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
     { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
     { "cantidad": 120, "valor": 8999, "Unidad": "$8.999 c/u" }
@@ -20,7 +19,6 @@
      "nombre": "Ref 3303",
      "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS: Surtidos.",
      "precios": [
-     { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
      { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
      { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
      { "cantidad": 120, "valor": 8999, "Unidad": "$8.999 c/u" }
@@ -35,7 +33,6 @@
   "nombre": "Ref 3305",
   "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
   "precios": [
-    { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
     { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
     { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
     { "cantidad": 120, "valor": 8999, "Unidad": "$8.999 c/u" }
@@ -50,7 +47,6 @@
   "nombre": "Ref 3305XL",
   "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
   "precios": [
-    { "cantidad": 1, "valor": 20999, "Unidad": "$20.999 c/u" },
     { "cantidad": 6, "valor": 83994, "Unidad": "$13.999 c/u" },
     { "cantidad": 12, "valor": 143988, "Unidad": "$11.999 c/u" },
     { "cantidad": 120, "valor": 11500, "Unidad": "$11.500 c/u" }
@@ -65,7 +61,6 @@
   "nombre": "Ref 3306",
   "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
   "precios": [
-    { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
     { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
     { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
     { "cantidad": 120, "valor": 8999, "Unidad": "$8.999 c/u" }
@@ -80,7 +75,6 @@
         "nombre": "Ref 3308",
         "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
         "precios": [
-    { "cantidad": 1, "valor": 20999, "Unidad": "$20.999 c/u" },
     { "cantidad": 6, "valor": 83994, "Unidad": "$13.999 c/u" },
     { "cantidad": 12, "valor": 143988, "Unidad": "$11.999 c/u" },
     { "cantidad": 120, "valor": 11500, "Unidad": "$11.500 c/u" }
@@ -95,7 +89,6 @@
  	  "nombre": "Ref 3308XL",
   	  "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
  	  "precios": [
-           { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
            { "cantidad": 6, "valor": 95994, "Unidad": "$15.999 c/u" },
            { "cantidad": 12, "valor": 167988, "Unidad": "$13.999 c/u" },
            { "cantidad": 120, "valor": 13499, "Unidad": "$13.499.599 c/u" }
@@ -110,7 +103,6 @@
           "nombre": "Ref 3309",
           "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
           "precios": [
-           { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
            { "cantidad": 6, "valor": 71994, "Unidad": "$11.999 c/u" },
            { "cantidad": 12, "valor": 119999, "Unidad": "$9.999 c/u" },
            { "cantidad": 120, "valor": 9599, "Unidad": "$9.499 c/u" }
@@ -125,7 +117,6 @@
            "nombre": "Ref 3309XL",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-            { "cantidad": 1, "valor": 20999, "Unidad": "$20.999 c/u" },
             { "cantidad": 6, "valor": 83994, "Unidad": "$13.999 c/u" },
             { "cantidad": 12, "valor": 143988, "Unidad": "$11.999 c/u" },
             { "cantidad": 120, "valor": 11500, "Unidad": "$11.500 c/u" }
@@ -140,7 +131,6 @@
            "nombre": "Ref 3310",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-    { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
     { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
     { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
     { "cantidad": 120, "valor": 8999, "Unidad": "$8.999 c/u" }
@@ -156,7 +146,6 @@
            "nombre": "Ref 3311",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-            { "cantidad": 1, "valor": 18000, "Unidad": "$19.500 c/u" },
             { "cantidad": 6, "valor": 69000, "Unidad": "$13.000 c/u" },
             { "cantidad": 12, "valor": 114000, "Unidad": "$10.999 c/u" },
             { "cantidad": 120, "valor": 8999, "Unidad": "$10.500 c/u" }
@@ -171,7 +160,6 @@
            "nombre": "Ref 3312",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-           { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
            { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
            { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
            { "cantidad": 120, "valor": 8999, "Unidad": "$8.999 c/u" }
@@ -186,7 +174,6 @@
            "nombre": "Ref 33115",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-           { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
            { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
            { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
            { "cantidad": 120, "valor": 8999, "Unidad": "$8.999 c/u" }
@@ -201,7 +188,6 @@
            "nombre": "Ref 3315XL",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-            { "cantidad": 1, "valor": 19999, "Unidad": "$19.999 c/u" },
             { "cantidad": 6, "valor": 81000, "Unidad": "$13.500 c/u" },
             { "cantidad": 12, "valor": 138000, "Unidad": "$11.500 c/u" },
             { "cantidad": 120, "valor": 10999, "Unidad": "$10.999 c/u" }
@@ -216,7 +202,6 @@
            "nombre": "Ref 3316",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-            { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
             { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
             { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
             { "cantidad": 120, "valor": 8999, "Unidad": "$8.999 c/u" }
@@ -231,7 +216,6 @@
            "nombre": "Ref 3316XL",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-            { "cantidad": 1, "valor": 19999, "Unidad": "$19.999 c/u" },
             { "cantidad": 6, "valor": 81000, "Unidad": "$13.500 c/u" },
             { "cantidad": 12, "valor": 138000, "Unidad": "$11.500 c/u" },
             { "cantidad": 120, "valor": 10999, "Unidad": "$10.999 c/u" }
@@ -246,7 +230,6 @@
            "nombre": "Ref 3317",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-           { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
            { "cantidad": 6, "valor": 71994, "Unidad": "$11.999 c/u" },
            { "cantidad": 12, "valor": 119999, "Unidad": "$9.999 c/u" },
            { "cantidad": 120, "valor": 9599, "Unidad": "$9.499.599 c/u" }
@@ -261,7 +244,6 @@
            "nombre": "Ref 3317XL",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-            { "cantidad": 1, "valor": 20999, "Unidad": "$20.999 c/u" },
             { "cantidad": 6, "valor": 83994, "Unidad": "$13.999 c/u" },
             { "cantidad": 12, "valor": 143988, "Unidad": "$11.999 c/u" },
             { "cantidad": 120, "valor": 11500, "Unidad": "$11.500 c/u" }
@@ -276,7 +258,6 @@
            "nombre": "Ref 3319",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-            { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
             { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
             { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
             { "cantidad": 120, "valor": 8999, "Unidad": "$8.999 c/u" }
@@ -291,7 +272,6 @@
            "nombre": "Ref 3320",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-            { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
             { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
             { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
             { "cantidad": 120, "valor": 8999, "Unidad": "$8.999 c/u" }
@@ -306,7 +286,6 @@
            "nombre": "Ref 3324",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-           { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
            { "cantidad": 6, "valor": 71994, "Unidad": "$11.999 c/u" },
            { "cantidad": 12, "valor": 119999, "Unidad": "$9.999 c/u" },
            { "cantidad": 120, "valor": 9599, "Unidad": "$9.499.599 c/u" }
@@ -321,7 +300,6 @@
            "nombre": "Ref 3328",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-           { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
            { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
            { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
            { "cantidad": 120, "valor": 8999, "Unidad": "$8.999 c/u" }
@@ -336,7 +314,6 @@
            "nombre": "Ref 3329",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-           { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
            { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
            { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
            { "cantidad": 120, "valor": 8999, "Unidad": "$8.999 c/u" }
@@ -351,7 +328,6 @@
            "nombre": "Ref 3330",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-            { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
             { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
             { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
             { "cantidad": 120, "valor": 8999, "Unidad": "$8.999 c/u" }
@@ -366,7 +342,6 @@
            "nombre": "Ref 3330XL",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-            { "cantidad": 1, "valor": 19999, "Unidad": "$19.999 c/u" },
             { "cantidad": 6, "valor": 81000, "Unidad": "$13.500 c/u" },
             { "cantidad": 12, "valor": 138000, "Unidad": "$11.500 c/u" },
             { "cantidad": 120, "valor": 10999, "Unidad": "$10.999 c/u" }
@@ -381,7 +356,6 @@
            "nombre": "Ref 3331",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-           { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
            { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
            { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
            { "cantidad": 120, "valor": 8999, "Unidad": "$8.999 c/u" }
@@ -396,7 +370,6 @@
            "nombre": "Ref 3334",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-           { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
            { "cantidad": 6, "valor": 71994, "Unidad": "$11.999 c/u" },
            { "cantidad": 12, "valor": 119999, "Unidad": "$9.999 c/u" },
            { "cantidad": 120, "valor": 9499, "Unidad": "$9.499 c/u" }
@@ -411,7 +384,6 @@
            "nombre": "Ref 3335",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-    { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
     { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
     { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
     { "cantidad": 120, "valor": 8999, "Unidad": "$8.999 c/u" }
@@ -426,7 +398,6 @@
            "nombre": "Ref 3335XL",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-            { "cantidad": 1, "valor": 20999, "Unidad": "$20.999 c/u" },
             { "cantidad": 6, "valor": 83994, "Unidad": "$13.999 c/u" },
             { "cantidad": 12, "valor": 143988, "Unidad": "$11.999 c/u" },
             { "cantidad": 120, "valor": 11500, "Unidad": "$11.500 c/u" }
@@ -441,7 +412,6 @@
            "nombre": "Ref 3336",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-            { "cantidad": 1, "valor": 20999, "Unidad": "$20.999 c/u" },
             { "cantidad": 6, "valor": 83994, "Unidad": "$13.999 c/u" },
             { "cantidad": 12, "valor": 143988, "Unidad": "$11.999 c/u" },
             { "cantidad": 120, "valor": 11500, "Unidad": "$11.500 c/u" }
@@ -456,7 +426,6 @@
            "nombre": "Ref 3338",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-           { "cantidad": 1, "valor": 22000, "Unidad": "$22.000 c/u" },
            { "cantidad": 6, "valor": 93000, "Unidad": "$15.500 c/u" },
            { "cantidad": 12, "valor": 162000, "Unidad": "$13.500 c/u" },
            { "cantidad": 120, "valor": 12999, "Unidad": "$12.999 c/u" }
@@ -471,7 +440,6 @@
            "nombre": "Ref 3338XL",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-           { "cantidad": 1, "valor": 24000, "Unidad": "$24.000 c/u" },
            { "cantidad": 6, "valor": 105000, "Unidad": "$17.500 c/u" },
            { "cantidad": 12, "valor": 186000, "Unidad": "$15.500 c/u" },
            { "cantidad": 120, "valor": 14999, "Unidad": "$14.999 c/u" }
@@ -486,7 +454,6 @@
            "nombre": "Ref 3339",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-           { "cantidad": 1, "valor": 17999, "Unidad": "$17.999 c/u" },
            { "cantidad": 6, "valor": 59994, "Unidad": "$9.999 c/u" },
            { "cantidad": 12, "valor": 95988, "Unidad": "$7.999 c/u" },
            { "cantidad": 120, "valor": 7999, "Unidad": "$7.999 c/u" }
@@ -501,7 +468,6 @@
            "nombre": "Ref 3344",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-           { "cantidad": 1, "valor": 32000, "Unidad": "$32.000 c/u" },
            { "cantidad": 6, "valor": 147000, "Unidad": "$24.500 c/u" },
            { "cantidad": 12, "valor": 270000, "Unidad": "$22.500 c/u" },
            { "cantidad": 120, "valor": 21999, "Unidad": "$21.999 c/u" }
@@ -515,8 +481,7 @@
            "id": 35,
            "nombre": "Ref 3345",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
-           "precios": [
-            { "cantidad": 1, "valor": 20999, "Unidad": "$20.999 c/u" },
+           "precios": [         
             { "cantidad": 6, "valor": 83994, "Unidad": "$13.999 c/u" },
             { "cantidad": 12, "valor": 143988, "Unidad": "$11.999 c/u" },
             { "cantidad": 120, "valor": 11500, "Unidad": "$11.500 c/u" }
@@ -531,7 +496,6 @@
            "nombre": "Ref 3348",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-          { "cantidad": 1, "valor": 20000, "Unidad": "$20.000 c/u" },
           { "cantidad": 6, "valor": 81000, "Unidad": "$13.500 c/u" },
           { "cantidad": 12, "valor": 138000, "Unidad": "$11.500 c/u" },
           { "cantidad": 120, "valor": 10999, "Unidad": "$10.999 c/u" }
@@ -545,8 +509,7 @@
            "id": 37,
            "nombre": "Ref 3351",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
-           "precios": [
-           { "cantidad": 1, "valor": 19999, "Unidad": "$19.999 c/u" },
+           "precios": [         
            { "cantidad": 6, "valor": 75000, "Unidad": "$12.500 c/u" },
            { "cantidad": 12, "valor": 126000, "Unidad": "$10.500 c/u" },
            { "cantidad": 120, "valor": 9999, "Unidad": "$9.999 c/u" }
@@ -560,8 +523,7 @@
            "id": 38,
            "nombre": "Ref 3356",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
-           "precios": [
-           { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
+           "precios": [        
            { "cantidad": 6, "valor": 71994, "Unidad": "$11.999 c/u" },
            { "cantidad": 12, "valor": 119999, "Unidad": "$9.999 c/u" },
            { "cantidad": 120, "valor": 9499, "Unidad": "$9.499.599 c/u" }
@@ -575,8 +537,7 @@
            "id": 39,
            "nombre": "Ref 3358",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
-           "precios": [
-           { "cantidad": 1, "valor": 22000, "Unidad": "$22.000 c/u" },
+           "precios": [          
            { "cantidad": 6, "valor": 105000, "Unidad": "$17.500 c/u" },
            { "cantidad": 12, "valor": 186000, "Unidad": "$15.500 c/u" },
            { "cantidad": 120, "valor": 14999, "Unidad": "$14.999 c/u" }
@@ -591,8 +552,7 @@
           "id": 40,
            "nombre": "Ref 3360",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
-           "precios": [
-            { "cantidad": 1, "valor": 20999, "Unidad": "$20.999 c/u" },
+           "precios": [      
             { "cantidad": 6, "valor": 83994, "Unidad": "$13.999 c/u" },
             { "cantidad": 12, "valor": 143988, "Unidad": "$11.999 c/u" },
             { "cantidad": 120, "valor": 11500, "Unidad": "$11.500 c/u" }
@@ -606,8 +566,7 @@
            "id": 41,
            "nombre": "Ref 3361",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
-           "precios": [
-           { "cantidad": 1, "valor": 30000, "Unidad": "$30.000 c/u" },
+           "precios": [         
            { "cantidad": 6, "valor": 141000, "Unidad": "$23.500 c/u" },
            { "cantidad": 12, "valor": 258000, "Unidad": "$21.500 c/u" },
            { "cantidad": 120, "valor": 20999, "Unidad": "$20.999 c/u" }
@@ -621,8 +580,7 @@
            "id": 42,
            "nombre": "Ref 3362",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
-           "precios": [
-            { "cantidad": 1, "valor": 19999, "Unidad": "$19.999 c/u" },
+           "precios": [           
             { "cantidad": 6, "valor": 81000, "Unidad": "$13.500 c/u" },
             { "cantidad": 12, "valor": 138000, "Unidad": "$11.500 c/u" },
             { "cantidad": 120, "valor": 10999, "Unidad": "$10.999 c/u" }
@@ -636,8 +594,7 @@
            "id": 43,
            "nombre": "Ref 3363",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
-           "precios": [
-           { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
+           "precios": [           
            { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
            { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
            { "cantidad": 120, "valor": 8999, "Unidad": "$8.999 c/u" }
@@ -651,8 +608,7 @@
            "id": 44,
            "nombre": "Ref 3364",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
-           "precios": [
-           { "cantidad": 1, "valor": 21999, "Unidad": "$21.999 c/u" },
+           "precios": [         
            { "cantidad": 6, "valor": 69000, "Unidad": "$16.999 c/u" },
            { "cantidad": 12, "valor": 179999, "Unidad": "$14.999 c/u" },
            { "cantidad": 120, "valor": 13999, "Unidad": "$13.999 c/u" }
@@ -666,8 +622,7 @@
            "id": 45,
            "nombre": "Ref 3374",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
-           "precios": [
-           { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
+           "precios": [           
            { "cantidad": 6, "valor": 71994, "Unidad": "$11.999 c/u" },
            { "cantidad": 12, "valor": 119999, "Unidad": "$9.999 c/u" },
            { "cantidad": 120, "valor": 9599, "Unidad": "$9.499.599 c/u" }
@@ -681,8 +636,7 @@
            "id": 46,
            "nombre": "Ref 3375",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
-           "precios": [
-            { "cantidad": 1, "valor": 19999, "Unidad": "$19.999 c/u" },
+           "precios": [           
             { "cantidad": 6, "valor": 81000, "Unidad": "$13.500 c/u" },
             { "cantidad": 12, "valor": 138000, "Unidad": "$11.500 c/u" },
             { "cantidad": 120, "valor": 10999, "Unidad": "$10.999 c/u" }
@@ -698,8 +652,7 @@
            "id": 47,
            "nombre": "Ref 3379",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
-           "precios": [
-            { "cantidad": 1, "valor": 19999, "Unidad": "$19.999 c/u" },
+           "precios": [           
             { "cantidad": 6, "valor": 75000, "Unidad": "$12.500 c/u" },
             { "cantidad": 12, "valor": 126000, "Unidad": "$10.500 c/u" },
             { "cantidad": 120, "valor": 9999, "Unidad": "$9.999 c/u" }
@@ -713,8 +666,7 @@
            "id": 48,
            "nombre": "Ref 3383",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
-           "precios": [
-            { "cantidad": 1, "valor": 19999, "Unidad": "$19.999 c/u" },
+           "precios": [           
             { "cantidad": 6, "valor": 111000, "Unidad": "$18.500 c/u" },
             { "cantidad": 12, "valor": 198000, "Unidad": "$16.500 c/u" },
             { "cantidad": 120, "valor": 15999, "Unidad": "$15.999 c/u" }
@@ -728,8 +680,7 @@
            "id": 49,
            "nombre": "Ref 1208",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
-           "precios": [
-            { "cantidad": 1, "valor": 19999, "Unidad": "$29.999 c/u" },
+           "precios": [           
             { "cantidad": 6, "valor": 135000, "Unidad": "$22.500 c/u" },
             { "cantidad": 12, "valor": 246000, "Unidad": "$20.500 c/u" },
             { "cantidad": 120, "valor": 19999, "Unidad": "$19.999 c/u" }
@@ -744,7 +695,6 @@
            "nombre": "Ref 1208XL",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-            { "cantidad": 1, "valor": 31999, "Unidad": "$31.999 c/u" },
             { "cantidad": 6, "valor": 147000, "Unidad": "$24.500 c/u" },
             { "cantidad": 12, "valor": 270000, "Unidad": "$22.500 c/u" },
             { "cantidad": 120, "valor": 10999, "Unidad": "$10.999 c/u" }
@@ -758,8 +708,7 @@
            "id": 51,
            "nombre": "Ref 1209",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
-           "precios": [
-            { "cantidad": 1, "valor": 28999, "Unidad": "$28.999 c/u" },
+           "precios": [           
             { "cantidad": 6, "valor": 123000, "Unidad": "$20.500 c/u" },
             { "cantidad": 12, "valor": 222000, "Unidad": "$18.500 c/u" },
             { "cantidad": 120, "valor": 17999, "Unidad": "$17.999 c/u" }
@@ -773,8 +722,7 @@
            "id": 52,
            "nombre": "Ref 1209XL",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
-           "precios": [
-            { "cantidad": 1, "valor": 19999, "Unidad": "$29.999 c/u" },
+           "precios": [            
             { "cantidad": 6, "valor": 135000, "Unidad": "$22.500 c/u" },
             { "cantidad": 12, "valor": 246000, "Unidad": "$20.500 c/u" },
             { "cantidad": 120, "valor": 19999, "Unidad": "$19.999 c/u" }
@@ -788,8 +736,7 @@
            "id": 53,
            "nombre": "Ref 1210",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
-           "precios": [
-            { "cantidad": 1, "valor": 29999, "Unidad": "$29.999 c/u" },
+           "precios": [            
             { "cantidad": 6, "valor": 125000, "Unidad": "$20.999 c/u" },
             { "cantidad": 12, "valor": 227999, "Unidad": "$18.999 c/u" },
             { "cantidad": 120, "valor": 18500, "Unidad": "$18.500 c/u" }
@@ -803,8 +750,7 @@
            "id": 54,
            "nombre": "Ref 1218",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
-           "precios": [
-            { "cantidad": 1, "valor": 22999, "Unidad": "$22.999 c/u" },
+           "precios": [            
             { "cantidad": 6, "valor": 99000, "Unidad": "$16.500 c/u" },
             { "cantidad": 12, "valor": 174000, "Unidad": "$14.500 c/u" },
             { "cantidad": 120, "valor": 19999, "Unidad": "$19.999 c/u" }
@@ -819,7 +765,6 @@
            "nombre": "Ref 1218XL",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-            { "cantidad": 1, "valor": 29999, "Unidad": "$29.999 c/u" },
             { "cantidad": 6, "valor": 117000, "Unidad": "$19.500 c/u" },
             { "cantidad": 12, "valor": 210000, "Unidad": "$17.500 c/u" },
             { "cantidad": 120, "valor": 16999, "Unidad": "$16.999 c/u" }
@@ -833,8 +778,7 @@
            "id": 56,
            "nombre": "Ref 1903",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
-           "precios": [
-            { "cantidad": 1, "valor": 27999, "Unidad": "$27.999 c/u" },
+           "precios": [            
             { "cantidad": 6, "valor": 129000, "Unidad": "$21.500 c/u" },
             { "cantidad": 12, "valor": 234000, "Unidad": "$19.500 c/u" },
             { "cantidad": 120, "valor": 18999, "Unidad": "$18.999 c/u" }
@@ -848,8 +792,7 @@
            "id": 57,
            "nombre": "Ref 1061",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
-           "precios": [
-           { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
+           "precios": [           
            { "cantidad": 6, "valor": 95994, "Unidad": "$15.999 c/u" },
            { "cantidad": 12, "valor": 167988, "Unidad": "$13.999 c/u" },
            { "cantidad": 120, "valor": 13499, "Unidad": "$13.499.599 c/u" }
@@ -863,8 +806,7 @@
            "id": 58,
            "nombre": "Ref 1063",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
-           "precios": [
-           { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
+           "precios": [           
            { "cantidad": 6, "valor": 71994, "Unidad": "$11.999 c/u" },
            { "cantidad": 12, "valor": 119999, "Unidad": "$9.999 c/u" },
            { "cantidad": 120, "valor": 9599, "Unidad": "$9.499.599 c/u" }
@@ -879,7 +821,6 @@
            "nombre": "Ref 1065",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-           { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
            { "cantidad": 6, "valor": 71994, "Unidad": "$11.999 c/u" },
            { "cantidad": 12, "valor": 119999, "Unidad": "$9.999 c/u" },
            { "cantidad": 120, "valor": 9599, "Unidad": "$9.499.599 c/u" }
@@ -893,8 +834,7 @@
            "id": 60,
            "nombre": "Ref 1067",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
-           "precios": [
-           { "cantidad": 1, "valor": 18000, "Unidad": "$22.000 c/u" },
+           "precios": [         
            { "cantidad": 6, "valor": 69000, "Unidad": "$14.999 c/u" },
            { "cantidad": 12, "valor": 155988, "Unidad": "$12.999 c/u" },
            { "cantidad": 120, "valor": 12500, "Unidad": "$12.500 c/u" }
@@ -909,7 +849,6 @@
            "nombre": "Ref 1068",
            "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
-            { "cantidad": 1, "valor": 18000, "Unidad": "$18.000 c/u" },
             { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
             { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
             { "cantidad": 120, "valor": 8999, "Unidad": "$8.999 c/u" }
