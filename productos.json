@@ -21,7 +21,7 @@
      "precios": [
      { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
      { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
-     { "cantidad": 120, "valor": 1079000, "Unidad": "$8.999 c/u" }
+     { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
     ],
     "imagenes": [
     "img/3303.jpg"
@@ -35,7 +35,7 @@
      "precios": [
       { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
       { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
-      { "cantidad": 120, "valor": 1079000, "Unidad": "$8.999 c/u" }
+      { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
     ],
      "imagenes": [
      "img/3305.jpg"
@@ -63,7 +63,7 @@
   "precios": [
     { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
     { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
-    { "cantidad": 120, "valor": 1079000, "Unidad": "$8.999 c/u" }
+    { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
   ],
   "imagenes": [
     "img/3306.png"
@@ -133,7 +133,7 @@
            "precios": [
     { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
     { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
-    { "cantidad": 120, "valor": 1079000, "Unidad": "$8.999 c/u" }
+    { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
         ],
            "imagenes": [
            "img/3310.png"
@@ -851,7 +851,7 @@
            "precios": [
             { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
             { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
-            { "cantidad": 120, "valor": 1079000, "Unidad": "$8.999 c/u" }
+            { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
           ],
            "imagenes": [
            "img/1068.png"
