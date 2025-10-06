@@ -13,7 +13,7 @@ fetch("productos.json")
       const mainImg = document.getElementById("product-img");
       mainImg.src = producto.imagenes[0]; // la primera imagen del array
 
-      // =====================
+// =====================
 // Zoom de imagen principal
 // =====================
   const modal = document.getElementById("myModal");
@@ -57,7 +57,7 @@ fetch("productos.json")
       // Tabla de precios
       const preciosContainer = document.getElementById("product-prices");
       if (producto.precios && producto.precios.length > 0) {
-        let html = "<h3>Precios por cantidad:</h3><table class='prices-table'>";
+        let html = "<h3>(Puedes surtir en varias referencias)</h3><h3>Precios por cantidad</h3><table class='prices-table'>";
         html += "<tr><th>Cantidad</th><th>Valor</th><th>Unidad</th></tr>";
 
         producto.precios.forEach(p => {
