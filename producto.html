@@ -1,9 +1,29 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Detalle del Producto</title>
+
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1328987255274375');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1328987255274375&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -33,14 +53,7 @@
     </div>
 
     <!-- Tabla dinámica de precios -->
-   <div id="product-prices">
-  <table class="tabla-precios">
-    <tr><th>Cantidad</th><th>Valor</th><th>Unidad</th></tr>
-    <tr data-qty="6"   data-unit="11500"><td>6</td><td>$69.000</td><td>$11.500 c/u</td></tr>
-    <tr data-qty="12"  data-unit="9500"><td>12</td><td>$114.000</td><td>$9.500 c/u</td></tr>
-    <tr data-qty="120" data-unit="8999"><td>120</td><td>$1.079.880</td><td>$8.999 c/u</td></tr>
-  </table>
-</div>
+    <div id="product-prices"></div>
 
     <!-- Botón WhatsApp -->
     <a id="whatsapp-link" target="_blank" class="btn-whatsapp">Pedir lista y disponibilidad</a>
