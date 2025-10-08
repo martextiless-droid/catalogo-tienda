@@ -223,7 +223,7 @@ header h1 {
   border: 1px solid #ddd;
   padding: 10px;
   text-align: center;
-   min-width: 100px; /* ✅ asegura que no se encoja demasiado */
+  min-width: 100px; /* ✅ asegura que no se encoja demasiado */
   white-space: nowrap; /* ✅ evita que el texto se corte en varias líneas */
 }
 
@@ -332,4 +332,40 @@ header nav a:hover {
 
 .close:hover {
   color: #bbb;
+}
+
+/* ====== Barra de categorías ====== */
+.catbar{
+  position: sticky;        /* se queda pegada al top al hacer scroll */
+  top: 56px;               /* ajusta si tu header es más alto */
+  z-index: 50;
+  background: #0f0f10;     /* oscuro elegante */
+  border-bottom: 1px solid #1f1f22;
+  padding: 8px 12px;
+  overflow-x: auto;        /* scroll horizontal si hay muchas categorías */
+  white-space: nowrap;
+}
+
+.cat-link{
+  display: inline-block;
+  color: #d6d6d6;
+  text-decoration: none;
+  padding: 8px 14px;
+  margin-right: 8px;
+  border: 1px solid #2a2a2e;
+  border-radius: 999px;
+  font-size: 14px;
+  transition: background .2s, color .2s, border .2s, transform .1s;
+}
+
+.cat-link:hover{
+  border-color: #00A0B7;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.cat-link.active{
+  background: #00A0B7;
+  color: #fff;
+  border-color: transparent;
 }
