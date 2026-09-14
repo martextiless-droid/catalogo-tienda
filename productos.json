@@ -970,7 +970,7 @@
             { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
           ],
            "imagenes": [
-           "img/9903.png"
+           "img/9903.PNG"
           ]
 
          },
@@ -992,7 +992,37 @@
 
 
            "id": 71,
-           "nombre": "Ref 9904XL",
+           "nombre": "Ref 9905",
+           "descripcion": "TALLA:UNICA.\nTELA: Piel de durazno.\nSUBLIMADOS surtidos.",
+           "precios": [
+            { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
+            { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
+            { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
+          ],
+           "imagenes": [
+           "img/9905.png"
+          ]
+
+         },
+
+
+           "id": 72,
+           "nombre": "Ref 9908",
+           "descripcion": "TALLA:UNICA.\nTELA: Piel de durazno.\nSUBLIMADOS surtidos.",
+           "precios": [
+            { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
+            { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
+            { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
+          ],
+           "imagenes": [
+           "img/9908.png"
+          ]
+
+         },
+
+
+           "id": 73,
+           "nombre": "Ref 9908XL",
            "descripcion": "TALLA:XL.\nTELA: Piel de durazno.\nSUBLIMADOS surtidos.",
            "precios": [
             { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
@@ -1000,7 +1030,63 @@
             { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
           ],
            "imagenes": [
-           "img/9904XL.png"
+           "img/9908XL.png"
+          ]
+
+         },
+
+           "id": 74,
+           "nombre": "Ref 9909",
+           "descripcion": "TALLA:UNICA.\nTELA: Piel de durazno.\nSUBLIMADOS surtidos.",
+           "precios": [
+            { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
+            { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
+            { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
+          ],
+           "imagenes": [
+           "img/9909.png"
+          ]
+
+         },
+
+
+           "id": 75,
+           "nombre": "Ref 4006",
+           "descripcion": "TALLA:UNICA.\nTELA: Piel de durazno.\nSUBLIMADOS surtidos.",
+           "precios": [
+            { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
+            { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
+            { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
+          ],
+           "imagenes": [
+           "img/4006.png"
+          ]
+
+         },
+           "id": 76,
+           "nombre": "Ref 4007",
+           "descripcion": "TALLA:UNICA.\nTELA: Piel de durazno.\nSUBLIMADOS surtidos.",
+           "precios": [
+            { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
+            { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
+            { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
+          ],
+           "imagenes": [
+           "img/4007.png"
+          ]
+
+         },
+
+           "id": 77,
+           "nombre": "Ref 7071,
+           "descripcion": "TALLA:UNICA.\nTELA: Piel de durazno.\nSUBLIMADOS surtidos.",
+           "precios": [
+            { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
+            { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
+            { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
+          ],
+           "imagenes": [
+           "img/7071.png"
           ]
 
          }
