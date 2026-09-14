@@ -2,7 +2,7 @@
  {
     "id": 1,
     "nombre": "Ref:3301",
-   "descripcion": "TALLA: Unica.\nTELA: Piel de durazno (No transparenta). \nESTAMPADOS: Surtimos colores/estampados variados; si requieres repetir, confírmalo por WhatsApp. \nFABRICACION: Hecho en Medellín",
+    "descripcion": "TALLA: Unica.\nTELA: Piel de durazno (No transparenta). \nESTAMPADOS: Surtimos colores/estampados variados; si requieres repetir, confírmalo por WhatsApp. \nFABRICACION: Hecho en Medellín",
     "precios": [
     { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
     { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
@@ -91,7 +91,7 @@
  	  "precios": [
            { "cantidad": 6, "valor": 95994, "Unidad": "$15.999 c/u" },
            { "cantidad": 12, "valor": 167988, "Unidad": "$13.999 c/u" },
-           { "cantidad": 120, "valor": 13499, "Unidad": "$13.499.599 c/u" }
+           { "cantidad": 120, "valor": 13499, "Unidad": "$13.499 c/u" }
        ],
           "imagenes": [
           "img/3308XL.jpg"
@@ -403,7 +403,7 @@
             { "cantidad": 120, "valor": 1380000, "Unidad": "$11.500 c/u" }
           ],
            "imagenes": [
-           "img/3336.png"
+           "img/3335XL.png"
           ]     
 
         },
@@ -758,7 +758,6 @@
            "imagenes": [
            "img/1218.png"
         ]
-
         },
         {
            "id": 55,
@@ -772,7 +771,6 @@
            "imagenes": [
            "img/1218XL.jpg"
         ]
-
         },
         {
            "id": 56,
@@ -786,7 +784,6 @@
            "imagenes": [
            "img/1903.png"
         ]
-
         },
         {
            "id": 57,
@@ -800,7 +797,6 @@
            "imagenes": [
            "img/1061.png"
         ]
-
         },
         {
            "id": 58,
@@ -814,7 +810,6 @@
            "imagenes": [
            "img/1063.png"
         ]
-
         },
         {
            "id": 59,
@@ -827,9 +822,8 @@
         ],
            "imagenes": [
            "img/1065.png"
-        ]
-
-        },
+          ]
+          },
           {
            "id": 60,
            "nombre": "Ref 1067",
@@ -842,9 +836,8 @@
            "imagenes": [
            "img/1067.png"
            ]
-
-          },
-        {
+           },
+           {
            "id": 61,
            "nombre": "Ref 1068",
            "descripcion": "TALLA: 2-4, 6-8, 10-12, 14-16.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
@@ -856,7 +849,6 @@
            "imagenes": [
            "img/1068.jpg"
           ]
-
          },
          {
            "id": 62,
@@ -870,9 +862,7 @@
            "imagenes": [
            "img/1069.jpg"
           ]
-
          },
-
          {
            "id": 63,
            "nombre": "Ref 3384",
@@ -885,9 +875,7 @@
            "imagenes": [
            "img/3384.png"
           ]
-
          },
-
          {
            "id": 64,
            "nombre": "Ref 3385",
@@ -900,9 +888,7 @@
            "imagenes": [
            "img/3385.png"
           ]
-
          },
-
          {
            "id": 65,
            "nombre": "Ref 9901",
@@ -915,9 +901,7 @@
            "imagenes": [
            "img/9901.png"
           ]
-
          },
-
          {
 
            "id": 66,
@@ -931,9 +915,7 @@
            "imagenes": [
            "img/9901XL.png"
           ]
-
          },
-
          {
 
            "id": 67,
@@ -947,9 +929,7 @@
            "imagenes": [
            "img/9902.png"
           ]
-
          },
-
          {
 
            "id": 68,
@@ -963,9 +943,7 @@
            "imagenes": [
            "img/9902XL.png"
           ]
-
          },
-
          {
 
            "id": 69,
@@ -977,11 +955,9 @@
             { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
           ],
            "imagenes": [
-           "img/9903.PNG"
+           "img/9903.png"
           ]
-
          },
-
          {
 
            "id": 70,
@@ -995,9 +971,7 @@
            "imagenes": [
            "img/9904.png"
           ]
-
          },
-
          {
 
            "id": 71,
@@ -1011,9 +985,7 @@
            "imagenes": [
            "img/9905.png"
           ]
-
          },
-
          {
 
            "id": 72,
@@ -1027,9 +999,7 @@
            "imagenes": [
            "img/9908.png"
           ]
-
          },
-
          {
 
            "id": 73,
@@ -1043,9 +1013,7 @@
            "imagenes": [
            "img/9908XL.png"
           ]
-
          },
-
          {
 
            "id": 74,
@@ -1059,9 +1027,7 @@
            "imagenes": [
            "img/9909.png"
           ]
-
          },
-
          {
 
            "id": 75,
@@ -1075,9 +1041,7 @@
            "imagenes": [
            "img/4006.png"
           ]
-
          },
-
          {
            "id": 76,
            "nombre": "Ref 4007",
@@ -1089,10 +1053,8 @@
           ],
            "imagenes": [
            "img/4007.png"
-          ]
-
+         ]
          },
-
          {
            "id": 77,
            "nombre": "Ref 7071",
