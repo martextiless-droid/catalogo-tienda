@@ -871,5 +871,65 @@
            "img/1069.jpg"
           ]
 
-         }
+         },
+
+         {
+           "id": 63,
+           "nombre": "Ref 3384",
+           "descripcion": "TALLA:unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
+           "precios": [
+            { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
+            { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
+            { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
+          ],
+           "imagenes": [
+           "img/3384.png"
+          ]
+
+         },
+
+         {
+           "id": 64,
+           "nombre": "Ref 3385",
+           "descripcion": "TALLA:unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
+           "precios": [
+            { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
+            { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
+            { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
+          ],
+           "imagenes": [
+           "img/3385.png"
+          ]
+
+         },
+
+           "id": 65,
+           "nombre": "Ref 9901",
+           "descripcion": "TALLA:unica.\nTELA: Piel de durazno.\nSUBLIMADOS surtidos.",
+           "precios": [
+            { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
+            { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
+            { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
+          ],
+           "imagenes": [
+           "img/9901.png"
+          ]
+
+         },
+
+         },
+
+           "id": 66,
+           "nombre": "Ref 9901XL",
+           "descripcion": "TALLA:unica.\nTELA: Piel de durazno.\nSUBLIMADOS surtidos.",
+           "precios": [
+            { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
+            { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
+            { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
+          ],
+           "imagenes": [
+           "img/9901XL.png"
+          ]
+
+         },
 ]
