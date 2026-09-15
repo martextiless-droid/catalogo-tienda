@@ -908,7 +908,7 @@
            "nombre": "Ref 9901XL",
            "descripcion": "TALLA: XL.\nTELA: Piel de durazno.\nSUBLIMADOS surtidos.",
            "precios": [
-            { "cantidad": 6, "valor": 10200, "Unidad": "$17.000 c/u" },
+            { "cantidad": 6, "valor": 102000, "Unidad": "$17.000 c/u" },
             { "cantidad": 12, "valor": 179988, "Unidad": "$14.999 c/u" },
             { "cantidad": 120, "valor": 1740000, "Unidad": "$14.500 c/u" }
           ],
