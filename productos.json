@@ -1022,7 +1022,7 @@
            "precios": [
             { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
             { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
-            { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
+            { "cantidad": 120, "valor": $1.559.880, "Unidad": "$8.999 c/u" }
           ],
            "imagenes": [
            "img/9909.png"
@@ -1032,24 +1032,28 @@
 
            "id": 75,
            "nombre": "Ref 4006",
-           "descripcion": "TALLA: UNICA.\nTELA: Piel de durazno.\nSUBLIMADOS surtidos.",
+           "descripcion": "TALLA: UNICA.\nTELA: Satin Licrado.\nColores surtidos.",
            "precios": [
-            { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
-            { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
-            { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
+            { "cantidad": 6, "valor": $99.000, "Unidad": "$16.500 c/u" },
+            { "cantidad": 12, "valor": $174.500, "Unidad": "$14.500 c/u" },
+            { "cantidad": 120, "valor": $1.620.000, "Unidad": "$13.500 c/u" }
           ],
            "imagenes": [
            "img/4006.png"
+           "img/4006-1.png"
+           "img/4006-2.png"
+           "img/4006-3.png"
+           "img/4006-4.png"
           ]
          },
          {
            "id": 76,
            "nombre": "Ref 4007",
-           "descripcion": "TALLA: UNICA.\nTELA: Piel de durazno.\nSUBLIMADOS surtidos.",
+           "descripcion": "TALLA: UNICA.\nTELA: Satin Licrado.\nColores surtidos.",
            "precios": [
-            { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
-            { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
-            { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
+            { "cantidad": 6, "valor": $101.994, "Unidad": "$16.999 c/u" },
+            { "cantidad": 12, "valor": $191.988, "Unidad": "$15.999 c/u" },
+            { "cantidad": 120, "valor": $1.799.800, "Unidad": "$14.999 c/u" }
           ],
            "imagenes": [
            "img/4007.png"
@@ -1058,11 +1062,11 @@
          {
            "id": 77,
            "nombre": "Ref 7071",
-           "descripcion": "TALLA: UNICA.\nTELA: Piel de durazno.\nSUBLIMADOS surtidos.",
+           "descripcion": "TALLA: UNICA.\nTELA: Satin Licrado.\nColores surtidos.",
            "precios": [
-            { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
-            { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
-            { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
+            { "cantidad": 6, "valor":   $131.994,   "Unidad": "$21.999 c/u" },
+            { "cantidad": 12, "valor":  $228.000,   "Unidad": "$19.999 c/u" },
+            { "cantidad": 120, "valor": $2.160.000, "Unidad": "$18.999 c/u" }
           ],
            "imagenes": [
            "img/7071.png"
