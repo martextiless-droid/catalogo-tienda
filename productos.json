@@ -1022,7 +1022,7 @@
            "precios": [
             { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
             { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
-            { "cantidad": 120, "valor": $1.559.880, "Unidad": "$8.999 c/u" }
+            { "cantidad": 120, "valor": "$1.559.880", "Unidad": "$8.999 c/u" }
           ],
            "imagenes": [
            "img/9909.png"
