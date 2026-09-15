@@ -4,9 +4,9 @@
     "nombre": "Ref:3301",
     "descripcion": "TALLA: Unica.\nTELA: Piel de durazno (No transparenta). \nESTAMPADOS: Surtimos colores/estampados variados; si requieres repetir, confírmalo por WhatsApp. \nFABRICACION: Hecho en Medellín",
     "precios": [
-    { "cantidad": 6, "valor": $69.000, "Unidad": "$11.500 c/u" },
-    { "cantidad": 12, "valor": $114.000, "Unidad": "$9.500 c/u" },
-    { "cantidad": 120, "valor": $1.079.880, "Unidad": "$8.999 c/u" }
+    { "cantidad": 6, "valor": "$69.000", "Unidad": "$11.500 c/u" },
+    { "cantidad": 12, "valor": "$114.000", "Unidad": "$9.500 c/u" },
+    { "cantidad": 120, "valor": "$1.079.880", "Unidad": "$8.999 c/u" }
     ],
     "imagenes": [
     "img/3301.png",
