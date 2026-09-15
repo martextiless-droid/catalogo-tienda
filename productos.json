@@ -1,12 +1,12 @@
 [
  {
-    "id": 1,
+    "id": 1,F
     "nombre": "Ref:3301",
     "descripcion": "TALLA: Unica.\nTELA: Piel de durazno (No transparenta). \nESTAMPADOS: Surtimos colores/estampados variados; si requieres repetir, confírmalo por WhatsApp. \nFABRICACION: Hecho en Medellín",
     "precios": [
-    { "cantidad": 6, "valor": "$69.000", "Unidad": "$11.500 c/u" },
-    { "cantidad": 12, "valor": "$114.000", "Unidad": "$9.500 c/u" },
-    { "cantidad": 120, "valor": "$1.079.880", "Unidad": "$8.999 c/u" }
+    { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
+    { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
+    { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
     ],
     "imagenes": [
     "img/3301.png",
@@ -19,9 +19,9 @@
      "nombre": "Ref 3303",
      "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS: Surtidos.",
      "precios": [
-     { "cantidad": 6, "valor": "$69.000", "Unidad": "$11.500 c/u" },
-     { "cantidad": 12, "valor": "$114.000", "Unidad": "$9.500 c/u" },
-     { "cantidad": 120, "valor": "$1.079.880", "Unidad": "$8.999 c/u" }
+     { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
+     { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
+     { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
     ],
     "imagenes": [
     "img/3303.jpg"
@@ -33,9 +33,9 @@
      "nombre": "Ref 3305",
      "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
      "precios": [
-      { "cantidad": 6, "valor": "$69.000", "Unidad": "$11.500 c/u" },
-      { "cantidad": 12, "valor": "$114.000", "Unidad": "$9.500 c/u" },
-      { "cantidad": 120, "valor": "$1.079.880", "Unidad": "$8.999 c/u" }
+      { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
+      { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
+      { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
     ],
      "imagenes": [
      "img/3305.jpg"
@@ -47,9 +47,9 @@
   "nombre": "Ref 3305XL",
   "descripcion": "TALLA: XL.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
   "precios": [
-    { "cantidad": 6, "valor": "$69.000", "Unidad": "$13.999 c/u" },
-    { "cantidad": 12, "valor": "$114.000", "Unidad": "$11.999 c/u" },
-    { "cantidad": 120, "valor": "$1.380.000", "Unidad": "$11.500 c/u" }
+    { "cantidad": 6, "valor": 83994, "Unidad": "$13.999 c/u" },
+    { "cantidad": 12, "valor": 143988, "Unidad": "$11.999 c/u" },
+    { "cantidad": 120, "valor": 1380000, "Unidad": "$11.500 c/u" }
   ],
   "imagenes": [
     "img/3305XL.jpg"
@@ -1008,7 +1008,7 @@
            "precios": [
             { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
             { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
-            { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
+            { "cantidad": 120, "valor": 1860000, "Unidad": "$15.500c/u" }
           ],
            "imagenes": [
            "img/9908XL.png"
@@ -1020,9 +1020,9 @@
            "nombre": "Ref 9909",
            "descripcion": "TALLA: UNICA.\nTELA: Piel de durazno.\nSUBLIMADOS surtidos.",
            "precios": [
-            { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
-            { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
-            { "cantidad": 120, "valor": "$1.559.880", "Unidad": "$8.999 c/u" }
+            { "cantidad": 6, "valor": 135000, "Unidad": "$22.500 c/u" },
+            { "cantidad": 12, "valor": 246000, "Unidad": "$20.500 c/u" },
+            { "cantidad": 120, "valor": 2399880, "Unidad": "$19.999 c/u" }
           ],
            "imagenes": [
            "img/9909.png"
@@ -1034,9 +1034,9 @@
            "nombre": "Ref 4006",
            "descripcion": "TALLA: UNICA.\nTELA: Satin Licrado.\nColores surtidos.",
            "precios": [
-            { "cantidad": 6, "valor": "$99.000", "Unidad": "$16.500 c/u" },
-            { "cantidad": 12, "valor": "$174.500", "Unidad": "$14.500 c/u" },
-            { "cantidad": 120, "valor": "$1.620.000", "Unidad": "$13.500 c/u" }
+            { "cantidad": 6, "valor": 99000, "Unidad": "$16.500 c/u" },
+            { "cantidad": 12, "valor": 174500, "Unidad": "$14.500 c/u" },
+            { "cantidad": 120, "valor": 1679880, "Unidad": "$13.999 c/u" }
           ],
            "imagenes": [
            "img/4006.png",
@@ -1051,9 +1051,9 @@
            "nombre": "Ref 4007",
            "descripcion": "TALLA: UNICA.\nTELA: Satin Licrado.\nColores surtidos.",
            "precios": [
-            { "cantidad": 6, "valor": "$101.994", "Unidad": "$16.999 c/u" },
-            { "cantidad": 12, "valor": "$191.988", "Unidad": "$15.999 c/u" },
-            { "cantidad": 120, "valor": "$1.799.800", "Unidad": "$14.999 c/u" }
+            { "cantidad": 6, "valor": 101994, "Unidad": "$16.999 c/u" },
+            { "cantidad": 12, "valor": 191988, "Unidad": "$15.999 c/u" },
+            { "cantidad": 120, "valor": 1860000, "Unidad": "$15.500 c/u" }
           ],
            "imagenes": [
            "img/4007.png"
@@ -1064,9 +1064,9 @@
            "nombre": "Ref 7071",
            "descripcion": "TALLA: UNICA.\nTELA: Satin Licrado.\nColores surtidos.",
            "precios": [
-            { "cantidad": 6, "valor":   "$131.994",   "Unidad": "$21.999 c/u" },
-            { "cantidad": 12, "valor":  "$228.000",   "Unidad": "$19.999 c/u" },
-            { "cantidad": 120, "valor": "$2.160.000", "Unidad": "$18.999 c/u" }
+            { "cantidad": 6, "valor":   131994,   "Unidad": "$21.999 c/u" },
+            { "cantidad": 12, "valor":  228000,   "Unidad": "$19.999 c/u" },
+            { "cantidad": 120, "valor": 2340000, "Unidad": "$19.500 c/u" }
           ],
            "imagenes": [
            "img/7071.png"
