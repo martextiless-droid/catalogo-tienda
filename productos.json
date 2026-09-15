@@ -4,9 +4,9 @@
     "nombre": "Ref:3301",
     "descripcion": "TALLA: Unica.\nTELA: Piel de durazno (No transparenta). \nESTAMPADOS: Surtimos colores/estampados variados; si requieres repetir, confírmalo por WhatsApp. \nFABRICACION: Hecho en Medellín",
     "precios": [
-    { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
-    { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
-    { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
+    { "cantidad": 6, "valor": $69.000, "Unidad": "$11.500 c/u" },
+    { "cantidad": 12, "valor": $114.000, "Unidad": "$9.500 c/u" },
+    { "cantidad": 120, "valor": $1.079.880, "Unidad": "$8.999 c/u" }
     ],
     "imagenes": [
     "img/3301.png",
@@ -19,9 +19,9 @@
      "nombre": "Ref 3303",
      "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS: Surtidos.",
      "precios": [
-     { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
-     { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
-     { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
+     { "cantidad": 6, "valor": $69.000, "Unidad": "$11.500 c/u" },
+     { "cantidad": 12, "valor": $114.000, "Unidad": "$9.500 c/u" },
+     { "cantidad": 120, "valor": $1.079.880, "Unidad": "$8.999 c/u" }
     ],
     "imagenes": [
     "img/3303.jpg"
@@ -33,9 +33,9 @@
      "nombre": "Ref 3305",
      "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
      "precios": [
-      { "cantidad": 6, "valor": 69000, "Unidad": "$11.500 c/u" },
-      { "cantidad": 12, "valor": 114000, "Unidad": "$9.500 c/u" },
-      { "cantidad": 120, "valor": 1079880, "Unidad": "$8.999 c/u" }
+      { "cantidad": 6, "valor": $69.000, "Unidad": "$11.500 c/u" },
+      { "cantidad": 12, "valor": $114.000, "Unidad": "$9.500 c/u" },
+      { "cantidad": 120, "valor": $1.079.880, "Unidad": "$8.999 c/u" }
     ],
      "imagenes": [
      "img/3305.jpg"
@@ -45,11 +45,11 @@
     {
   "id": 4,
   "nombre": "Ref 3305XL",
-  "descripcion": "TALLA: Unica.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
+  "descripcion": "TALLA: XL.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
   "precios": [
-    { "cantidad": 6, "valor": 83994, "Unidad": "$13.999 c/u" },
-    { "cantidad": 12, "valor": 143988, "Unidad": "$11.999 c/u" },
-    { "cantidad": 120, "valor": 1380000, "Unidad": "$11.500 c/u" }
+    { "cantidad": 6, "valor": $69.000, "Unidad": "$13.999 c/u" },
+    { "cantidad": 12, "valor": $114.000, "Unidad": "$11.999 c/u" },
+    { "cantidad": 120, "valor": $1.380.000, "Unidad": "$11.500 c/u" }
   ],
   "imagenes": [
     "img/3305XL.jpg"
@@ -1039,10 +1039,10 @@
             { "cantidad": 120, "valor": $1.620.000, "Unidad": "$13.500 c/u" }
           ],
            "imagenes": [
-           "img/4006.png"
-           "img/4006-1.png"
-           "img/4006-2.png"
-           "img/4006-3.png"
+           "img/4006.png",
+           "img/4006-1.png",
+           "img/4006-2.png",
+           "img/4006-3.png",
            "img/4006-4.png"
           ]
          },
