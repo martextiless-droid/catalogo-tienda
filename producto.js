@@ -109,6 +109,14 @@ if (waBtn && typeof fbq === 'function') {
 
       // Resto de datos
       document.getElementById("product-name").textContent = producto.nombre;
+
+      // Preparar botón para agregar esta referencia al carrito
+      const addCartBtn = document.getElementById("add-product-to-cart");
+      if (addCartBtn) {
+        addCartBtn.dataset.id = String(producto.id);
+        addCartBtn.dataset.name = producto.nombre || `Ref ${producto.id}`;
+        addCartBtn.disabled = false;
+      }
       document.getElementById("product-description").textContent = producto.descripcion;
 
       // Tabla de precios

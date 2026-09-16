@@ -4,6 +4,7 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="img/favicon.png">
   <title>Detalle del Producto</title>
 
 <!-- Meta Pixel Code -->
@@ -35,6 +36,7 @@ src="https://www.facebook.com/tr?id=1328987255274375&ev=PageView&noscript=1"
     <h1>Detalle del Producto</h1>
     <nav>
       <a href="index.html">← Volver al catálogo</a>
+      <a href="#cart" id="open-cart">Carrito 🛒 <span id="cart-count" class="cart-count">0</span></a>
     </nav>
   </header>
 
@@ -59,13 +61,39 @@ src="https://www.facebook.com/tr?id=1328987255274375&ev=PageView&noscript=1"
     <!-- Tabla dinámica de precios -->
     <div id="product-prices"></div>
 
-    <!-- Botón WhatsApp -->
+    <!-- Carrito -->
+    <div class="product-add-row">
+      <label for="product-qty"><strong>Cantidad:</strong></label>
+      <input id="product-qty" class="qty-input" type="number" min="1" value="1" aria-label="Cantidad">
+      <button id="add-product-to-cart" type="button" class="btn-cart-add" disabled>Agregar al carrito 🛒</button>
+    </div>
+
+    <!-- Botón WhatsApp individual -->
     <a id="whatsapp-link" target="_blank" class="btn-whatsapp">Pedir lista y disponibilidad</a>
   </div>
 </main>
 
 
 <script src="producto.js"></script>
+<script src="script.js"></script>
 
+<style>
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:9998}.cart-overlay.open{display:block}
+.cart-panel{position:fixed;top:0;right:0;width:min(420px,92vw);height:100vh;background:#fff;z-index:9999;box-shadow:-8px 0 30px rgba(0,0,0,.25);transform:translateX(105%);transition:transform .25s ease;display:flex;flex-direction:column}.cart-panel.open{transform:translateX(0)}
+.cart-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid #eee}.cart-head h2{margin:0;font-size:22px}.cart-close{border:0;background:transparent;font-size:28px;cursor:pointer;line-height:1}
+.cart-body{padding:16px 20px;overflow:auto;flex:1}.cart-empty{color:#777;text-align:center;padding:35px 10px}.cart-item{display:grid;grid-template-columns:1fr auto;gap:8px;padding:14px 0;border-bottom:1px solid #eee}.cart-item-name{font-weight:700}.cart-item-sub{font-size:13px;color:#666;margin-top:4px}
+.cart-controls{display:flex;align-items:center;gap:8px;margin-top:9px}.cart-controls button{width:30px;height:30px;border:1px solid #ccc;border-radius:6px;background:#f7f7f7;cursor:pointer;font-size:18px}.cart-qty{min-width:28px;text-align:center;font-weight:700}.cart-remove{border:0!important;background:none!important;color:#b00020!important;cursor:pointer;font-size:12px!important;width:auto!important}
+.cart-summary{border-top:1px solid #eee;padding:16px 20px}.cart-total{display:flex;justify-content:space-between;font-weight:700;margin-bottom:12px}
+.btn-cart-add{display:inline-flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;padding:10px 14px;border:0;border-radius:7px;background:#222;color:#fff;cursor:pointer;font-weight:700}.btn-cart-add:hover{opacity:.9}
+.btn-whatsapp-cart{display:flex;align-items:center;justify-content:center;width:100%;padding:13px 16px;border:0;border-radius:8px;background:#25D366;color:#fff;text-decoration:none;font-weight:700;cursor:pointer}.btn-whatsapp-cart.disabled{opacity:.45;pointer-events:none}
+.cart-count{display:inline-flex;min-width:21px;height:21px;padding:0 5px;border-radius:999px;align-items:center;justify-content:center;background:#25D366;color:#fff;font-size:12px;font-weight:800;margin-left:5px}.qty-input{width:70px;padding:9px;border:1px solid #ccc;border-radius:7px;text-align:center}.product-add-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px}
+</style>
+<div id="cart-overlay" class="cart-overlay"></div>
+<aside id="cart-panel" class="cart-panel" aria-label="Carrito de compras">
+<div class="cart-head"><h2>🛒 Tu carrito</h2><button id="cart-close" class="cart-close" aria-label="Cerrar carrito">&times;</button></div>
+<div id="cart-items" class="cart-body"></div>
+<div class="cart-summary"><div class="cart-total"><span>Total de unidades</span><span id="cart-total">0</span></div>
+<a id="whatsapp-cart-link" class="btn-whatsapp-cart disabled" target="_blank" rel="noopener">Enviar pedido por WhatsApp</a></div>
+</aside>
 </body>
 </html>
