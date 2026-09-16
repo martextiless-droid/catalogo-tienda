@@ -47,9 +47,9 @@
   "nombre": "Ref 3305XL",
   "descripcion": "TALLA: XL.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
   "precios": [
-    { "cantidad": 6, "valor": 83994, "Unidad": "$13.999 c/u" },
-    { "cantidad": 12, "valor": 143988, "Unidad": "$11.999 c/u" },
-    { "cantidad": 120, "valor": 1380000, "Unidad": "$11.500 c/u" }
+    { "cantidad": 6, "valor": 81000, "Unidad": "$13.500 c/u" },
+    { "cantidad": 12, "valor": 138000, "Unidad": "$11.500 c/u" },
+    { "cantidad": 120, "valor": 1319880, "Unidad": "$10.999 c/u" }
   ],
   "imagenes": [
     "img/3305XL.jpg"
@@ -91,7 +91,7 @@
  	  "precios": [
            { "cantidad": 6, "valor": 95994, "Unidad": "$15.999 c/u" },
            { "cantidad": 12, "valor": 167988, "Unidad": "$13.999 c/u" },
-           { "cantidad": 120, "valor": 13499, "Unidad": "$13.499 c/u" }
+           { "cantidad": 120, "valor": 1619880, "Unidad": "$13.499 c/u" }
        ],
           "imagenes": [
           "img/3308XL.jpg"
@@ -105,7 +105,7 @@
           "precios": [
            { "cantidad": 6, "valor": 71994, "Unidad": "$11.999 c/u" },
            { "cantidad": 12, "valor": 119999, "Unidad": "$9.999 c/u" },
-           { "cantidad": 120, "valor": 9599, "Unidad": "$9.499 c/u" }
+           { "cantidad": 120, "valor": 1139880, "Unidad": "$9.499 c/u" }
         ],
           "imagenes": [
            "img/3309.png"
