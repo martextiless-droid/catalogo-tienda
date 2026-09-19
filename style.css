@@ -336,7 +336,8 @@ header nav a:hover {
 
 /* ====== Barra de categorías ====== */
 .catbar{
-  position: relative;
+  position: sticky;        /* se queda pegada al top al hacer scroll */
+  top: 0;               /* ajusta si tu header es más alto */position: relative;
   z-index: 50;
   background: #0f0f10;     /* oscuro elegante */
   border-bottom: 1px solid #1f1f22;
