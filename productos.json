@@ -1087,5 +1087,19 @@
            "img/7038.png"
           ]
 
+         },
+         {
+           "id": 79,
+           "nombre": "Ref 5801",
+           "descripcion": "TALLA: UNICA.\nTELA: Satin Licrado.\nColores surtidos.",
+           "precios": [
+            { "cantidad": 6, "valor":   89994,   "Unidad": "$14.999 c/u" },
+            { "cantidad": 12, "valor":  155988,   "Unidad": "$12.999 c/u" },
+            { "cantidad": 120, "valor": 1620000, "Unidad": "$12.500 c/u" }
+          ],
+           "imagenes": [
+           "img/5801.png"
+          ]
+
          }
 ]
