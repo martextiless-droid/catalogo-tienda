@@ -1101,5 +1101,24 @@
            "img/5801.png"
           ]
 
+         },
+         {
+           "id": 80,
+           "nombre": "Ref 6078",
+           "descripcion": "TALLA: UNICA.\nTELA: Satin Licrado.\nColores surtidos.",
+           "precios": [
+            { "cantidad": 6, "valor":   109200,   "Unidad": "$18.200 c/u" },
+            { "cantidad": 12, "valor":  194000,   "Unidad": "$16.200 c/u" },
+            { "cantidad": 120, "valor": 1824000, "Unidad": "$15.200 c/u" }
+          ],
+           "imagenes": [
+           "img/6078.png",
+           "img/6078-1.png",
+           "img/6078-2.png",
+           "img/6078-3.png",
+           "img/6078-4.png",
+           "img/6078-5.png"
+          ]
+
          }
 ]
