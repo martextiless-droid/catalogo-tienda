@@ -1107,9 +1107,9 @@
            "nombre": "Ref 6078",
            "descripcion": "TALLA: UNICA.\nTELA: Satin Licrado.\nColores surtidos.",
            "precios": [
-            { "cantidad": 6, "valor":   109200,   "Unidad": "$18.200 c/u" },
-            { "cantidad": 12, "valor":  194000,   "Unidad": "$16.200 c/u" },
-            { "cantidad": 120, "valor": 1824000, "Unidad": "$15.200 c/u" }
+            { "cantidad": 6, "valor":   111000,   "Unidad": "$18.500 c/u" },
+            { "cantidad": 12, "valor":  198000,   "Unidad": "$16.500 c/u" },
+            { "cantidad": 120, "valor": 1860000, "Unidad": "$15.500 c/u" }
           ],
            "imagenes": [
            "img/6078.png",
@@ -1119,6 +1119,34 @@
            "img/6078-4.png",
            "img/6078-5.png",
            "img/6078-6.png"
+          ]
+
+         },
+         {
+           "id": 81,
+           "nombre": "Ref 6571",
+           "descripcion": "TALLA: UNICA.\nTELA: Satin Licrado.\nColores surtidos.",
+           "precios": [
+            { "cantidad": 6, "valor":   111000,   "Unidad": "$18.500 c/u" },
+            { "cantidad": 12, "valor":  198000,   "Unidad": "$16.500 c/u" },
+            { "cantidad": 120, "valor": 1860000, "Unidad": "$15.500 c/u" }
+          ],
+           "imagenes": [
+           "img/6571.png"
+          ]
+
+         },
+         {
+           "id": 82,
+           "nombre": "Ref 6709",
+           "descripcion": "TALLA: UNICA.\nTELA: Satin Licrado.\nColores surtidos.",
+           "precios": [
+            { "cantidad": 6, "valor":   111000,   "Unidad": "$18.500 c/u" },
+            { "cantidad": 12, "valor":  198000,   "Unidad": "$16.500 c/u" },
+            { "cantidad": 120, "valor": 1860000, "Unidad": "$15.500 c/u" }
+          ],
+           "imagenes": [
+           "img/6709.png"
           ]
 
          }
