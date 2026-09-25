@@ -132,19 +132,20 @@ header nav a:hover {
 }
 
 .product h3 {
-  font-size: 1rem;
-  margin: 10px 0 4px;
+  font-size: 1.05rem;
+  margin: 8px 0 4px;
   text-align: center;
   font-weight: 700;
   color: #222;
+  letter-spacing: 0.2px;
 }
 
 .product p {
   margin: 0 0 10px;
-  color: #00A0B7;
+  color: #666;
   text-align: center;
   font-size: 0.92rem;
-  line-height: 1.3;
+  line-height: 1.35;
 }
 
 .btn {
