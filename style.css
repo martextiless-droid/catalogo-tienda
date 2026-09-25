@@ -121,14 +121,14 @@ header nav a:hover {
 
 .product img {
   width: 100%;
-  height: 200px;
+  height: 235px;
   object-fit: cover;
-  border-radius: 5px;
+  border-radius: 10px;
   transition: transform 0.3s ease;
 }
 
 .product img:hover {
-  transform: scale(1.05);
+  transform: scale(1.03);
 }
 
 .product h3 {
