@@ -349,7 +349,7 @@ header nav a:hover {
   background: #0f0f10;
   border-bottom: 1px solid #1f1f22;
   padding: 8px 12px;
-  overflow-x: auto;
+  overflow-x: visible;
   white-space: nowrap;
 }
 
