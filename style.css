@@ -506,3 +506,39 @@ header nav a:hover {
   .product { height: auto; min-height: 380px; }
   .btn-cart-add { width: 100%; }
 }
+
+/* ===== Menú desplegable de Pijamas ===== */
+
+.cat-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.cat-submenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 170px;
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 0 0 8px 8px;
+  padding: 6px 0;
+  z-index: 100;
+}
+
+.cat-submenu a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 10px 14px;
+  white-space: nowrap;
+}
+
+.cat-submenu a:hover {
+  background: #222;
+}
+
+.cat-dropdown:hover .cat-submenu {
+  display: block;
+}
