@@ -388,15 +388,16 @@ header nav a:hover {
 /* ====== Barra de categorías ====== */
 .catbar {
   position: fixed;
-  top: 56px;
+  top: 64px;
   left: 0;
   right: 0;
   z-index: 50;
-  background: #0f0f10;
-  border-bottom: 1px solid #1f1f22;
-  padding: 8px 12px;
-  overflow-x: visible;
+  background: #111;
+  border-bottom: 1px solid #2a2a2a;
+  padding: 7px 28px;
+  overflow: visible;
   white-space: nowrap;
+  box-sizing: border-box;
 }
 
 .cat-link{
