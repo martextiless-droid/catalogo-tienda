@@ -400,30 +400,29 @@ header nav a:hover {
   box-sizing: border-box;
 }
 
-.cat-link{
+.cat-link {
   display: inline-block;
-  color: #d6d6d6;
+  color: #cfcfcf;
   text-decoration: none;
-  padding: 8px 14px;
-  margin-right: 8px;
-  border: 1px solid #2a2a2e;
-  border-radius: 999px;
+  padding: 9px 12px;
+  margin-right: 18px;
+  border: none;
+  border-bottom: 2px solid transparent;
   font-size: 14px;
-  transition: background .2s, color .2s, border .2s, transform .1s;
+  font-weight: 500;
+  transition: color .2s, border-color .2s;
 }
 
-.cat-link:hover{
-  border-color: #00A0B7;
+.cat-link:hover {
   color: #fff;
-  transform: translateY(-1px);
+  border-bottom-color: #555;
 }
 
-.cat-link.active{
-  background: #00A0B7;
+.cat-link.active {
   color: #fff;
-  border-color: transparent;
+  border-bottom-color: #00A0B7;
+  background: transparent;
 }
-
 
 /* ========================
    Carrito de compras
