@@ -88,7 +88,7 @@
   renderCart();
 
 
- // ====== Filtro de categorías y subcategorías ======
+// ====== Filtro de categorías y subcategorías ======
 const params = new URLSearchParams(location.search);
 
 const cat = (params.get("cat") || "all").toLowerCase();
@@ -110,11 +110,15 @@ document.querySelectorAll(".product").forEach(card => {
   const productCat = (card.dataset.cat || "pijamas").toLowerCase();
   const productSubcat = (card.dataset.subcat || "").toLowerCase();
 
+  // Primero comprobamos la categoría principal
   const matchesCategory =
     cat === "all" || productCat === cat;
 
+  // La subcategoría SOLO se aplica a Pijamas
   const matchesSubcategory =
-    subcat === "all" || productSubcat === subcat;
+    cat !== "pijamas" ||
+    subcat === "all" ||
+    productSubcat === subcat;
 
   card.style.display =
     matchesCategory && matchesSubcategory ? "" : "none";
@@ -123,6 +127,7 @@ document.querySelectorAll(".product").forEach(card => {
 // Meta Pixel
 if (typeof fbq === "function") {
   fbq("track", "ViewCategory", {
-    content_category: subcat === "all" ? cat : `${cat}-${subcat}`
+    content_category:
+      subcat === "all" ? cat : `${cat}-${subcat}`
   });
 }
