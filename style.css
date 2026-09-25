@@ -436,20 +436,33 @@ header nav a:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 7px;
+  width: 100%;
   margin-top: 10px;
-  padding: 10px 14px;
+  padding: 11px 14px;
   border: 0;
-  border-radius: 7px;
-  background: #222;
+  border-radius: 8px;
+  background: #00A0B7;
   color: #fff;
   cursor: pointer;
   font-weight: 700;
   font-size: 14px;
+  transition: background 0.2s ease, transform 0.15s ease;
 }
 
-.btn-cart-add:hover { opacity: .9; }
-.btn-cart-add:disabled { opacity: .5; cursor: not-allowed; }
+.btn-cart-add:hover {
+  background: #00899d;
+  transform: translateY(-1px);
+}
+
+.btn-cart-add:active {
+  transform: translateY(0);
+}
+
+.btn-cart-add:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
 
 .cart-count {
   display: inline-flex;
