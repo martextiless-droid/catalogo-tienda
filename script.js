@@ -87,16 +87,42 @@
 
   renderCart();
 
-  // ====== Filtro de categorías por URL ======
-  const params=new URLSearchParams(location.search);
-  const cat=(params.get("cat")||"all").toLowerCase();
-  document.querySelectorAll(".cat-link").forEach(a=>{
-    const linkCat=(new URL(a.href,location.href).searchParams.get("cat")||"all").toLowerCase();
-    if(linkCat===cat)a.classList.add("active");
+
+ // ====== Filtro de categorías y subcategorías ======
+const params = new URLSearchParams(location.search);
+
+const cat = (params.get("cat") || "all").toLowerCase();
+const subcat = (params.get("subcat") || "all").toLowerCase();
+
+// Activar categoría principal
+document.querySelectorAll(".cat-link").forEach(a => {
+  const url = new URL(a.href, location.href);
+  const linkCat = (url.searchParams.get("cat") || "all").toLowerCase();
+
+  if (linkCat === cat) {
+    a.classList.add("active");
+  }
+});
+
+// Filtrar productos
+document.querySelectorAll(".product").forEach(card => {
+
+  const productCat = (card.dataset.cat || "pijamas").toLowerCase();
+  const productSubcat = (card.dataset.subcat || "").toLowerCase();
+
+  const matchesCategory =
+    cat === "all" || productCat === cat;
+
+  const matchesSubcategory =
+    subcat === "all" || productSubcat === subcat;
+
+  card.style.display =
+    matchesCategory && matchesSubcategory ? "" : "none";
+});
+
+// Meta Pixel
+if (typeof fbq === "function") {
+  fbq("track", "ViewCategory", {
+    content_category: subcat === "all" ? cat : `${cat}-${subcat}`
   });
-  document.querySelectorAll(".product").forEach(card=>{
-    const c=(card.dataset.cat||"pijamas").toLowerCase();
-    card.style.display=(cat==="all"||c===cat)?"":"none";
-  });
-  if(typeof fbq==="function")fbq("track","ViewCategory",{content_category:cat});
-})();
+}
