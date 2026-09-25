@@ -131,3 +131,5 @@ if (typeof fbq === "function") {
       subcat === "all" ? cat : `${cat}-${subcat}`
   });
 }
+
+})();
