@@ -1,3 +1,4 @@
+
 // Obtener el parámetro ?id= de la URL
 const params = new URLSearchParams(window.location.search);
 const productId = parseInt(params.get("id"));

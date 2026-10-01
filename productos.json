@@ -792,7 +792,7 @@
            "precios": [           
            { "cantidad": 6, "valor": 95994, "Unidad": "$15.999 c/u" },
            { "cantidad": 12, "valor": 167988, "Unidad": "$13.999 c/u" },
-           { "cantidad": 120, "valor": 13499, "Unidad": "$13.499.599 c/u" }
+           { "cantidad": 120, "valor": 1500000, "Unidad": "$13.500 c/u" }
         ],
            "imagenes": [
            "img/1061.png"
@@ -804,8 +804,8 @@
            "descripcion": "TALLA: 2-4, 6-8, 10-12, 14-16.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [           
            { "cantidad": 6, "valor": 71994, "Unidad": "$11.999 c/u" },
-           { "cantidad": 12, "valor": 119999, "Unidad": "$9.999 c/u" },
-           { "cantidad": 120, "valor": 9599, "Unidad": "$9.499.599 c/u" }
+           { "cantidad": 12, "valor": 119988, "Unidad": "$9.999 c/u" },
+           { "cantidad": 120, "valor": 1140000, "Unidad": "$9.500 c/u" }
         ],
            "imagenes": [
            "img/1063.png"
@@ -817,8 +817,8 @@
            "descripcion": "TALLA: 2-4, 6-8, 10-12, 14-16.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [
            { "cantidad": 6, "valor": 71994, "Unidad": "$11.999 c/u" },
-           { "cantidad": 12, "valor": 119999, "Unidad": "$9.999 c/u" },
-           { "cantidad": 120, "valor": 9599, "Unidad": "$9.499.599 c/u" }
+           { "cantidad": 12, "valor": 119988, "Unidad": "$9.999 c/u" },
+           { "cantidad": 120, "valor": 1140000, "Unidad": "$9.500 c/u" }
         ],
            "imagenes": [
            "img/1065.png"
@@ -829,9 +829,9 @@
            "nombre": "Ref 1067",
            "descripcion": "TALLA: 2-4, 6-8, 10-12, 14-16.\nTELA: Piel de durazno.\nESTAMPADOS surtidos.",
            "precios": [         
-           { "cantidad": 6, "valor": 69000, "Unidad": "$14.999 c/u" },
-           { "cantidad": 12, "valor": 155988, "Unidad": "$12.999 c/u" },
-           { "cantidad": 120, "valor": 12500, "Unidad": "$12.500 c/u" }
+           { "cantidad": 6, "valor": 95994, "Unidad": "$15.999 c/u" },
+           { "cantidad": 12, "valor": 167988, "Unidad": "$13.999 c/u" },
+           { "cantidad": 120, "valor": 1500000, "Unidad": "$13.500 c/u" }
            ],
            "imagenes": [
            "img/1067.png"
