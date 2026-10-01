@@ -1148,7 +1148,7 @@
          },
          {
            "id": 83,
-           "nombre": "Ref 2805",
+           "nombre": "Jogger",
            "descripcion": "TALLA: UNICA.\nTELA: Piel De Durazno.\nColores surtidos.",
            "precios": [
             { "cantidad": 6, "valor":   111000,   "Unidad": "$18.500 c/u" },
@@ -1162,7 +1162,7 @@
          },
          {
            "id": 84,
-           "nombre": "Ref 2805XL",
+           "nombre": "Jogger XL",
            "descripcion": "TALLA: XL.\nTELA: Piel De Durazno.\nColores surtidos.",
            "precios": [
             { "cantidad": 6, "valor":   111000,   "Unidad": "$18.500 c/u" },
@@ -1176,7 +1176,7 @@
          },
          {
            "id": 85,
-           "nombre": "Ref Overzise",
+           "nombre": "Overzise",
            "descripcion": "TALLA: XL.\nTELA: Piel De Durazno.\nColores surtidos.",
            "precios": [
             { "cantidad": 6, "valor":   111000,   "Unidad": "$18.500 c/u" },
