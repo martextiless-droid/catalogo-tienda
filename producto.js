@@ -156,6 +156,7 @@ fetch("productos.json")
 
     const recomendados = productos
       .filter(p => p.id !== producto.id)
+      .sort(() => Math.random() - 0.5)
       .slice(0, 4);
 
     const grid = document.getElementById("recommended-grid");
