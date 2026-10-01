@@ -608,3 +608,17 @@ header nav a:hover {
 .cat-dropdown:hover .cat-submenu {
   display: block;
 }
+
+/* Productos recomendados */
+.recommended-products {
+  max-width: 1200px;
+  margin: 40px auto 0;
+  padding: 0 2rem 40px;
+}
+
+.recommended-products h2 {
+  margin: 0 0 20px;
+  font-size: 1.4rem;
+  color: #222;
+  font-weight: 700;
+}
