@@ -622,3 +622,14 @@ header nav a:hover {
   color: #222;
   font-weight: 700;
 }
+@media (max-width: 768px) {
+  .recommended-products {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .recommended-products .products {
+    padding: 0;
+    gap: 14px;
+  }
+}
