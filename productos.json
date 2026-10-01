@@ -1145,5 +1145,19 @@
            "img/6709.png"
           ]
 
+         },
+         {
+           "id": 83,
+           "nombre": "Ref 2805",
+           "descripcion": "TALLA: UNICA.\nTELA: Piel De Durazno.\nColores surtidos.",
+           "precios": [
+            { "cantidad": 6, "valor":   111000,   "Unidad": "$18.500 c/u" },
+            { "cantidad": 12, "valor":  198000,   "Unidad": "$16.500 c/u" },
+            { "cantidad": 120, "valor": 1860000, "Unidad": "$15.500 c/u" }
+          ],
+           "imagenes": [
+           "img/2805.png"
+          ]
+
          }
 ]
