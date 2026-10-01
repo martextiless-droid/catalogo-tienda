@@ -146,6 +146,52 @@ if (waBtn && typeof fbq === 'function') {
         `https://wa.me/573015547616?text=${encodeURIComponent(mensaje)}`;
     }
 
+// ==============================
+// Productos recomendados
+// ==============================
+
+fetch("productos.json")
+  .then(response => response.json())
+  .then(productos => {
+
+    const recomendados = productos
+      .filter(p => p.id !== producto.id)
+      .slice(0, 4);
+
+    const grid = document.getElementById("recommended-grid");
+
+    if (!grid) return;
+
+    grid.innerHTML = "";
+
+    recomendados.forEach(p => {
+
+      const card = document.createElement("div");
+      card.className = "product";
+
+      card.innerHTML = `
+        <a href="producto.html?id=${p.id}">
+          <img src="${p.imagenes[0]}" alt="${p.nombre}">
+        </a>
+
+        <h3>${p.nombre}</h3>
+
+        <p>
+          Mayorista desde ${p.precios[p.precios.length - 1].Unidad}
+        </p>
+
+        <button
+          type="button"
+          class="btn-cart-add add-to-cart"
+          data-id="${p.id}">
+          Agregar al carrito 🛒
+        </button>
+      `;
+
+      grid.appendChild(card);
+    });
+  });
+
     // --- Catálogo: si existe la grilla, marcamos ViewCategory
 document.addEventListener('DOMContentLoaded', () => {
   const grid = document.querySelector('.products');
