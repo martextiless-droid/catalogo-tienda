@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administrar productos - MarTextiles</title>
+  <style>
+    :root { color-scheme: light; --ink:#18211f; --muted:#68736f; --line:#e2e8e5; --brand:#176b55; --paper:#f4f7f5; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font:15px/1.5 Arial,sans-serif; }
+    .topbar { background:#13201c; color:#fff; padding:1rem max(1rem,calc((100% - 1080px)/2)); display:flex; align-items:center; justify-content:space-between; }
+    .topbar strong { font-size:1.1rem; letter-spacing:.02em; }
+    main { max-width:1080px; margin:2rem auto; padding:0 1rem; }
+    h1 { margin:0 0 .35rem; font-size:1.8rem; }
+    h2 { margin:0 0 1rem; font-size:1.2rem; }
+    .intro { color:var(--muted); margin:0 0 1.5rem; }
+    #login-panel, #producto-panel, #gestion-panel { background:#fff; border:1px solid var(--line); border-radius:14px; padding:1.4rem; margin:1rem 0; box-shadow:0 5px 18px #1736290a; }
+    #producto-panel[hidden], #gestion-panel[hidden] { display:none; }
+    #cerrar-sesion { float:right; }
+    label { display:block; margin:.9rem 0; font-weight:600; }
+    input, select, textarea { display:block; width:100%; max-width:620px; border:1px solid #cbd5d0; border-radius:7px; padding:.7rem .75rem; margin-top:.35rem; font:inherit; background:#fff; }
+    input:focus, select:focus, textarea:focus { outline:2px solid #83c8b2; border-color:var(--brand); }
+    button { border:0; border-radius:7px; padding:.68rem 1rem; cursor:pointer; font:600 .92rem Arial,sans-serif; background:var(--brand); color:#fff; }
+    button:hover { filter:brightness(.94); }
+    button.secondary { background:#edf3f0; color:#24342e; border:1px solid var(--line); }
+    button.danger { background:#a93333; }
+    #acciones-edicion { display:flex; gap:.7rem; align-items:center; margin-top:1rem; }
+    #cancelar-edicion[hidden] { display:none; }
+    #imagenes-preview { display:flex; flex-wrap:wrap; gap:.75rem; margin-top:.75rem; }
+    #imagenes-preview img { width:110px; height:110px; object-fit:cover; border-radius:9px; border:1px solid var(--line); }
+    #lista-productos { display:grid; gap:.75rem; }
+    .product-selection { display:grid; grid-template-columns:minmax(0,1fr) auto auto; gap:.6rem; align-items:end; }
+    .product-selection label { margin:0; }
+    #producto-seleccionado { display:flex; gap:.9rem; align-items:center; margin-top:1rem; padding:.8rem; background:#f7f9f8; border:1px solid var(--line); border-radius:10px; min-height:90px; }
+    #producto-seleccionado[hidden] { display:none; }
+    #producto-seleccionado img,.selection-placeholder { width:72px; height:72px; border-radius:8px; object-fit:cover; background:#edf1ef; }
+    .selection-placeholder { display:grid; place-items:center; color:var(--muted); font-size:.72rem; text-align:center; }
+    .selection-info strong { display:block; }
+    .selection-info span { color:var(--muted); font-size:.9rem; }
+    .product-row { display:grid; grid-template-columns:76px minmax(0,1fr) auto; gap:1rem; align-items:center; padding:.8rem; border:1px solid var(--line); border-radius:11px; }
+    .product-row img, .product-placeholder { width:76px; height:76px; border-radius:8px; object-fit:cover; background:#edf1ef; }
+    .product-placeholder { display:grid; place-items:center; color:var(--muted); font-size:.72rem; text-align:center; }
+    .product-name { font-weight:700; }
+    .product-meta { color:var(--muted); font-size:.88rem; }
+    .product-status { display:inline-block; margin-top:.2rem; padding:.1rem .5rem; border-radius:99px; background:#e7f4ed; color:#286745; font-size:.76rem; }
+    .product-status.draft { background:#f2f0e9; color:#73633b; }
+    .product-actions { display:flex; gap:.5rem; }
+    #resultado { margin:1rem 0; padding:.8rem 1rem; border-radius:8px; background:#edf3f0; }
+    #resultado[data-tipo="error"] { background:#fff0ee; color:#922e26; }
+    .nota { color:var(--muted); font-size:.9rem; }
+    @media(max-width:620px) { main { margin:1.2rem auto; } .product-row { grid-template-columns:62px minmax(0,1fr); } .product-row img,.product-placeholder { width:62px;height:62px; } .product-actions { grid-column:1/-1; justify-content:flex-end; } .product-selection { grid-template-columns:1fr 1fr; } .product-selection label { grid-column:1/-1; } #login-panel,#producto-panel,#gestion-panel { padding:1rem; } }
+  </style>
+</head>
+<body>
+  <header class="topbar"><strong>MarTextiles</strong><span>Administración de catálogo</span></header>
+  <main>
+  <h1>Administrar productos</h1>
+  <p class="intro">Gestiona los datos, precios e imágenes del catálogo.</p>
+
+  <section id="login-panel">
+    <h2>Acceso administrador</h2>
+    <form id="login-form">
+      <label>Correo<input id="login-email" type="email" autocomplete="username" required></label>
+      <label>Contraseña<input id="login-password" type="password" autocomplete="current-password" required></label>
+      <button type="submit">Iniciar sesión</button>
+    </form>
+  </section>
+
+  <section id="gestion-panel" hidden>
+    <button id="cerrar-sesion" type="button">Cerrar sesión</button>
+    <h2>Productos existentes</h2>
+    <div class="product-selection">
+      <label for="producto-existente">Referencia del producto
+        <select id="producto-existente"><option value="">Cargando referencias...</option></select>
+      </label>
+      <button id="editar-producto" type="button" class="secondary">Editar</button>
+      <button id="eliminar-producto" type="button" class="danger">Eliminar</button>
+    </div>
+    <div id="producto-seleccionado" hidden aria-live="polite"></div>
+  </section>
+
+  <section id="producto-panel" hidden>
+    <h2 id="form-title">Nuevo producto</h2>
+    <form id="producto-form">
+      <label>Referencia<input type="text" id="referencia" required></label>
+      <label>Nombre<input type="text" id="nombre" required></label>
+      <label>Categoría
+        <select id="categoria" required>
+          <option value="">Seleccionar</option>
+          <option value="pijamas">Pijamas</option>
+          <option value="Niños">Niños</option>
+          <option value="Niñas">Niñas</option>
+          <option value="Joggers">Joggers</option>
+          <option value="Basicas">Básicas</option>
+        </select>
+      </label>
+      <label>Subcategoría
+        <select id="subcategoria">
+          <option value="">Ninguna</option>
+          <option value="sublimadas">Sublimadas</option>
+          <option value="estampadas">Estampadas</option>
+          <option value="satin">Satín</option>
+        </select>
+      </label>
+      <label>Descripción<textarea id="descripcion" rows="5"></textarea></label>
+      <h3>Precios</h3>
+      <label>Desde 6 unidades<input type="number" id="precio6" min="0" required></label>
+      <label>Desde 12 unidades<input type="number" id="precio12" min="0" required></label>
+      <label>Desde 120 unidades<input type="number" id="precio120" min="0" required></label>
+      <label>Imágenes del producto<input type="file" id="imagenes" accept="image/*" multiple></label>
+      <p id="ayuda-imagenes" class="nota">Selecciona imágenes para reemplazar la galería; si no seleccionas ninguna, se conservan las actuales.</p>
+      <div id="imagenes-preview" aria-live="polite"></div>
+      <div id="acciones-edicion">
+        <button id="guardar-producto" type="submit">Guardar producto</button>
+        <button id="cancelar-edicion" type="button" hidden>Cancelar edición</button>
+      </div>
+    </form>
+  </section>
+
+  <div id="resultado" role="status" aria-live="polite"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="admin-producto.js"></script>
+</body>
+</html>

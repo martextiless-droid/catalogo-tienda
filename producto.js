@@ -3,6 +3,7 @@
 const params = new URLSearchParams(window.location.search);
 const productId = parseInt(params.get("id"));
 
+if (params.get("origen") !== "supabase") {
 // Cargar los datos del JSON
 fetch("productos.json")
   .then(response => response.json())
@@ -224,5 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   });
+
+}
 
 
