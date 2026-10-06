@@ -31,9 +31,12 @@ src="https://www.facebook.com/tr?id=1328987255274375&ev=PageView&noscript=1"
 
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <header>
-    <h1>Detalle del Producto</h1>
+<body class="page-producto">
+  <header class="site-header">
+    <a class="brand-lockup" href="index.html" aria-label="MarTextiles, inicio">
+      <img src="img/favicon.png" alt="" class="brand-logo">
+      <span>MarTextiles</span>
+    </a>
     <nav>
       <a href="index.html">← Volver al catálogo</a>
       <a href="#cart" id="open-cart">Carrito 🛒 <span id="cart-count" class="cart-count">0</span></a>
@@ -43,13 +46,20 @@ src="https://www.facebook.com/tr?id=1328987255274375&ev=PageView&noscript=1"
 <main class="product-detail">
   <!-- Columna izquierda: imagen grande + miniaturas -->
   <div class="detail-left">
-    <img id="product-img" class="detail-img" src="" alt="Imagen del producto">
+    <div class="product-photo-wrap">
+      <img id="product-img" class="detail-img" src="" alt="Imagen del producto">
+      <nav class="product-nav-arrows" aria-label="Cambiar de producto">
+        <button id="previous-product" type="button" aria-label="Ver referencia anterior" title="Referencia anterior">‹</button>
+        <button id="next-product" type="button" aria-label="Ver siguiente referencia" title="Siguiente referencia">›</button>
+      </nav>
+    </div>
     <div id="gallery" class="gallery"></div>
   </div>
 
   <!-- Columna derecha: texto + precios + botón -->
   <div class="detail-right">
-    <h2 id="product-name"></h2>
+    <p id="product-reference" class="product-reference" hidden></p>
+    <h1 id="product-name"></h1>
     <p id="product-description" class="description"></p>
 
     <!-- Modal para zoom -->
@@ -72,11 +82,6 @@ src="https://www.facebook.com/tr?id=1328987255274375&ev=PageView&noscript=1"
     <a id="whatsapp-link" target="_blank" class="btn-whatsapp">Pedir lista y disponibilidad</a>
   </div>
 </main>
-
-<nav class="product-nav-arrows" aria-label="Cambiar de producto">
-  <button id="previous-product" type="button" aria-label="Ver referencia anterior" title="Referencia anterior">‹</button>
-  <button id="next-product" type="button" aria-label="Ver siguiente referencia" title="Siguiente referencia">›</button>
-</nav>
 
 <section class="recommended-products">
   <h2>También te puede interesar</h2>

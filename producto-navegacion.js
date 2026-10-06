@@ -64,8 +64,8 @@
       String(producto.id) === idActual && producto.url.includes("origen=supabase") === esSupabase
     );
     if (indiceActual < 0) {
-      const nombreActual = document.querySelector("header h1")?.textContent ||
-        document.getElementById("product-name")?.textContent || "";
+      const nombreActual = document.getElementById("product-name")?.textContent ||
+        document.querySelector("header h1")?.textContent || "";
       const referenciaActual = claveReferencia({ nombre: nombreActual });
       indiceActual = productos.findIndex(producto => producto.referencia === referenciaActual);
     }

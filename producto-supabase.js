@@ -200,8 +200,12 @@
 
     const nombre = nombreDe(producto);
     document.title = `${nombre} - MarTextiles`;
-    document.querySelector("header h1").textContent = nombre;
     document.getElementById("product-name").textContent = producto.nombre || nombre;
+    const referencia = document.getElementById("product-reference");
+    if (producto.referencia) {
+      referencia.textContent = `Referencia ${producto.referencia}`;
+      referencia.hidden = false;
+    }
     document.getElementById("product-description").textContent = producto.descripcion || "";
     const imagenPrincipal = document.getElementById("product-img");
     const galeria = document.getElementById("gallery");
