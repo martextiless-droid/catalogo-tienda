@@ -2,6 +2,7 @@
   const SUPABASE_URL = "https://nsuxvytaogbnrlopzfgi.supabase.co";
   const SUPABASE_KEY = "sb_publishable_A61mORZLeNZ4hd4x4INGjQ_XS0U1Xap";
   const ADMIN_USER_ID = "c1fd6ad7-15be-42a6-b239-0564bb34cba5";
+  const CATALOGO_PUBLICO_URL = "https://martextiles.com/";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   const loginPanel = document.getElementById("login-panel");
   const gestionPanel = document.getElementById("gestion-panel");
@@ -141,7 +142,8 @@
     mostrarEstado("Cargando productos...");
     const { data: productos, error } = await supabaseClient
       .from("productos")
-      .select("id, referencia, nombre, descripcion, categoria, subcategoria, imagen_url, imagenes_url, publicado")
+      .select("id, referencia, nombre, descripcion, categoria, subcategoria, imagen_url, imagenes_url, publicado, eliminado")
+      .eq("eliminado", false)
       .order("id", { ascending: true });
     if (error) throw error;
 
@@ -155,6 +157,116 @@
     if (seleccionarId) selectorProducto.value = String(seleccionarId);
     mostrarProductoSeleccionado();
     mostrarEstado(`${cacheProductos.size} producto(s) cargado(s).`);
+  }
+
+  function normalizarReferencia(valor) {
+    return String(valor || "").replace(/^ref(?:erencia)?\s*[:#]?\s*/i, "").trim().toLocaleLowerCase("es");
+  }
+
+  function extraerReferencia(nombre) {
+    return String(nombre || "").replace(/^ref(?:erencia)?\s*[:#]?\s*/i, "").trim();
+  }
+
+  function precioUnitario(precio) {
+    const textoUnidad = precio.Unidad || precio.unidad || "";
+    const digitos = String(textoUnidad).replace(/[^\d]/g, "");
+    if (digitos) return Number(digitos);
+    const cantidad = Number(precio.cantidad);
+    const total = Number(precio.valor);
+    return cantidad > 0 && total > 0 ? Math.round(total / cantidad) : 0;
+  }
+
+  async function importarReferenciasAntiguas() {
+    const boton = document.getElementById("importar-referencias-antiguas");
+    if (!(await validarSesion())) {
+      mostrarEstado("Inicia sesión como administrador para importar referencias.", "error");
+      return;
+    }
+    boton.disabled = true;
+    mostrarEstado("Leyendo el catálogo anterior...");
+    try {
+      const [respuestaProductos, respuestaCatalogo] = await Promise.all([
+        fetch("productos.json", { cache: "no-store" }),
+        fetch("index.html", { cache: "no-store" })
+      ]);
+      if (!respuestaProductos.ok || !respuestaCatalogo.ok) throw new Error("No se pudo leer el catálogo publicado.");
+      const productosAntiguos = await respuestaProductos.json();
+      const documentoCatalogo = new DOMParser().parseFromString(await respuestaCatalogo.text(), "text/html");
+      const categoriasPorReferencia = new Map();
+      for (const tarjeta of documentoCatalogo.querySelectorAll(".products .product")) {
+        const referencia = normalizarReferencia(tarjeta.querySelector("h3")?.textContent);
+        if (referencia) categoriasPorReferencia.set(referencia, {
+          categoria: tarjeta.dataset.cat || "pijamas",
+          subcategoria: tarjeta.dataset.subcat || null
+        });
+      }
+
+      const { data: existentes, error: errorExistentes } = await supabaseClient
+        .from("productos")
+        .select("id, referencia");
+      if (errorExistentes) throw errorExistentes;
+      const referenciasExistentes = new Set((existentes || []).map(item => normalizarReferencia(item.referencia)));
+      let importados = 0;
+      let omitidos = 0;
+      let preciosImportados = 0;
+
+      for (const antiguo of productosAntiguos) {
+        const referencia = extraerReferencia(antiguo.nombre);
+        const clave = normalizarReferencia(referencia);
+        if (!clave || referenciasExistentes.has(clave)) {
+          omitidos++;
+          continue;
+        }
+        const imagenes = (Array.isArray(antiguo.imagenes) ? antiguo.imagenes : [])
+          .filter(Boolean)
+          .map(ruta => new URL(ruta, CATALOGO_PUBLICO_URL).href);
+        const categoria = categoriasPorReferencia.get(clave) || { categoria: "pijamas", subcategoria: null };
+        const payload = {
+          referencia,
+          nombre: String(antiguo.nombre || `Ref ${referencia}`),
+          descripcion: antiguo.descripcion || "",
+          categoria: categoria.categoria,
+          subcategoria: categoria.subcategoria,
+          imagen_url: imagenes[0] || null,
+          imagenes_url: imagenes,
+          publicado: true
+        };
+        const { data: producto, error } = await supabaseClient
+          .from("productos")
+          .insert(payload)
+          .select("id, referencia")
+          .single();
+        if (error) throw new Error(`No se pudo importar ${referencia}: ${error.message || "error desconocido"}`);
+
+        const niveles = (antiguo.precios || [])
+          .map(precio => ({
+            producto_id: producto.id,
+            cantidad_minima: Number(precio.cantidad),
+            precio_unitario: precioUnitario(precio)
+          }))
+          .filter(precio => precio.cantidad_minima > 0 && precio.precio_unitario > 0);
+        if (niveles.length) {
+          const { error: errorPrecios } = await supabaseClient.from("precios").insert(niveles);
+          if (errorPrecios) {
+            await supabaseClient.from("productos").delete().eq("id", producto.id);
+            throw new Error(`No se pudieron importar los precios de ${referencia}: ${errorPrecios.message || "error desconocido"}`);
+          }
+          preciosImportados += niveles.length;
+        }
+        referenciasExistentes.add(clave);
+        importados++;
+        mostrarEstado(`Importando catálogo anterior: ${importados} referencia(s)...`);
+      }
+
+      await cargarProductos();
+      mostrarEstado(`Listo: ${importados} referencia(s) incorporada(s), ${omitidos} omitida(s) porque ya existían y ${preciosImportados} precios registrados.`);
+    } catch (error) {
+      console.error("Error al importar referencias antiguas:", error);
+      mostrarEstado(`No se completó la importación: ${error.message || "error desconocido"}. Puedes volver a intentarlo; se omiten las referencias ya incorporadas.`, "error");
+      await cargarProductos().catch(() => {});
+    } finally {
+      boton.disabled = false;
+    }
   }
 
   async function cargarPrecios(productoId) {
@@ -226,12 +338,7 @@
   }
 
   async function retirarImagenes(urls) {
-    const urlsValidas = urls.filter(Boolean);
-    const rutasParseadas = urlsValidas.map(rutaDesdeUrl);
-    if (rutasParseadas.some(ruta => !ruta)) {
-      return new Error("No se pudo obtener la ruta de una o más imágenes del bucket productos.");
-    }
-    const rutas = [...new Set(rutasParseadas)];
+    const rutas = [...new Set(urls.filter(Boolean).map(rutaDesdeUrl).filter(Boolean))];
     if (!rutas.length) return null;
     const { error } = await supabaseClient.storage.from("productos").remove(rutas);
     return error || null;
@@ -367,25 +474,24 @@
       mostrarEstado("Selecciona un producto para eliminar.", "error");
       return;
     }
-    const confirmar = window.confirm(`¿Eliminar definitivamente ${producto.referencia || `el producto ${producto.id}`} — ${producto.nombre}? Sus precios asociados también se eliminarán. Esta acción no se puede deshacer.`);
+    const confirmar = window.confirm(`¿Retirar ${producto.referencia || `el producto ${producto.id}`} — ${producto.nombre} del catálogo? Se guardará una marca interna para que la referencia antigua no vuelva a aparecer. Esta acción no se puede deshacer desde el administrador.`);
     if (!confirmar) return;
 
     mostrarEstado("Eliminando producto...");
-    const urls = imagenesDe(producto);
-    const { error } = await supabaseClient.from("productos").delete().eq("id", producto.id);
+    const { error } = await supabaseClient
+      .from("productos")
+      .update({ eliminado: true, publicado: false, nombre: "", descripcion: "", imagen_url: null, imagenes_url: [] })
+      .eq("id", producto.id);
     if (error) {
       mostrarEstado(`No se pudo eliminar el producto: ${error.message || "error desconocido"}`, "error");
       return;
     }
 
-    const errorImagenes = await retirarImagenes(urls);
     cancelarEdicion();
     await cargarProductos();
     selectorProducto.value = "";
     mostrarProductoSeleccionado();
-    mostrarEstado(errorImagenes
-      ? `Producto ${producto.referencia} eliminado con sus precios, pero Storage rechazó el borrado de alguna foto: ${errorImagenes.message || "revisa la política DELETE del bucket productos"}.`
-      : `Producto ${producto.referencia}, sus precios e imágenes eliminados.`, errorImagenes ? "error" : "info");
+    mostrarEstado(`Referencia ${producto.referencia} retirada del catálogo y de la lista de administración.`);
   }
 
   selectorImagenes.addEventListener("change", () => {
@@ -403,6 +509,7 @@
 
   document.getElementById("editar-producto").addEventListener("click", iniciarEdicion);
   document.getElementById("eliminar-producto").addEventListener("click", eliminarSeleccionado);
+  document.getElementById("importar-referencias-antiguas").addEventListener("click", importarReferenciasAntiguas);
   selectorProducto.addEventListener("change", () => {
     if (productoEditandoId && selectorProducto.value !== String(productoEditandoId)) cancelarEdicion();
     mostrarProductoSeleccionado();

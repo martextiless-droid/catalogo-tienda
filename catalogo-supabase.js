@@ -10,7 +10,10 @@
   }
 
   function referenciasLocales() {
-    return new Set(Array.from(galeria.querySelectorAll(".product h3"), titulo => normalizarReferencia(titulo.textContent)));
+    return new Map(Array.from(galeria.querySelectorAll(".product"), tarjeta => {
+      const titulo = tarjeta.querySelector("h3");
+      return [normalizarReferencia(titulo?.textContent), tarjeta];
+    }).filter(([referencia]) => referencia));
   }
 
   function elemento(tag, texto) {
@@ -83,14 +86,22 @@
   async function cargarProductosPublicados() {
     const { data: productos, error: errorProductos } = await cliente
       .from("productos")
-      .select("id, referencia, nombre, categoria, subcategoria, imagen_url, imagenes_url, publicado")
-      .eq("publicado", true)
+      .select("id, referencia, nombre, categoria, subcategoria, imagen_url, imagenes_url, publicado, eliminado")
       .order("id", { ascending: true });
 
     if (errorProductos) throw errorProductos;
     if (!productos.length) return;
 
-    const ids = productos.map(producto => producto.id);
+    const ids = productos.filter(producto => producto.publicado && !producto.eliminado).map(producto => producto.id);
+    if (!ids.length) {
+      for (const producto of productos) {
+        const referencia = normalizarReferencia(producto.referencia);
+        existentes.get(referencia)?.remove();
+        existentes.delete(referencia);
+      }
+      aplicarFiltroActual();
+      return;
+    }
     const { data: precios, error: errorPrecios } = await cliente
       .from("precios")
       .select("producto_id, cantidad_minima, precio_unitario")
@@ -109,11 +120,17 @@
     const existentes = referenciasLocales();
     for (const producto of productos) {
       const referencia = normalizarReferencia(producto.referencia);
-      if (referencia && existentes.has(referencia)) continue;
+      const tarjetaAnterior = existentes.get(referencia);
+      if (producto.eliminado || !producto.publicado) {
+        tarjetaAnterior?.remove();
+        existentes.delete(referencia);
+        continue;
+      }
       const tarjeta = crearTarjeta(producto, preciosPorProducto.get(producto.id) || []);
       tarjeta.dataset.supabaseProduct = "true";
-      galeria.appendChild(tarjeta);
-      if (referencia) existentes.add(referencia);
+      if (tarjetaAnterior) tarjetaAnterior.replaceWith(tarjeta);
+      else galeria.appendChild(tarjeta);
+      if (referencia) existentes.set(referencia, tarjeta);
     }
 
     aplicarFiltroActual();
