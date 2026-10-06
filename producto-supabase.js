@@ -72,53 +72,107 @@
     return `Mayorista desde $${Number(ultimo.precio_unitario).toLocaleString("es-CO")} c/u (${ultimo.cantidad_minima}u)`;
   }
 
+  function claveReferencia(producto) {
+    const valor = producto.referencia || producto.nombre || producto.id;
+    return String(valor).replace(/^ref\s*:?\s*/i, "").trim().toLocaleUpperCase("es");
+  }
+
   async function cargarRecomendados(productoActual) {
     const grid = document.getElementById("recommended-grid");
     if (!grid) return;
-    const { data: productos, error } = await cliente
+    const consultaSupabase = await cliente
       .from("productos")
       .select("id, referencia, nombre, imagen_url, imagenes_url")
       .eq("publicado", true)
       .neq("id", productoActual.id)
-      .order("id", { ascending: true })
-      .limit(4);
-    if (error || !productos.length) return;
+      .order("id", { ascending: true });
+    if (consultaSupabase.error) throw consultaSupabase.error;
 
-    const ids = productos.map(item => item.id);
-    const { data: precios } = await cliente
-      .from("precios")
-      .select("producto_id, cantidad_minima, precio_unitario")
-      .in("producto_id", ids)
-      .order("cantidad_minima", { ascending: true });
+    let productosJson = [];
+    try {
+      const respuesta = await fetch("productos.json");
+      if (respuesta.ok) productosJson = await respuesta.json();
+    } catch (error) {
+      console.warn("No se cargó el catálogo anterior para las sugerencias:", error);
+    }
+
+    const porReferencia = new Map();
+    for (const item of productosJson) {
+      const referencia = claveReferencia(item);
+      porReferencia.set(referencia, {
+        origen: "json",
+        id: item.id,
+        referencia,
+        nombre: item.nombre || `Ref ${referencia}`,
+        imagen: Array.isArray(item.imagenes) ? item.imagenes[0] : "",
+        preciosJson: item.precios || []
+      });
+    }
+    for (const item of consultaSupabase.data || []) {
+      const referencia = claveReferencia(item);
+      porReferencia.set(referencia, {
+        origen: "supabase",
+        id: item.id,
+        referencia,
+        nombre: nombreDe(item),
+        imagen: imagenesDe(item)[0] || "",
+        producto: item
+      });
+    }
+
+    const candidatos = [...porReferencia.values()]
+      .filter(item => item.referencia !== claveReferencia(productoActual));
+    for (let indice = candidatos.length - 1; indice > 0; indice--) {
+      const aleatorio = Math.floor(Math.random() * (indice + 1));
+      [candidatos[indice], candidatos[aleatorio]] = [candidatos[aleatorio], candidatos[indice]];
+    }
+    const productos = candidatos.slice(0, 4);
+    if (!productos.length) return;
+
+    const ids = productos.filter(item => item.origen === "supabase").map(item => item.id);
+    let precios = [];
+    if (ids.length) {
+      const consultaPrecios = await cliente
+        .from("precios")
+        .select("producto_id, cantidad_minima, precio_unitario")
+        .in("producto_id", ids)
+        .order("cantidad_minima", { ascending: true });
+      if (consultaPrecios.error) throw consultaPrecios.error;
+      precios = consultaPrecios.data || [];
+    }
     const porProducto = new Map();
-    for (const precio of precios || []) {
+    for (const precio of precios) {
       const lista = porProducto.get(precio.producto_id) || [];
       lista.push(precio);
       porProducto.set(precio.producto_id, lista);
     }
 
     grid.replaceChildren();
-    for (const producto of productos) {
+    for (const recomendado of productos) {
       const tarjeta = document.createElement("article");
       tarjeta.className = "product";
       const enlace = document.createElement("a");
-      enlace.href = `producto.html?id=${encodeURIComponent(producto.id)}&origen=supabase`;
-      const imagenPrincipal = imagenesDe(producto)[0];
-      if (imagenPrincipal) {
+      enlace.href = recomendado.origen === "supabase"
+        ? `producto.html?id=${encodeURIComponent(recomendado.id)}&origen=supabase`
+        : `producto.html?id=${encodeURIComponent(recomendado.id)}`;
+      if (recomendado.imagen) {
         const imagen = document.createElement("img");
-        imagen.src = imagenPrincipal;
-        imagen.alt = nombreDe(producto);
+        imagen.src = recomendado.imagen;
+        imagen.alt = recomendado.nombre;
         imagen.loading = "lazy";
         enlace.appendChild(imagen);
       }
       tarjeta.appendChild(enlace);
-      tarjeta.appendChild(crear("h3", nombreDe(producto)));
-      tarjeta.appendChild(crear("p", precioResumen(porProducto.get(producto.id) || [])));
+      tarjeta.appendChild(crear("h3", recomendado.nombre));
+      const resumen = recomendado.origen === "supabase"
+        ? precioResumen(porProducto.get(recomendado.id) || [])
+        : (recomendado.preciosJson.at(-1)?.Unidad || recomendado.preciosJson.at(-1)?.unidad || "Precios por consultar");
+      tarjeta.appendChild(crear("p", recomendado.origen === "supabase" ? resumen : `Mayorista desde ${resumen}`));
       const boton = document.createElement("button");
       boton.type = "button";
       boton.className = "btn-cart-add add-to-cart";
-      boton.dataset.id = `supabase-${producto.id}`;
-      boton.dataset.name = nombreDe(producto);
+      boton.dataset.id = recomendado.origen === "supabase" ? `supabase-${recomendado.id}` : String(recomendado.id);
+      boton.dataset.name = recomendado.nombre;
       boton.textContent = "Agregar al carrito 🛒";
       tarjeta.appendChild(boton);
       grid.appendChild(tarjeta);

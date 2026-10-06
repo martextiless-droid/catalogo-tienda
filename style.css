@@ -622,7 +622,52 @@ header nav a:hover {
   color: #222;
   font-weight: 700;
 }
+
+.product-nav-arrows {
+  position: fixed;
+  z-index: 1000;
+  inset: 50% 14px auto;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.product-nav-arrows button {
+  width: 48px;
+  height: 48px;
+  border: 1px solid #d8d8d8;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .94);
+  color: #171717;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, .2);
+  font-size: 34px;
+  line-height: 1;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.product-nav-arrows button:hover {
+  background: #171717;
+  color: #fff;
+}
+
+.product-nav-arrows button:focus-visible {
+  outline: 3px solid #25d366;
+  outline-offset: 3px;
+}
+
 @media (max-width: 768px) {
+  .product-nav-arrows {
+    inset-inline: 6px;
+  }
+
+  .product-nav-arrows button {
+    width: 40px;
+    height: 40px;
+    font-size: 29px;
+  }
+
   .recommended-products {
     padding-left: 1rem;
     padding-right: 1rem;
