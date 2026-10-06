@@ -81,6 +81,8 @@ header h1 {
 .page-catalogo .catbar {
   background: var(--brand-ink);
   border-bottom-color: rgba(255, 255, 255, .14);
+  border-radius: 0 0 14px 14px;
+  box-shadow: 0 5px 16px rgba(31, 58, 95, .14);
 }
 
 .page-catalogo .cat-link.active {
@@ -769,6 +771,8 @@ body.page-producto {
 .page-producto .site-header {
   height: 70px;
   padding-inline: max(16px, calc((100% - 1280px) / 2));
+  border-radius: 0 0 14px 14px;
+  box-shadow: 0 5px 16px rgba(31, 58, 95, .14);
 }
 
 .page-producto .brand-logo {
@@ -827,6 +831,10 @@ body.page-producto {
   font-size: .84rem;
   font-weight: 700;
   letter-spacing: .02em;
+}
+
+.product-reference[hidden] {
+  display: none;
 }
 
 .page-producto .description {
@@ -996,6 +1004,7 @@ body.page-producto {
 .site-footer {
   margin-top: 42px;
   padding: 38px max(20px, calc((100% - 1200px) / 2)) 18px;
+  border-radius: 18px 18px 0 0;
   background: var(--brand-ink);
   color: #fff;
 }
@@ -1055,14 +1064,31 @@ body.page-producto {
   text-underline-offset: 3px;
 }
 
-.footer-contact > a {
+.footer-contact > .footer-whatsapp {
   display: inline-flex;
+  align-items: center;
+  gap: 9px;
   margin-top: 14px;
   padding: 10px 14px;
-  border: 1px solid rgba(255, 255, 255, .34);
+  border: 1px solid #167453;
   border-radius: 8px;
+  background: #167453;
   color: #fff;
   font-weight: 700;
+}
+
+.footer-contact > .footer-whatsapp:hover {
+  border-color: #125d43;
+  background: #125d43;
+  color: #fff;
+  text-decoration: none;
+}
+
+.whatsapp-mark {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  fill: currentColor;
 }
 
 .footer-bottom {
