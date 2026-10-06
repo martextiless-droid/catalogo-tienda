@@ -15,12 +15,21 @@
     const card=btn.closest(".product"), title=card&&card.querySelector("h3");
     return title ? title.textContent.trim() : `Ref ${btn.dataset.id||""}`.trim();
   }
+  function getProductImage(btn){
+    const cardImage=btn.closest(".product")?.querySelector("img");
+    const detailImage=document.getElementById("product-img");
+    const source=cardImage?.currentSrc||cardImage?.src||detailImage?.currentSrc||detailImage?.src||"";
+    try {
+      const imageUrl=new URL(source,location.href);
+      return ["http:","https:"].includes(imageUrl.protocol)?imageUrl.href:"";
+    } catch (_) { return ""; }
+  }
   function addToCart(item){
     const id=String(item.id), qty=Math.max(1,parseInt(item.quantity,10)||1);
     const existing=cart.find(x=>String(x.id)===id);
-    if(existing) existing.quantity+=qty;
-    else cart.push({id,name:item.name,quantity:qty});
-    saveCart(); renderCart(); openCart();
+    if(existing){ existing.quantity+=qty; if(item.image)existing.image=item.image; }
+    else cart.push({id,name:item.name,quantity:qty,image:item.image||""});
+    saveCart(); renderCart(); openCart(); animateCartFeedback();
   }
   function changeQty(id,delta){
     const item=cart.find(x=>String(x.id)===String(id)); if(!item)return;
@@ -46,8 +55,14 @@
     if(!cart.length){
       container.innerHTML='<div class="cart-empty">Tu carrito está vacío.<br>Agrega las referencias que te interesan.</div>';
     } else {
-      container.innerHTML=cart.map(item=>`
+      container.innerHTML=cart.map(item=>{
+        const imageUrl=safeImageUrl(item.image);
+        const imageMarkup=imageUrl
+          ? `<img class="cart-item-image" src="${escapeAttr(imageUrl)}" alt="" loading="lazy">`
+          : '<div class="cart-item-image cart-item-image-placeholder" aria-hidden="true">🧺</div>';
+        return `
         <div class="cart-item">
+          ${imageMarkup}
           <div><div class="cart-item-name">${escapeHtml(item.name)}</div>
           <div class="cart-item-sub">Referencia seleccionada</div>
           <div class="cart-controls">
@@ -56,17 +71,35 @@
             <button type="button" data-cart-plus="${escapeAttr(item.id)}">+</button>
             <button type="button" class="cart-remove" data-cart-remove="${escapeAttr(item.id)}">Eliminar</button>
           </div></div>
-        </div>`).join("");
+        </div>`;
+      }).join("");
     }
     if(wa){
       if(cart.length){ wa.classList.remove("disabled"); wa.href=`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(whatsappMessage())}`; }
       else { wa.classList.add("disabled"); wa.removeAttribute("href"); }
     }
   }
+  function safeImageUrl(value){
+    try {
+      const imageUrl=new URL(String(value||""),location.href);
+      return ["http:","https:"].includes(imageUrl.protocol)?imageUrl.href:"";
+    } catch (_) { return ""; }
+  }
   function escapeHtml(v){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
   function escapeAttr(v){return escapeHtml(v);}
   function openCart(){document.getElementById("cart-panel")?.classList.add("open");document.getElementById("cart-overlay")?.classList.add("open");}
   function closeCart(){document.getElementById("cart-panel")?.classList.remove("open");document.getElementById("cart-overlay")?.classList.remove("open");}
+  function replayAnimation(element, className){
+    if(!element)return;
+    element.classList.remove(className);
+    void element.offsetWidth;
+    element.classList.add(className);
+    element.addEventListener("animationend",()=>element.classList.remove(className),{once:true});
+  }
+  function animateCartFeedback(){
+    document.querySelectorAll(".cart-icon, .cart-panel-icon").forEach(icon=>replayAnimation(icon,"is-bouncing"));
+    replayAnimation(document.getElementById("cart-count"),"is-popping");
+  }
 
   document.addEventListener("click",event=>{
     const add=event.target.closest(".add-to-cart, #add-product-to-cart");
@@ -75,7 +108,7 @@
       let quantity=1;
       const qtyInput=document.getElementById("product-qty");
       if(add.id==="add-product-to-cart" && qtyInput) quantity=Math.max(1,parseInt(qtyInput.value,10)||1);
-      if(id)addToCart({id,name,quantity});
+      if(id)addToCart({id,name,quantity,image:getProductImage(add)});
       return;
     }
     if(event.target.closest("#open-cart")){event.preventDefault();openCart();return;}
