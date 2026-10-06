@@ -71,8 +71,36 @@ src="https://www.facebook.com/tr?id=1328987255274375&ev=PageView&noscript=1"
 
 </nav>
 
+<section class="catalog-tools" aria-label="Buscar y filtrar productos">
+  <label class="catalog-search">
+    <span>Buscar referencia</span>
+    <input id="catalog-search" type="search" placeholder="Ej. 3301" autocomplete="off">
+  </label>
+  <label class="catalog-filter">
+    <span>Categoría</span>
+    <select id="catalog-category">
+      <option value="all">Todas las categorías</option>
+      <option value="pijamas">Pijamas</option>
+      <option value="ninos">Niños</option>
+      <option value="ninas">Niñas</option>
+      <option value="joggers">Joggers</option>
+      <option value="basicas">Básicas</option>
+    </select>
+  </label>
+  <label class="catalog-filter">
+    <span>Estilo</span>
+    <select id="catalog-subcategory">
+      <option value="all">Todos los estilos</option>
+      <option value="estampadas">Estampadas</option>
+      <option value="sublimadas">Sublimadas</option>
+      <option value="satin">Satín</option>
+    </select>
+  </label>
+  <p id="catalog-results" class="catalog-results" role="status" aria-live="polite"></p>
+</section>
+
   <!-- Galería de productos -->
-  <section class="products">
+  <section class="products" id="catalogo">
  
 
 <div class="product" data-cat="pijamas" data-subcat="estampadas">

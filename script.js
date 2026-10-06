@@ -88,47 +88,188 @@
   renderCart();
 
 
-// ====== Filtro de categorías y subcategorías ======
+// ====== Búsqueda y filtros del catálogo ======
 const params = new URLSearchParams(location.search);
+const catalogGrid = document.querySelector(".products");
+const searchInput = document.getElementById("catalog-search");
+const categorySelect = document.getElementById("catalog-category");
+const subcategorySelect = document.getElementById("catalog-subcategory");
+const resultsMessage = document.getElementById("catalog-results");
 
-const cat = (params.get("cat") || "all").toLowerCase();
-const subcat = (params.get("subcat") || "all").toLowerCase();
+function normalizeCatalogText(value) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase();
+}
 
-// Activar categoría principal
-document.querySelectorAll(".cat-link").forEach(a => {
-  const url = new URL(a.href, location.href);
-  const linkCat = (url.searchParams.get("cat") || "all").toLowerCase();
+function catalogCards() {
+  return Array.from(catalogGrid?.querySelectorAll(".product") || []);
+}
 
-  if (linkCat === cat) {
-    a.classList.add("active");
+function enhanceProductCards() {
+  for (const card of catalogCards()) {
+    const price = card.querySelector("p");
+    const priceMatch = price?.textContent.match(/mayorista\s+desde\s+(.+?)(?:\s*\((\d+)\s*u\))?\s*$/i);
+    if (price && priceMatch && price.dataset.priceEnhanced !== "true") {
+      price.classList.add("product-price");
+      price.replaceChildren();
+
+      const unitPrice = document.createElement("span");
+      unitPrice.className = "product-price-unit";
+      unitPrice.textContent = priceMatch[1].trim();
+      price.appendChild(unitPrice);
+
+      const caption = document.createElement("span");
+      caption.className = "product-price-caption";
+      caption.textContent = "precio mayorista";
+      price.appendChild(caption);
+      price.dataset.priceEnhanced = "true";
+    }
+
+    const image = card.querySelector("img");
+    if (!image) continue;
+    let imageArea = image.closest("a");
+    if (imageArea) {
+      imageArea.classList.add("product-image-link");
+    } else {
+      imageArea = image.parentElement.closest(".product-image-wrap");
+      if (!imageArea) {
+        imageArea = document.createElement("span");
+        imageArea.className = "product-image-wrap";
+        image.parentNode.insertBefore(imageArea, image);
+        imageArea.appendChild(image);
+      }
+    }
+
+    const quantity = priceMatch?.[2];
+    if (quantity && !imageArea.querySelector(".product-volume-badge")) {
+      const badge = document.createElement("span");
+      badge.className = "product-volume-badge";
+      badge.setAttribute("aria-hidden", "true");
+      badge.textContent = `${quantity}+ unids`;
+      imageArea.appendChild(badge);
+    }
   }
-});
+}
 
-// Filtrar productos
-document.querySelectorAll(".product").forEach(card => {
+function syncCatalogOptions() {
+  const knownCategories = new Set(Array.from(categorySelect.options, option => option.value));
+  for (const card of catalogCards()) {
+    const category = card.dataset.cat || "";
+    const normalizedCategory = normalizeCatalogText(category);
+    if (category && !knownCategories.has(normalizedCategory)) {
+      categorySelect.add(new Option(category, normalizedCategory));
+      knownCategories.add(normalizedCategory);
+    }
+  }
 
-  const productCat = (card.dataset.cat || "pijamas").toLowerCase();
-  const productSubcat = (card.dataset.subcat || "").toLowerCase();
+  const selectedCategory = normalizeCatalogText(categorySelect.value);
+  const knownSubcategories = new Set(Array.from(subcategorySelect.options, option => option.value));
+  for (const card of catalogCards()) {
+    if (selectedCategory !== "all" && normalizeCatalogText(card.dataset.cat) !== selectedCategory) continue;
+    const subcategory = card.dataset.subcat || "";
+    const normalizedSubcategory = normalizeCatalogText(subcategory);
+    if (subcategory && !knownSubcategories.has(normalizedSubcategory)) {
+      subcategorySelect.add(new Option(subcategory, normalizedSubcategory));
+      knownSubcategories.add(normalizedSubcategory);
+    }
+  }
+}
 
-  // Primero comprobamos la categoría principal
-  const matchesCategory =
-    cat === "all" || productCat === cat;
+function updateCatalogUrl() {
+  const url = new URL(location.href);
+  const category = normalizeCatalogText(categorySelect.value);
+  const subcategory = normalizeCatalogText(subcategorySelect.value);
+  const query = searchInput.value.trim();
 
-  // La subcategoría SOLO se aplica a Pijamas
-  const matchesSubcategory =
-    cat !== "pijamas" ||
-    subcat === "all" ||
-    productSubcat === subcat;
+  if (category === "all") url.searchParams.delete("cat");
+  else url.searchParams.set("cat", category);
+  if (category === "pijamas" && subcategory !== "all") url.searchParams.set("subcat", subcategory);
+  else url.searchParams.delete("subcat");
+  if (query) url.searchParams.set("q", query);
+  else url.searchParams.delete("q");
+  history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+}
 
-  card.style.display =
-    matchesCategory && matchesSubcategory ? "" : "none";
-});
+function applyCatalogFilters(updateUrl = true) {
+  if (!catalogGrid || !searchInput || !categorySelect || !subcategorySelect) return;
+  enhanceProductCards();
+  syncCatalogOptions();
+
+  const category = normalizeCatalogText(categorySelect.value);
+  const subcategory = normalizeCatalogText(subcategorySelect.value);
+  const query = normalizeCatalogText(searchInput.value);
+  subcategorySelect.disabled = category !== "pijamas";
+
+  let visibleCount = 0;
+  for (const card of catalogCards()) {
+    const productCategory = normalizeCatalogText(card.dataset.cat || "pijamas");
+    const productSubcategory = normalizeCatalogText(card.dataset.subcat);
+    const searchableText = normalizeCatalogText([
+      card.querySelector("h3")?.textContent,
+      card.querySelector("p")?.textContent,
+      card.querySelector("img")?.alt,
+    ].join(" "));
+    const matchesCategory = category === "all" || productCategory === category;
+    const matchesSubcategory = category !== "pijamas" || subcategory === "all" || productSubcategory === subcategory;
+    const matchesQuery = !query || searchableText.includes(query);
+    const visible = matchesCategory && matchesSubcategory && matchesQuery;
+    card.style.display = visible ? "" : "none";
+    if (visible) visibleCount += 1;
+  }
+
+  document.querySelectorAll(".cat-link").forEach(link => {
+    const url = new URL(link.href, location.href);
+    const linkCategory = normalizeCatalogText(url.searchParams.get("cat") || "all");
+    link.classList.toggle("active", linkCategory === category);
+  });
+
+  if (resultsMessage) {
+    resultsMessage.textContent = visibleCount
+      ? ` ${visibleCount} producto${visibleCount === 1 ? "" : "s"} encontrado${visibleCount === 1 ? "" : "s"}.`
+      : "No encontramos productos con esos criterios. Prueba otra referencia o filtro.";
+    resultsMessage.classList.toggle("is-empty", visibleCount === 0);
+  }
+
+  if (updateUrl) updateCatalogUrl();
+}
+
+if (catalogGrid && categorySelect && subcategorySelect && searchInput) {
+  const initialCategory = normalizeCatalogText(params.get("cat") || "all");
+  const initialSubcategory = normalizeCatalogText(params.get("subcat") || "all");
+  const initialQuery = params.get("q") || "";
+  syncCatalogOptions();
+  if (Array.from(categorySelect.options).some(option => option.value === initialCategory)) {
+    categorySelect.value = initialCategory;
+  }
+  searchInput.value = initialQuery;
+  syncCatalogOptions();
+  if (Array.from(subcategorySelect.options).some(option => option.value === initialSubcategory)) {
+    subcategorySelect.value = initialSubcategory;
+  }
+
+  searchInput.addEventListener("input", () => applyCatalogFilters());
+  categorySelect.addEventListener("change", () => {
+    if (categorySelect.value !== "pijamas") subcategorySelect.value = "all";
+    syncCatalogOptions();
+    applyCatalogFilters();
+  });
+  subcategorySelect.addEventListener("change", () => applyCatalogFilters());
+  applyCatalogFilters(false);
+
+  const catalogObserver = new MutationObserver(() => applyCatalogFilters(false));
+  catalogObserver.observe(catalogGrid, { childList: true });
+}
 
 // Meta Pixel
 if (typeof fbq === "function") {
   fbq("track", "ViewCategory", {
     content_category:
-      subcat === "all" ? cat : `${cat}-${subcat}`
+      normalizeCatalogText(params.get("subcat")) === "all"
+        ? normalizeCatalogText(params.get("cat") || "all")
+        : `${normalizeCatalogText(params.get("cat"))}-${normalizeCatalogText(params.get("subcat"))}`
   });
 }
 
