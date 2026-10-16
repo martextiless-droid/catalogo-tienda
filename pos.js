@@ -6,7 +6,7 @@
   const $ = id => document.getElementById(id);
   const money = value => new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(Number(value) || 0);
   const safeText = value => String(value ?? "");
-  const state = { products: [], prices: new Map(), classPrices: new Map(), config: new Map(), stock: new Map(), cart: new Map(), sales: [], selectedReturn: null, selectedCancelSale: null, cashExpected: 0, customerCredit: 0 };
+  const state = { products: [], prices: new Map(), classPrices: new Map(), config: new Map(), stock: new Map(), cart: new Map(), sales: [], selectedReturn: null, selectedCancelSale: null, cashExpected: 0, customerCredit: 0, customerLookupRequest: 0, matchedCustomerIdentity: null };
 
   function status(message, error = false) {
     const box = $("status");
@@ -234,7 +234,7 @@
     if(error){const detail=error.code==="PGRST202"?"Instala primero la extensión del POS para guardar los datos de entrega y vincular el cliente.":error.message;status(`No se registró la venta: ${detail}`,true);updatePaymentSummary();return;}
     const lines=[...state.cart.values()].map(item=>({reference:item.product.referencia,name:item.product.nombre,quantity:item.quantity,price:item.unitPrice}));
     showReceipt(data.numero,lines,totals(),payments,{client,level,delivery,creditApplied:Number(data.saldo_aplicado)||0,creditRemaining:Number(data.saldo_favor_restante)||0,change:Math.max(0,[...document.querySelectorAll(".payment-row")].filter(row=>row.querySelector(".payment-kind").value==="efectivo").reduce((sum,row)=>sum+(Number(row.querySelector(".cash-received").value)||0),0)-payments.filter(payment=>payment.medio==="efectivo").reduce((sum,payment)=>sum+payment.valor,0))});
-    state.cart.clear();$("payment-rows").replaceChildren();addPaymentRow();$("customer-name").value="";$("customer-document").value="";$("customer-phone").value="";$("customer-city").value="";$("customer-neighborhood").value="";$("customer-address").value="";$("customer-price-level").value="";$("customer-match").textContent="";state.customerCredit=0;$("customer-credit").textContent=`Saldo a favor disponible: ${money(0)}`;$("delivery-type").value="recoge_cliente";$("carrier-name").value="";$("carrier-other").value="";$("tracking-number").value="";toggleDeliveryFields();$("sale-note").value="";
+    state.cart.clear();$("payment-rows").replaceChildren();addPaymentRow();state.customerLookupRequest++;state.matchedCustomerIdentity=null;$("customer-name").value="";$("customer-document").value="";$("customer-phone").value="";$("customer-city").value="";$("customer-neighborhood").value="";$("customer-address").value="";$("customer-price-level").value="";$("customer-match").textContent="";state.customerCredit=0;$("customer-credit").textContent=`Saldo a favor disponible: ${money(0)}`;$("delivery-type").value="recoge_cliente";$("carrier-name").value="";$("carrier-other").value="";$("tracking-number").value="";toggleDeliveryFields();$("sale-note").value="";
     await refreshAll();await refreshCash();status(legacySave?`Venta ${data.numero} guardada e inventario actualizado. La extensión para guardar ficha del cliente y entrega aún no está instalada.`:`Venta ${data.numero} guardada. El inventario se actualizó.`);
     $("receipt-dialog").showModal();
   }
@@ -271,26 +271,42 @@
     row.push(cell);if(row.some(value=>value.trim()))rows.push(row);return rows;
   }
   function toggleDeliveryFields(){const carrier=$("delivery-type").value==="transportadora";$("carrier-field").hidden=!carrier;$("tracking-field").hidden=!carrier;$("carrier-other-field").hidden=!carrier||$("carrier-name").value!=="Otra";}
+  function customerIdentity(){return `${$("customer-document").value.trim()}|${$("customer-phone").value.trim()}`;}
+  function clearCustomerFields({keepFocusField=null}={}){
+    for(const id of ["customer-name","customer-document","customer-phone","customer-city","customer-neighborhood","customer-address"]){if(id!==keepFocusField)$(id).value="";}
+    $("customer-price-level").value="";$("customer-match").textContent="";state.matchedCustomerIdentity=null;state.customerCredit=0;
+    $("customer-credit").textContent=`Saldo a favor disponible: ${money(0)}`;$("customer-account-history").hidden=true;$("customer-account-movements").replaceChildren();
+    for(const item of state.cart.values())if(!item.manualPrice)item.unitPrice=priceFor(item.product,item.quantity);renderCart();updatePaymentSummary();
+  }
   async function lookupCustomer(){
     const documentNumber=$("customer-document").value.trim(),phone=$("customer-phone").value.trim();if(!documentNumber&&!phone)return;
+    const request=++state.customerLookupRequest,identity=`${documentNumber}|${phone}`;
+    const isCurrent=()=>request===state.customerLookupRequest;
+    const isSameIdentity=()=>identity===customerIdentity();
     const digits=value=>String(value||"").replace(/\D/g,"");const normalizedPhone=value=>{const number=digits(value);return number.length===12&&number.startsWith("57")?number.slice(2):number;};let data=null,lastError=null;
     const customers=await db.from("pos_clientes").select("nombre,documento,telefono,ciudad,barrio,direccion,nivel_precio,actualizado_en").order("actualizado_en",{ascending:false}).limit(1000);
+    if(!isCurrent()||!isSameIdentity())return;
     if(!customers.error){const all=customers.data||[];data=(documentNumber&&all.find(customer=>digits(customer.documento)===digits(documentNumber)))||(phone&&all.find(customer=>normalizedPhone(customer.telefono)===normalizedPhone(phone)))||null;}
     else lastError=customers.error;
     if(!data){
       const sales=await db.from("pos_ventas").select("cliente_nombre,cliente_documento,cliente_telefono,cliente_ciudad,nivel_precio,creada_en").order("creada_en",{ascending:false}).limit(1000);
+      if(!isCurrent()||!isSameIdentity())return;
       if(!sales.error){lastError=null;const all=sales.data||[];const previous=(documentNumber&&all.find(sale=>digits(sale.cliente_documento)===digits(documentNumber)))||(phone&&all.find(sale=>normalizedPhone(sale.cliente_telefono)===normalizedPhone(phone)));if(previous)data={nombre:previous.cliente_nombre,documento:previous.cliente_documento,telefono:previous.cliente_telefono,ciudad:previous.cliente_ciudad,nivel_precio:previous.nivel_precio};}
       else lastError=sales.error;
     }
+    if(!isCurrent()||!isSameIdentity())return;
     if(!data&&lastError){state.customerCredit=0;$("customer-credit").textContent=`Saldo a favor disponible: ${money(0)}`;$("customer-match").textContent=`No pude buscar el cliente: ${lastError.message}`;updatePaymentSummary();return;}
-    if(!data){state.customerCredit=0;$("customer-credit").textContent=`Saldo a favor disponible: ${money(0)}`;$("customer-match").textContent="Cliente nuevo; quedará guardado al registrar la venta.";updatePaymentSummary();return;}
+    if(!data){state.customerCredit=0;state.matchedCustomerIdentity=null;$("customer-credit").textContent=`Saldo a favor disponible: ${money(0)}`;$("customer-match").textContent="Cliente nuevo; quedará guardado al registrar la venta.";updatePaymentSummary();return;}
     $("customer-name").value=data.nombre||"";$("customer-document").value=data.documento||documentNumber;$("customer-phone").value=data.telefono||phone;$("customer-city").value=data.ciudad||"";$("customer-neighborhood").value=data.barrio||"";$("customer-address").value=data.direccion||"";$("customer-price-level").value=data.nivel_precio||"";
+    state.matchedCustomerIdentity=customerIdentity();
     $("customer-match").textContent="Cliente encontrado; cargué sus datos guardados.";
-    await refreshCustomerAccount();
+    await refreshCustomerAccount(request);
+    if(!isCurrent())return;
     for(const item of state.cart.values())if(!item.manualPrice)item.unitPrice=priceFor(item.product,item.quantity);renderCart();
   }
-  async function refreshCustomerAccount(){
+  async function refreshCustomerAccount(lookupRequest=state.customerLookupRequest){
     const {data,error}=await db.rpc("pos_obtener_cuenta_cliente",{p_documento:$('customer-document').value.trim()||null,p_telefono:$('customer-phone').value.trim()||null});
+    if(lookupRequest!==state.customerLookupRequest)return;
     state.customerCredit=error?0:Number(data?.saldo_favor)||0;
     $("customer-credit").textContent=error?"Saldo a favor: no disponible (instala la migración)":`Saldo a favor disponible: ${money(state.customerCredit)}${Number(data?.saldo_pendiente)>0?` · Debe ${money(data.saldo_pendiente)}`:""}`;
     const history=$('customer-account-history'),list=$('customer-account-movements');list.replaceChildren();
@@ -363,7 +379,8 @@
   $("customer-price-level").addEventListener("change",()=>{for(const item of state.cart.values())if(!item.manualPrice)item.unitPrice=priceFor(item.product,item.quantity);renderCart();});
   $("customer-document").addEventListener("blur",lookupCustomer);
   $("customer-phone").addEventListener("blur",lookupCustomer);
-  for(const field of [$('customer-document'),$('customer-phone')])field.addEventListener("input",()=>{state.customerCredit=0;$('customer-credit').textContent=`Saldo a favor disponible: ${money(0)}`;$('customer-account-history').hidden=true;$('customer-account-movements').replaceChildren();updatePaymentSummary();});
+  for(const field of [$('customer-document'),$('customer-phone')])field.addEventListener("input",event=>{state.customerLookupRequest++;if(state.matchedCustomerIdentity&&customerIdentity()!==state.matchedCustomerIdentity){clearCustomerFields({keepFocusField:event.currentTarget.id});}else{state.customerCredit=0;$('customer-credit').textContent=`Saldo a favor disponible: ${money(0)}`;$('customer-account-history').hidden=true;$('customer-account-movements').replaceChildren();updatePaymentSummary();}});
+  $('clear-customer').addEventListener("click",()=>{state.customerLookupRequest++;clearCustomerFields();$('customer-match').textContent="Datos del cliente borrados. Puedes ingresar otro cliente; el carrito se conserva.";$('customer-document').focus();});
   $('register-advance').addEventListener("click",openAdvance);
   $('advance-form').addEventListener("submit",submitAdvance);
   $('advance-method').addEventListener("change",toggleAdvanceFields);
