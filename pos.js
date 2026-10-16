@@ -338,7 +338,7 @@
   function parseCop(value){
     let clean=String(value??"").replace(/[^0-9,.-]/g,"");if(!clean)return null;
     const comma=clean.lastIndexOf(","),dot=clean.lastIndexOf(".");
-    if(comma>=0&&dot>=0){const decimal=comma>dot?",":".";clean=clean.replace(/[,.]/g,"");if(decimal===",")clean=clean.slice(0,-2)+"."+clean.slice(-2);}
+    if(comma>=0&&dot>=0){const decimal=comma>dot?comma:dot,tail=clean.length-decimal-1;clean=clean.replace(/[,.]/g,"");if(tail>0)clean=clean.slice(0,-tail)+"."+clean.slice(-tail);}
     else if(comma>=0){const tail=clean.length-comma-1;clean=tail>0&&tail<=2?clean.replace(",","."):clean.replace(/,/g,"");}
     else if(dot>=0){const tail=clean.length-dot-1;clean=tail>0&&tail<=2?clean:clean.replace(/\./g,"");}
     const number=Number(clean);return Number.isFinite(number)&&number>=0?number:null;
