@@ -310,7 +310,8 @@
     state.customerCredit=error?0:Number(data?.saldo_favor)||0;
     $("customer-credit").textContent=error?"Saldo a favor: no disponible (instala la migración)":`Saldo a favor disponible: ${money(state.customerCredit)}${Number(data?.saldo_pendiente)>0?` · Debe ${money(data.saldo_pendiente)}`:""}`;
     const history=$('customer-account-history'),list=$('customer-account-movements');list.replaceChildren();
-    for(const movement of data?.movimientos||[]){const row=document.createElement('p');const names={abono:'Abono recibido',uso_abono:'Abono aplicado',deuda:'Saldo pendiente',pago_deuda:'Pago de saldo pendiente'};row.textContent=`${names[movement.tipo]||movement.tipo}: ${money(movement.monto)}${movement.medio?` · ${movement.medio}`:''}${movement.banco?` · ${movement.banco}`:''}${movement.referencia_pago?` · ${movement.referencia_pago}`:''} · ${new Date(movement.creado_en).toLocaleDateString('es-CO')}`;list.append(row);}
+    const movements=data?.movimientos||[];const reversedIds=new Set(movements.map(movement=>Number(movement.movimiento_reversado_id)).filter(Boolean));
+    for(const movement of movements){const row=document.createElement('p');row.className='account-movement';const names={abono:'Abono recibido',uso_abono:'Abono aplicado',anulacion_abono:'Abono anulado',deuda:'Saldo pendiente',pago_deuda:'Pago de saldo pendiente'};const details=document.createElement('span');details.textContent=`${names[movement.tipo]||movement.tipo}: ${money(movement.monto)}${movement.medio?` · ${movement.medio}`:''}${movement.banco?` · ${movement.banco}`:''}${movement.referencia_pago?` · ${movement.referencia_pago}`:''} · ${new Date(movement.creado_en).toLocaleDateString('es-CO')}`;row.append(details);if(movement.tipo==='abono'&&!reversedIds.has(Number(movement.id))){const cancel=document.createElement('button');cancel.type='button';cancel.className='btn btn-small btn-danger cancel-advance';cancel.textContent='Anular';cancel.dataset.movementId=String(movement.id);cancel.dataset.amount=String(movement.monto);cancel.dataset.method=movement.medio||'';cancel.addEventListener('click',cancelAdvance);row.append(cancel);}list.append(row);}
     history.hidden=error||!list.childElementCount;
     updatePaymentSummary();
   }
@@ -326,6 +327,13 @@
     if(error){status(`No se pudo registrar el abono: ${error.message}`,true);return;}
     $('customer-name').value=client.nombre;$('customer-document').value=client.documento;$('customer-phone').value=client.telefono;
     $('advance-dialog').close();$('advance-form').reset();await lookupCustomer();status(`Abono registrado. Saldo a favor disponible: ${money(data?.saldo_favor)}.`);
+  }
+  async function cancelAdvance(event){
+    const button=event.currentTarget,id=Number(button.dataset.movementId),amount=Number(button.dataset.amount);if(!id)return;
+    if(!window.confirm(`¿Anular el abono de ${money(amount)}? Se conservará el movimiento en el historial y se ajustará el saldo del cliente${button.dataset.method==='efectivo'?' y la caja':''}.`))return;
+    button.disabled=true;const {data,error}=await db.rpc('pos_anular_abono',{p_movimiento_id:id,p_motivo:'Anulación de abono'});button.disabled=false;
+    if(error){status(`No se pudo anular el abono: ${error.message}`,true);return;}
+    await refreshCustomerAccount();await refreshCash();status(`Abono anulado. Saldo a favor disponible: ${money(data?.saldo_favor)}.`);
   }
   function applyReceiptSettings(){
     const settings=JSON.parse(localStorage.getItem("martextiles-pos-receipt")||"{}");
