@@ -200,7 +200,7 @@
     $("complete-sale").disabled=!state.cart.size||remainingDue>.01||missingTransfer||overpaidNonCash;
   }
   function fillProductSelects() {
-    for (const select of [$("stock-product"),$("config-product")]) {
+    for (const select of [$("stock-product"),$("config-product"),$("adjust-stock-product")]) {
       const previous=select.value; select.replaceChildren(new Option("Selecciona una referencia",""));
       for (const p of state.products) select.add(new Option(`Ref ${p.referencia} — ${p.nombre||"Producto"}`,String(p.id)));
       if (previous) select.value=previous;
@@ -210,10 +210,10 @@
   function renderStock() {
     const term=$("stock-search").value.trim().toLocaleLowerCase("es"), container=$("stock-list"); container.replaceChildren();
     const products=state.products.filter(p=>`${p.referencia} ${p.nombre}`.toLocaleLowerCase("es").includes(term));
-    for(const p of products){const row=document.createElement("div");row.className="inventory-row";const desc=document.createElement("div");desc.innerHTML="";const strong=document.createElement("strong");strong.textContent=`Ref ${p.referencia}`;const small=document.createElement("small");small.textContent=p.nombre||p.categoria||"";desc.append(strong,small);const stock=document.createElement("strong");stock.className="stock-value";stock.textContent=`${state.stock.get(p.id)||0} unid.`;const code=document.createElement("small");code.textContent=state.config.get(p.id)?.codigo_barras?"Código asignado":"Sin código";row.append(desc,stock,code);container.append(row);}
+    for(const p of products){const row=document.createElement("div");row.className="inventory-row";const desc=document.createElement("div");const strong=document.createElement("strong");strong.textContent=`Ref ${p.referencia}`;const small=document.createElement("small");small.textContent=p.nombre||p.categoria||"";desc.append(strong,small);const stock=document.createElement("strong");stock.className="stock-value";stock.textContent=`${state.stock.get(p.id)||0} unid.`;const code=document.createElement("small");code.textContent=state.config.get(p.id)?.codigo_barras?"Código asignado":"Sin código";const actions=document.createElement("div");actions.className="inventory-actions";const edit=document.createElement("button");edit.type="button";edit.className="btn btn-small btn-secondary";edit.textContent="Modificar";edit.addEventListener("click",()=>{$("config-product").value=String(p.id);loadConfigFields();$("config-form").scrollIntoView({behavior:"smooth",block:"center"});$("config-name").focus();});const adjust=document.createElement("button");adjust.type="button";adjust.className="btn btn-small btn-secondary";adjust.textContent="Ajustar stock";adjust.addEventListener("click",()=>{$("adjust-stock-product").value=String(p.id);$("adjust-stock-count").value=String(state.stock.get(p.id)||0);$("adjust-stock-reason").value="";$("adjust-stock-form").scrollIntoView({behavior:"smooth",block:"center"});$("adjust-stock-reason").focus();});const retire=document.createElement("button");retire.type="button";retire.className="btn btn-small btn-danger";retire.textContent="Retirar";retire.addEventListener("click",()=>retireReference(p));actions.append(edit,adjust,retire);row.append(desc,stock,code,actions);container.append(row);}
     if(!products.length){const empty=document.createElement("p");empty.className="empty";empty.textContent="No hay referencias para mostrar.";container.append(empty);}
   }
-  function loadConfigFields(){const id=Number($("config-product").value);const cfg=state.config.get(id);$("barcode").value=cfg?.codigo_barras||"";$("unit-cost").value=cfg?.costo_unitario??"";}
+  function loadConfigFields(){const id=Number($("config-product").value),product=state.products.find(item=>item.id===id),cfg=state.config.get(id),prices=state.classPrices.get(id)||{};$("config-name").value=product?.nombre||"";$("config-category").value=product?.categoria||"";$("barcode").value=cfg?.codigo_barras||"";$("unit-cost").value=cfg?.costo_unitario??"";for(const level of ["A","B","C","D","E"])$(`edit-price-${level.toLowerCase()}`).value=prices[level]??"";}
   async function submitSale(){
     const items=[...state.cart.values()].map(item=>({producto_id:item.product.id,cantidad:item.quantity,precio_unitario:item.unitPrice}));
     const payments=paymentData(); if(!items.length){status("Agrega productos al carrito.",true);return;}
@@ -282,7 +282,9 @@
     const id=String(data?.producto_id||"");if(id){$("stock-product").value=id;$("config-product").value=id;loadConfigFields();}
     status(`Referencia ${data?.referencia||"nueva"} creada. Inventario inicial: ${Number(data?.existencia)||0} unidades. Agrega fotos y completa la ficha desde Administración cuando quieras.`);
   }
-  async function saveConfig(event){event.preventDefault();const id=Number($("config-product").value),barcode=$("barcode").value.trim(),cost=Number($("unit-cost").value)||0;if(!id){status("Selecciona una referencia.",true);return;}const {error}=await db.rpc("pos_guardar_config_producto",{p_producto_id:id,p_codigo_barras:barcode||null,p_costo:cost});if(error){status(`No se pudieron guardar los datos: ${error.message}`,true);return;}await refreshAll();$("config-product").value=String(id);loadConfigFields();status("Código de barras y costo guardados.");}
+  async function saveConfig(event){event.preventDefault();const id=Number($("config-product").value);if(!id){status("Selecciona una referencia.",true);return;}const prices={A:Number($("edit-price-a").value),B:Number($("edit-price-b").value),C:Number($("edit-price-c").value),D:Number($("edit-price-d").value),E:Number($("edit-price-e").value)};const {error}=await db.rpc("pos_actualizar_referencia",{p_producto_id:id,p_nombre:$("config-name").value.trim(),p_categoria:$("config-category").value,p_codigo_barras:$("barcode").value.trim()||null,p_costo:Number($("unit-cost").value),p_precios:prices});if(error){status(`No se pudieron guardar los cambios: ${error.message}`,true);return;}await refreshAll();$("config-product").value=String(id);loadConfigFields();status("Referencia actualizada. El código se conservó para mantener agrupado su historial.");}
+  async function adjustStock(event){event.preventDefault();const id=Number($("adjust-stock-product").value),count=Number($("adjust-stock-count").value),reason=$("adjust-stock-reason").value.trim();if(!id||!Number.isInteger(count)||count<0||!reason){status("Selecciona referencia, cantidad contada y motivo.",true);return;}const {data,error}=await db.rpc("pos_ajustar_inventario",{p_producto_id:id,p_existencia_contada:count,p_motivo:reason});if(error){status(`No se pudo ajustar el inventario: ${error.message}`,true);return;}$("adjust-stock-form").reset();await refreshAll();status(`Ajuste guardado para ${data.referencia}: ${data.diferencia>0?"+":""}${data.diferencia} unidades. Existencia actual: ${data.existencia}.`);}
+  async function retireReference(product){const stock=state.stock.get(product.id)||0;if(stock!==0){status(`No se puede retirar Ref ${product.referencia}: primero deja sus existencias en cero mediante un ajuste con motivo.`,true);return;}if(!window.confirm(`¿Retirar Ref ${product.referencia} del inventario activo? Se conservarán sus ventas e historial.`))return;const {error}=await db.rpc("pos_retirar_referencia",{p_producto_id:product.id});if(error){status(`No se pudo retirar la referencia: ${error.message}`,true);return;}await refreshAll();status(`Ref ${product.referencia} retirada. Su historial se conserva y ya no aparecerá en ventas nuevas.`);}
   function parseCsv(text){
     const firstLine=text.split(/\r?\n/,1)[0]||"";const delimiter=(firstLine.match(/;/g)||[]).length>(firstLine.match(/,/g)||[]).length?";":",";const rows=[];let row=[],cell="",quoted=false;
     for(let i=0;i<text.length;i++){const ch=text[i];if(ch==='"'&&quoted&&text[i+1]==='"'){cell+='"';i++;}else if(ch==='"'){quoted=!quoted;}else if(ch===delimiter&&!quoted){row.push(cell);cell="";}else if((ch==='\n'||ch==='\r')&&!quoted){if(ch==='\r'&&text[i+1]==='\n')i++;row.push(cell);if(row.some(value=>value.trim()))rows.push(row);row=[];cell="";}else cell+=ch;}
@@ -450,10 +452,12 @@
   $("add-payment").addEventListener("click",()=>addPaymentRow());
   $("complete-sale").addEventListener("click",submitSale);
   $("stock-form").addEventListener("submit",submitStock);
+  $("adjust-stock-form").addEventListener("submit",adjustStock);
   $("new-reference-form").addEventListener("submit",createReference);
   $("config-form").addEventListener("submit",saveConfig);
   $("import-prices").addEventListener("click",importClassPrices);
   $("stock-product").addEventListener("change",()=>{const cfg=state.config.get(Number($("stock-product").value));if(cfg){$("config-product").value=String($("stock-product").value);loadConfigFields();}});
+  $("adjust-stock-product").addEventListener("change",()=>{$("adjust-stock-count").value=String(state.stock.get(Number($("adjust-stock-product").value))||0);});
   $("config-product").addEventListener("change",loadConfigFields);
   $("stock-search").addEventListener("input",renderStock);
   $("history-search").addEventListener("input",renderHistory);
