@@ -56,9 +56,8 @@ BEGIN
   v_envio:=COALESCE(NULLIF(p_entrega->>'envio_valor','')::numeric,0);
   v_envio_medio:=NULLIF(p_entrega->>'envio_medio','');
   IF v_envio<0 THEN RAISE EXCEPTION 'El valor del envío no puede ser negativo'; END IF;
-  IF v_tipo='transportadora' AND v_envio<=0 THEN RAISE EXCEPTION 'Registra el envío cobrado por adelantado'; END IF;
   IF v_envio>0 AND (v_envio_medio IS NULL OR v_envio_medio NOT IN ('efectivo','transferencia','tarjeta','otro')) THEN RAISE EXCEPTION 'Selecciona cómo se pagó el envío'; END IF;
-  IF v_envio_medio='transferencia' AND (NULLIF(btrim(p_entrega->>'envio_banco'),'') IS NULL OR NULLIF(btrim(p_entrega->>'envio_referencia'),'') IS NULL) THEN RAISE EXCEPTION 'El pago del envío por transferencia necesita banco y comprobante'; END IF;
+  IF v_envio>0 AND v_envio_medio='transferencia' AND (NULLIF(btrim(p_entrega->>'envio_banco'),'') IS NULL OR NULLIF(btrim(p_entrega->>'envio_referencia'),'') IS NULL) THEN RAISE EXCEPTION 'El pago del envío por transferencia necesita banco y comprobante'; END IF;
   IF EXISTS(SELECT 1 FROM jsonb_array_elements(v_pagos) x WHERE x->>'medio'='contra_entrega') AND v_tipo<>'transportadora' THEN RAISE EXCEPTION 'El pago contra entrega requiere una transportadora'; END IF;
   SELECT COALESCE(sum((x->>'cantidad')::numeric*(x->>'precio_unitario')::numeric),0) INTO v_total FROM jsonb_array_elements(COALESCE(p_items,'[]'::jsonb)) x;
   SELECT COALESCE(sum((x->>'valor')::numeric),0),COALESCE(sum((x->>'valor')::numeric) FILTER(WHERE x->>'medio'='contra_entrega'),0)

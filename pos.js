@@ -208,7 +208,7 @@
     const codWithoutCarrier=cod>0&&$("delivery-type").value!=="transportadora";
     if(overpaidNonCash){balance.textContent="Los pagos por transferencia, tarjeta, otro y contra entrega superan el total; corrige los valores.";balance.style.color="#b42318";$("change-return").textContent=money(0);}
     if(codWithoutCarrier){balance.textContent="Contra entrega solo está disponible con transportadora.";balance.style.color="#b42318";}
-    $("complete-sale").disabled=!state.cart.size||remainingDue>.01||missingTransfer||missingShippingTransfer||overpaidNonCash||codWithoutCarrier||($("delivery-type").value==="transportadora"&&shippingFee<=0);
+    $("complete-sale").disabled=!state.cart.size||remainingDue>.01||missingTransfer||missingShippingTransfer||overpaidNonCash||codWithoutCarrier;
   }
   function fillProductSelects() {
     for (const select of [$("stock-product"),$("config-product"),$("adjust-stock-product"),$("variant-product")]) {
@@ -252,7 +252,6 @@
     const delivery={tipo:deliveryType,transportadora:selectedCarrier==="Otra"?$("carrier-other").value.trim():selectedCarrier,guia:$("tracking-number").value.trim(),envio_valor:shippingFee,envio_medio:shippingMethod,envio_banco:shippingMethod==="transferencia"?$("shipping-bank").value:null,envio_referencia:shippingMethod==="transferencia"?$("shipping-reference").value.trim():null};
     if(["transportadora","domicilio"].includes(deliveryType)&&(!client.ciudad||!client.direccion)){status("Para la entrega, indica ciudad y dirección.",true);button.disabled=false;button.textContent="Confirmar venta";return;}
     if(deliveryType==="transportadora"&&!delivery.transportadora){status("Selecciona o escribe la transportadora.",true);button.disabled=false;button.textContent="Confirmar venta";return;}
-    if(deliveryType==="transportadora"&&shippingFee<=0){status("Registra el valor del envío cobrado por adelantado.",true);button.disabled=false;button.textContent="Confirmar venta";return;}
     if(shippingFee>0&&shippingMethod==="transferencia"&&(!delivery.envio_banco||!delivery.envio_referencia)){status("Para el pago del envío por transferencia, indica banco y número de comprobante.",true);button.disabled=false;button.textContent="Confirmar venta";return;}
     if(payments.some(payment=>payment.medio==="contra_entrega")&&deliveryType!=="transportadora"){status("El pago contra entrega solo puede usarse con transportadora.",true);button.disabled=false;button.textContent="Confirmar venta";return;}
     let {data,error}=await db.rpc("pos_registrar_venta_detallada",{p_items:items,p_pagos:payments,p_cliente:client,p_nivel_precio:level,p_observacion:$("sale-note").value.trim()||null,p_entrega:delivery});
@@ -326,7 +325,7 @@
     const firstLine=text.split(/\r?\n/,1)[0]||"";const delimiter=(firstLine.match(/;/g)||[]).length>(firstLine.match(/,/g)||[]).length?";":",";const rows=[];let row=[],cell="",quoted=false;
     for(let i=0;i<text.length;i++){const ch=text[i];if(ch==='"'&&quoted&&text[i+1]==='"'){cell+='"';i++;}else if(ch==='"'){quoted=!quoted;}else if(ch===delimiter&&!quoted){row.push(cell);cell="";}else if((ch==='\n'||ch==='\r')&&!quoted){if(ch==='\r'&&text[i+1]==='\n')i++;row.push(cell);if(row.some(value=>value.trim()))rows.push(row);row=[];cell="";}else cell+=ch;}
     row.push(cell);if(row.some(value=>value.trim()))rows.push(row);return rows;
-  }  function toggleDeliveryFields(){const carrier=$("delivery-type").value==="transportadora";$("carrier-field").hidden=!carrier;$("tracking-field").hidden=!carrier;$("carrier-other-field").hidden=!carrier||$("carrier-name").value!=="Otra";$("shipping-prepayment").hidden=!carrier;$("shipping-fee").required=carrier;const transfer=carrier&&$("shipping-method").value==="transferencia";$("shipping-transfer-fields").hidden=!transfer;$("shipping-bank").required=transfer;$("shipping-reference").required=transfer;updatePaymentSummary();}
+  }  function toggleDeliveryFields(){const carrier=$("delivery-type").value==="transportadora";$("carrier-field").hidden=!carrier;$("tracking-field").hidden=!carrier;$("carrier-other-field").hidden=!carrier||$("carrier-name").value!=="Otra";$("shipping-prepayment").hidden=!carrier;$("shipping-fee").required=false;const shippingFee=Number($("shipping-fee").value)||0;const transfer=carrier&&shippingFee>0&&$("shipping-method").value==="transferencia";$("shipping-transfer-fields").hidden=!transfer;$("shipping-bank").required=transfer;$("shipping-reference").required=transfer;updatePaymentSummary();}
   function customerIdentity(){return `${$("customer-document").value.trim()}|${$("customer-phone").value.trim()}`;}
   function clearCustomerFields({keepFocusField=null}={}){
     for(const id of ["customer-name","customer-document","customer-phone","customer-city","customer-neighborhood","customer-address"]){if(id!==keepFocusField)$(id).value="";}
@@ -499,7 +498,7 @@
   $('receipt-dialog').addEventListener("click",event=>{if(event.target===$('receipt-dialog'))$('receipt-dialog').close();});
   $("delivery-type").addEventListener("change",toggleDeliveryFields);
   $("carrier-name").addEventListener("change",toggleDeliveryFields);
-  $("shipping-fee").addEventListener("input",updatePaymentSummary);
+  $("shipping-fee").addEventListener("input",toggleDeliveryFields);
   $("shipping-method").addEventListener("change",toggleDeliveryFields);
   $("shipping-bank").addEventListener("change",updatePaymentSummary);
   $("shipping-reference").addEventListener("input",updatePaymentSummary);
