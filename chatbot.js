@@ -1,5 +1,7 @@
 (() => {
   const WHATSAPP_NUMBER = "573015547616";
+  const SUPABASE_URL = "https://nsuxvytaogbnrlopzfgi.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_A61mORZLeNZ4hd4x4INGjQ_XS0U1Xap";
   const toggle = document.getElementById("store-chat-toggle");
   const panel = document.getElementById("store-chat-panel");
   const closeButton = document.getElementById("store-chat-close");
@@ -39,6 +41,29 @@
     link.rel = "noopener noreferrer";
     link.textContent = "Continuar por WhatsApp";
     parent.appendChild(link);
+  }
+
+  async function askAssistant(question) {
+    const typing = addMessage("Estoy revisando tu consulta…", "bot");
+    try {
+      const response = await fetch(`${SUPABASE_URL}/functions/v1/martextiles-chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: SUPABASE_PUBLISHABLE_KEY
+        },
+        body: JSON.stringify({ question }),
+        signal: AbortSignal.timeout(20000)
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || "No fue posible responder.");
+      typing.textContent = result.answer || "No pude preparar una respuesta.";
+    } catch (error) {
+      typing.textContent = "No pude conectarme en este momento. Puedes continuar la consulta con nuestro equipo.";
+      addContactLink(typing, `Mi pregunta: ${question}`);
+      console.error("Error del asistente de MarTextiles:", error);
+    }
+    messages.scrollTop = messages.scrollHeight;
   }
 
   function findProduct(question) {
@@ -101,8 +126,7 @@
     } else if (/garantia|defecto|imperfecto|costura|tela/.test(text)) {
       addMessage("Las prendas tienen garantía de fábrica por imperfectos en la tela o la costura. Escríbenos por WhatsApp para revisar tu caso y recibir orientación.", "bot");
     } else {
-      const bubble = addMessage("Aún no tengo esa información. Puedo ayudarte a buscar una referencia o puedes continuar la consulta con nuestro equipo.", "bot");
-      addContactLink(bubble, `Mi pregunta: ${question}`);
+      askAssistant(question);
     }
   }
 

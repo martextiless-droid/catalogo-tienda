@@ -1,0 +1,4 @@
+project_id = "nsuxvytaogbnrlopzfgi"
+
+[functions.martextiles-chat]
+verify_jwt = false
