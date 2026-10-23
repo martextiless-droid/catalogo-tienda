@@ -6,7 +6,7 @@
   const $ = id => document.getElementById(id);
   const money = value => new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(Number(value) || 0);
   const safeText = value => String(value ?? "");
-  const state = { products: [], prices: new Map(), classPrices: new Map(), config: new Map(), stock: new Map(), variants: new Map(), variantStock: new Map(), cart: new Map(), sales: [], report: null, selectedReturn: null, selectedCancelSale: null, selectedCodSale: null, cashExpected: 0, customerCredit: 0, customerLookupRequest: 0, matchedCustomerIdentity: null };
+  const state = { products: [], prices: new Map(), classPrices: new Map(), config: new Map(), stock: new Map(), variants: new Map(), variantStock: new Map(), inventoryEntries: [], entryHistoryError: null, customers: [], cart: new Map(), sales: [], report: null, selectedReturn: null, selectedCancelSale: null, selectedCodSale: null, cashExpected: 0, customerCredit: 0, customerLookupRequest: 0, matchedCustomerIdentity: null };
 
   function status(message, error = false) {
     const box = $("status");
@@ -32,17 +32,22 @@
   }
   async function refreshAll() {
     status("Cargando referencias e inventario…");
-    const [productResult, priceResult, classPriceResult, configResult, movementResult, variantResult] = await Promise.all([
+    const [productResult, priceResult, classPriceResult, configResult, movementResult, variantResult, entryResult, customerResult] = await Promise.all([
       db.from("productos").select("id,referencia,nombre,categoria,imagen_url,imagenes_url,eliminado").eq("eliminado", false).order("referencia"),
       db.from("precios").select("producto_id,cantidad_minima,precio_unitario").order("cantidad_minima"),
       db.from("pos_producto_precios_clase").select("producto_id,nivel,precio_unitario"),
       db.from("pos_producto_config").select("producto_id,codigo_barras,costo_unitario"),
       db.from("pos_movimientos_inventario").select("producto_id,variante_id,cantidad"),
-      db.from("pos_producto_variantes").select("id,producto_id,color,talla,activo").eq("activo", true)
+      db.from("pos_producto_variantes").select("id,producto_id,color,talla,activo").eq("activo", true),
+      db.from("pos_movimientos_inventario").select("id,producto_id,variante_id,tipo,cantidad,nota,creado_en").order("creado_en", { ascending: false }).limit(1000),
+      db.from("pos_clientes").select("id,nombre,documento,telefono,ciudad,barrio,direccion,nivel_precio,actualizado_en").order("actualizado_en", { ascending: false }).limit(1000)
     ]);
     const problem = [productResult, priceResult, classPriceResult, configResult, movementResult, variantResult].find(result => result.error);
     if (problem) { status(`No se pudo cargar el POS: ${problem.error.message}. Verifica que se haya instalado la migración de variantes e inventario.`, true); return; }
     state.products = productResult.data || [];
+    state.entryHistoryError = entryResult.error?.message || null;
+    state.inventoryEntries = entryResult.error ? [] : (entryResult.data || []).filter(item => item.tipo === "entrada" || (item.tipo === "ajuste" && Number(item.cantidad) > 0 && item.nota === "Inventario inicial al crear la referencia"));
+    state.customers = customerResult.error ? [] : customerResult.data || [];
     state.prices.clear(); state.classPrices.clear(); state.config.clear(); state.stock.clear(); state.variants.clear(); state.variantStock.clear();
     for (const price of priceResult.data || []) {
       const list = state.prices.get(price.producto_id) || [];
@@ -57,7 +62,7 @@
     for (const item of configResult.data || []) state.config.set(item.producto_id, item);
     for (const variant of variantResult.data || []) { const list=state.variants.get(variant.producto_id)||[];list.push(variant);state.variants.set(variant.producto_id,list); }
     for (const move of movementResult.data || []) { state.stock.set(move.producto_id, (state.stock.get(move.producto_id) || 0) + Number(move.cantidad)); if(move.variante_id)state.variantStock.set(move.variante_id,(state.variantStock.get(move.variante_id)||0)+Number(move.cantidad)); }
-    fillProductSelects(); renderProducts(); renderCart(); renderStock(); status("");
+    fillProductSelects(); renderProducts(); renderCart(); renderStock(); renderStockEntryHistory(); renderCustomerEditor(); status("");
   }
   async function refreshCash(){
     const {data,error}=await db.rpc("pos_estado_caja");
@@ -236,6 +241,11 @@
     }
     if(!products.length){const empty=document.createElement("p");empty.className="empty";empty.textContent="No hay referencias para mostrar.";container.append(empty);}
   }
+  function renderStockEntryHistory(){const list=$("stock-entry-history");list.replaceChildren();if(state.entryHistoryError){const empty=document.createElement("p");empty.className="empty";empty.textContent=`No se pudo cargar el historial: ${state.entryHistoryError}`;list.append(empty);return;}if(!state.inventoryEntries.length){const empty=document.createElement("p");empty.className="empty";empty.textContent="Aún no hay entradas de mercancía registradas.";list.append(empty);return;}for(const movement of state.inventoryEntries){const product=state.products.find(item=>item.id===movement.producto_id),variant=movement.variante_id?(state.variants.get(movement.producto_id)||[]).find(item=>item.id===movement.variante_id):null,card=document.createElement("article");card.className="sale-card";const row=document.createElement("div");row.className="sale-summary";const reference=document.createElement("strong");reference.textContent=`Ref ${product?.referencia||movement.producto_id}${variant?` · ${[variant.color,variant.talla].filter(Boolean).join(" · ")}`:""}`;const quantity=document.createElement("strong");quantity.textContent=`+${movement.cantidad} unidades`;const date=document.createElement("small");date.textContent=movement.creado_en?new Date(movement.creado_en).toLocaleString("es-CO"):"Fecha no disponible";row.append(reference,quantity,date);card.append(row);if(movement.nota){const note=document.createElement("p");note.textContent=movement.nota;card.append(note);}list.append(card);}}
+  function renderCustomerEditor(){const select=$("customer-edit-select"),current=select.value;select.replaceChildren();const placeholder=document.createElement("option");placeholder.value="";placeholder.textContent=state.customers.length?"Selecciona un cliente":"No hay clientes guardados";select.append(placeholder);for(const customer of state.customers){const option=document.createElement("option");option.value=String(customer.id);option.textContent=`${customer.nombre||"Sin nombre"}${customer.documento?` · ${customer.documento}`:""}${customer.telefono?` · ${customer.telefono}`:""}`;select.append(option);}if(state.customers.some(customer=>String(customer.id)===current))select.value=current;else clearCustomerEditor();}
+  function clearCustomerEditor(){for(const id of ["customer-edit-name","customer-edit-document","customer-edit-phone","customer-edit-city","customer-edit-neighborhood","customer-edit-address"])$(id).value="";$("customer-edit-level").value="";}
+  function loadCustomerEditor(){const customer=state.customers.find(item=>String(item.id)===$("customer-edit-select").value);if(!customer){clearCustomerEditor();return;}$("customer-edit-name").value=customer.nombre||"";$("customer-edit-document").value=customer.documento||"";$("customer-edit-phone").value=customer.telefono||"";$("customer-edit-city").value=customer.ciudad||"";$("customer-edit-neighborhood").value=customer.barrio||"";$("customer-edit-address").value=customer.direccion||"";$("customer-edit-level").value=customer.nivel_precio||"";}
+  async function saveCustomer(event){event.preventDefault();const id=Number($("customer-edit-select").value);if(!id){status("Selecciona un cliente para modificar.",true);return;}const {error}=await db.rpc("pos_actualizar_cliente",{p_cliente_id:id,p_nombre:$("customer-edit-name").value.trim(),p_documento:$("customer-edit-document").value.trim()||null,p_telefono:$("customer-edit-phone").value.trim()||null,p_ciudad:$("customer-edit-city").value.trim()||null,p_barrio:$("customer-edit-neighborhood").value.trim()||null,p_direccion:$("customer-edit-address").value.trim()||null,p_nivel_precio:$("customer-edit-level").value||null});if(error){status(`No se pudieron guardar los datos del cliente: ${error.message}${error.code==="PGRST202"?". Ejecuta la nueva migración de clientes en Supabase.":""}`,true);return;}const selectedId=String(id);await refreshAll();$("customer-edit-select").value=selectedId;loadCustomerEditor();status("Datos del cliente actualizados. Se usarán en sus próximas ventas.");}
   function loadVariantEditor(){const id=Number($("variant-product").value),variants=state.variants.get(id)||[];let mode="ninguno";if(variants.length){const colors=variants.some(item=>item.color),sizes=variants.some(item=>item.talla);mode=colors&&sizes?"color_talla":colors?"color":"talla";}
     $("variant-mode").value=mode;$("variant-edit-fields").hidden=mode==="ninguno";$("variants-input").value=variants.map(item=>`${item.color||""} | ${item.talla||""} | ${state.variantStock.get(item.id)||0}`).join("\n");
   }
@@ -512,6 +522,8 @@
   $("complete-sale").addEventListener("click",submitSale);
   $("stock-form").addEventListener("submit",submitStock);
   $("adjust-stock-form").addEventListener("submit",adjustStock);
+  $("customer-edit-select").addEventListener("change",loadCustomerEditor);
+  $("customer-edit-form").addEventListener("submit",saveCustomer);
   $("new-reference-form").addEventListener("submit",createReference);
   $("configure-variants-form").addEventListener("submit",saveVariants);
   $("config-form").addEventListener("submit",saveConfig);
