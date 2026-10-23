@@ -30,6 +30,7 @@ src="https://www.facebook.com/tr?id=1328987255274375&ev=PageView&noscript=1"
 <!-- End Meta Pixel Code -->
 
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="chatbot.css">
 </head>
 <body class="page-producto">
   <header id="top" class="site-header">
@@ -135,11 +136,22 @@ src="https://www.facebook.com/tr?id=1328987255274375&ev=PageView&noscript=1"
   </div>
 </footer>
 
+<section id="store-chat" class="store-chat" aria-label="Asistente de MarTextiles">
+  <button id="store-chat-toggle" class="store-chat-toggle" type="button" aria-expanded="false" aria-controls="store-chat-panel"><span aria-hidden="true">✦</span><span>¿Te ayudo?</span></button>
+  <div id="store-chat-panel" class="store-chat-panel" hidden>
+    <header class="store-chat-header"><div><strong>Asistente MarTextiles</strong><span>Pregúntame por referencias y compras</span></div><button id="store-chat-close" class="store-chat-close" type="button" aria-label="Cerrar chat">×</button></header>
+    <div id="store-chat-messages" class="store-chat-messages" role="log" aria-live="polite" aria-relevant="additions text"><div class="store-chat-message store-chat-bot">¡Hola! Puedo ayudarte a encontrar una referencia o resolver dudas sobre envíos, pagos y atención mayorista.</div></div>
+    <div class="store-chat-quick" aria-label="Preguntas rápidas"><button type="button" data-chat-question="¿Cómo funcionan los envíos?">Envíos</button><button type="button" data-chat-question="¿Qué formas de pago tienen?">Pagos</button><button type="button" data-chat-question="¿Cuál es el horario de atención?">Horario</button></div>
+    <form id="store-chat-form" class="store-chat-form"><label class="visually-hidden" for="store-chat-input">Escribe tu pregunta</label><input id="store-chat-input" type="text" maxlength="240" placeholder="Escribe una pregunta…" autocomplete="off" required><button type="submit" aria-label="Enviar mensaje">Enviar</button></form>
+  </div>
+</section>
+
 <script src="producto.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="producto-supabase.js"></script>
 <script src="producto-navegacion.js"></script>
 <script src="script.js"></script>
+<script src="chatbot.js"></script>
 
 <style>
 .cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:9998}.cart-overlay.open{display:block}
