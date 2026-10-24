@@ -5,10 +5,56 @@
   const toggle = document.getElementById("store-chat-toggle");
   const panel = document.getElementById("store-chat-panel");
   const closeButton = document.getElementById("store-chat-close");
+  const resetButton = document.getElementById("store-chat-reset");
   const messages = document.getElementById("store-chat-messages");
   const form = document.getElementById("store-chat-form");
   const input = document.getElementById("store-chat-input");
   if (!toggle || !panel || !messages || !form || !input) return;
+
+  const HISTORY_KEY = "martextiles-chat-history-v1";
+  const HISTORY_LIMIT = 12;
+  const MAX_HISTORY_MESSAGE = 600;
+  const welcomeMessage = messages.querySelector(".store-chat-bot")?.textContent.trim()
+    || "¡Hola! Puedo ayudarte a encontrar una referencia o resolver dudas sobre envíos, pagos y atención mayorista.";
+
+  function loadHistory() {
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(HISTORY_KEY) || "null");
+      if (!Array.isArray(saved)) return [{ role: "assistant", content: welcomeMessage }];
+      const valid = saved
+        .filter(item => item && ["user", "assistant"].includes(item.role) && typeof item.content === "string")
+        .map(item => ({ role: item.role, content: item.content.trim().slice(0, MAX_HISTORY_MESSAGE) }))
+        .filter(item => item.content);
+      return valid.length ? valid.slice(-HISTORY_LIMIT) : [{ role: "assistant", content: welcomeMessage }];
+    } catch {
+      return [{ role: "assistant", content: welcomeMessage }];
+    }
+  }
+
+  let conversationHistory = loadHistory();
+
+  function saveHistory() {
+    conversationHistory = conversationHistory.slice(-HISTORY_LIMIT);
+    try {
+      sessionStorage.setItem(HISTORY_KEY, JSON.stringify(conversationHistory));
+    } catch (error) {
+      console.warn("No se pudo conservar la memoria temporal del chat:", error);
+    }
+  }
+
+  function remember(role, content) {
+    const value = String(content || "").trim().slice(0, MAX_HISTORY_MESSAGE);
+    if (!value) return;
+    conversationHistory.push({ role, content: value });
+    saveHistory();
+  }
+
+  function restoreTranscript() {
+    messages.replaceChildren();
+    conversationHistory.forEach(item => addMessage(item.content, item.role === "user" ? "user" : "bot"));
+  }
+
+  restoreTranscript();
 
   const normalize = value => String(value || "")
     .normalize("NFD")
@@ -43,6 +89,33 @@
     parent.appendChild(link);
   }
 
+  function catalogContext(question) {
+    const stopWords = new Set(["como", "para", "que", "con", "una", "uno", "las", "los", "del", "por", "tiene", "tienen", "quiero", "busco", "hay", "me", "de", "en", "el", "la"]);
+    const terms = normalize(question).split(/[^a-z0-9]+/).filter(term => term.length > 2 && !stopWords.has(term));
+    const cards = [...document.querySelectorAll(".products .product")];
+    const byReference = new Map();
+
+    for (const card of cards) {
+      const reference = card.querySelector("h3")?.textContent.trim().replace(/^ref(?:erencia)?\s*/i, "");
+      if (!reference || byReference.has(reference.toLowerCase())) continue;
+      const name = card.querySelector("h3")?.textContent.trim() || reference;
+      const category = card.dataset.cat || "";
+      const style = card.dataset.subcat || "";
+      const price = card.querySelector("p")?.textContent.trim() || "Precio por consultar";
+      const link = card.querySelector("a[href]")?.href || "";
+      const searchable = normalize(`${reference} ${name} ${category} ${style}`);
+      let score = terms.reduce((total, term) => total + (searchable.includes(term) ? 1 : 0), 0);
+      if (terms.some(term => /^\d+[a-z]*$/i.test(term) && normalize(reference) === term)) score += 20;
+      if (/pijam/.test(normalize(question)) && /pijam/.test(normalize(category))) score += 5;
+      if (/jogger/.test(normalize(question)) && /jogger/.test(normalize(category))) score += 5;
+      byReference.set(reference.toLowerCase(), { reference, name, category, style, price, url: link, score });
+    }
+
+    const ranked = [...byReference.values()].sort((a, b) => b.score - a.score);
+    const relevant = ranked.filter(item => item.score > 0).slice(0, 10);
+    return (relevant.length ? relevant : ranked.slice(0, 8)).map(({ score, ...product }) => product);
+  }
+
   async function askAssistant(question) {
     const typing = addMessage("Estoy revisando tu consulta…", "bot");
     try {
@@ -52,14 +125,21 @@
           "Content-Type": "application/json",
           apikey: SUPABASE_PUBLISHABLE_KEY
         },
-        body: JSON.stringify({ question }),
+        body: JSON.stringify({
+          question,
+          history: conversationHistory.slice(0, -1).slice(-10),
+          catalog: catalogContext(question)
+        }),
         signal: AbortSignal.timeout(20000)
       });
       const result = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(result.error || "No fue posible responder.");
       typing.textContent = result.answer || "No pude preparar una respuesta.";
+      remember("assistant", typing.textContent);
     } catch (error) {
       typing.textContent = "No pude conectarme en este momento. Puedes continuar la consulta con nuestro equipo.";
+      conversationHistory.pop();
+      saveHistory();
       addContactLink(typing, `Mi pregunta: ${question}`);
       console.error("Error del asistente de MarTextiles:", error);
     }
@@ -105,7 +185,14 @@
     }
     addContactLink(product, `Quisiera confirmar disponibilidad y precio de ${title.textContent}. Mi pregunta fue: ${question}`);
     bubble.appendChild(product);
+    const summary = priceText ? `${title.textContent}. ${priceText}` : title.textContent;
+    remember("assistant", `Encontré esta referencia en el catálogo: ${summary}`);
     messages.scrollTop = messages.scrollHeight;
+  }
+
+  function reply(text) {
+    addMessage(text, "bot");
+    remember("assistant", text);
   }
 
   function answer(question) {
@@ -116,15 +203,15 @@
       return;
     }
     if (/envio|envios|transportadora|cobertura|domicilio/.test(text)) {
-      addMessage("Realizamos envíos nacionales e internacionales. El costo y el tiempo dependen del destino y del pedido; escríbenos por WhatsApp para confirmarlos.", "bot");
+      reply("Realizamos envíos nacionales e internacionales. El costo y el tiempo dependen del destino y del pedido; escríbenos por WhatsApp para confirmarlos.");
     } else if (/pago|pagos|transferencia|contra entrega|contraentrega|banco/.test(text)) {
-      addMessage("El pago contra entrega está disponible a nivel nacional. Para confirmar los medios de pago disponibles para tu pedido, te atienden por WhatsApp.", "bot");
+      reply("El pago contra entrega está disponible a nivel nacional. Para confirmar los medios de pago disponibles para tu pedido, te atienden por WhatsApp.");
     } else if (/mayorista|emprendedor|cantidad minima|minimo|precio/.test(text)) {
-      addMessage("Somos mayoristas y atendemos a emprendedores. El precio y la cantidad mínima dependen de cada referencia; dime el código para buscarla en el catálogo.", "bot");
+      reply("Somos mayoristas y atendemos a emprendedores. El precio y la cantidad mínima dependen de cada referencia; dime el código para buscarla en el catálogo.");
     } else if (/horario|abren|atienden|atencion/.test(text)) {
-      addMessage("Nuestro horario es de lunes a viernes, de 8:20 a. m. a 1:00 p. m. y de 2:00 a 5:00 p. m.; sábados, de 8:20 a. m. a 12:00 p. m. (hora de Colombia).", "bot");
+      reply("Nuestro horario es de lunes a viernes, de 8:20 a. m. a 1:00 p. m. y de 2:00 a 5:00 p. m.; sábados, de 8:20 a. m. a 12:00 p. m. (hora de Colombia).");
     } else if (/garantia|defecto|imperfecto|costura|tela/.test(text)) {
-      addMessage("Las prendas tienen garantía de fábrica por imperfectos en la tela o la costura. Escríbenos por WhatsApp para revisar tu caso y recibir orientación.", "bot");
+      reply("Las prendas tienen garantía de fábrica por imperfectos en la tela o la costura. Escríbenos por WhatsApp para revisar tu caso y recibir orientación.");
     } else {
       askAssistant(question);
     }
@@ -134,11 +221,17 @@
     const value = String(question || "").trim();
     if (!value) return;
     addMessage(value, "user");
+    remember("user", value);
     answer(value);
   }
 
   toggle.addEventListener("click", () => setOpen(panel.hidden));
   closeButton?.addEventListener("click", () => setOpen(false));
+  resetButton?.addEventListener("click", () => {
+    conversationHistory = [{ role: "assistant", content: welcomeMessage }];
+    saveHistory();
+    restoreTranscript();
+  });
   panel.addEventListener("keydown", event => {
     if (event.key === "Escape") setOpen(false);
   });

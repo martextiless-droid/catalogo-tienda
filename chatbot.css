@@ -6,6 +6,9 @@
 .store-chat-panel[hidden]{display:none}
 .store-chat-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;background:#0f172a;color:#fff}
 .store-chat-header div{display:grid;gap:2px}.store-chat-header strong{font-size:1rem}.store-chat-header span{font-size:.78rem;color:#dbe5ee}
+.store-chat-header .store-chat-header-actions{display:flex;align-items:center;gap:7px}
+.store-chat-reset{padding:7px 9px;border:1px solid #ffffff50;border-radius:9px;background:transparent;color:#fff;font-family:inherit;font-size:.75rem;font-weight:650;cursor:pointer}
+.store-chat-reset:hover{background:#ffffff18}
 .store-chat-close{width:38px;height:38px;border:1px solid #ffffff50;border-radius:50%;background:transparent;color:#fff;font-size:1.5rem;cursor:pointer}
 .store-chat-messages{display:flex;flex-direction:column;gap:11px;overflow-y:auto;padding:16px;background:#f8fafc}
 .store-chat-message{max-width:90%;padding:11px 13px;border-radius:14px;font-size:.92rem;line-height:1.45;overflow-wrap:anywhere;white-space:pre-line}
