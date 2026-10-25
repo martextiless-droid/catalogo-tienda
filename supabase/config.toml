@@ -2,3 +2,6 @@ project_id = "nsuxvytaogbnrlopzfgi"
 
 [functions.martextiles-chat]
 verify_jwt = false
+
+[functions.martextiles-whatsapp]
+verify_jwt = false
