@@ -206,7 +206,10 @@
       referencia.textContent = `Referencia ${producto.referencia}`;
       referencia.hidden = false;
     }
-    document.getElementById("product-description").textContent = producto.descripcion || "";
+    window.renderizarDescripcion(
+      document.getElementById("product-description"),
+      producto.descripcion || ""
+    );
     const imagenPrincipal = document.getElementById("product-img");
     const galeria = document.getElementById("gallery");
     galeria.replaceChildren();

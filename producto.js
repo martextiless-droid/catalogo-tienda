@@ -119,7 +119,10 @@ if (waBtn && typeof fbq === 'function') {
         addCartBtn.dataset.name = producto.nombre || `Ref ${producto.id}`;
         addCartBtn.disabled = false;
       }
-      document.getElementById("product-description").textContent = producto.descripcion;
+      window.renderizarDescripcion(
+        document.getElementById("product-description"),
+        producto.descripcion || ""
+      );
 
       // Tabla de precios
       const preciosContainer = document.getElementById("product-prices");
