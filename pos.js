@@ -6,7 +6,7 @@
   const $ = id => document.getElementById(id);
   const money = value => new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(Number(value) || 0);
   const safeText = value => String(value ?? "");
-  const state = { products: [], prices: new Map(), classPrices: new Map(), config: new Map(), stock: new Map(), variants: new Map(), variantStock: new Map(), inventoryEntries: [], entryHistoryError: null, customers: [], cart: new Map(), sales: [], report: null, expenses: [], expensesError: null, selectedReturn: null, selectedCancelSale: null, selectedCodSale: null, cashExpected: 0, customerCredit: 0, customerLookupRequest: 0, customerSearchRequest: 0, matchedCustomerIdentity: null };
+  const state = { products: [], prices: new Map(), classPrices: new Map(), config: new Map(), stock: new Map(), variants: new Map(), variantStock: new Map(), inventoryEntries: [], entryHistoryError: null, customers: [], quotes: [], activeQuoteId: null, cart: new Map(), sales: [], report: null, expenses: [], expensesError: null, selectedReturn: null, selectedCancelSale: null, selectedCodSale: null, cashExpected: 0, customerCredit: 0, customerLookupRequest: 0, customerSearchRequest: 0, matchedCustomerIdentity: null };
   let customerNameSearchTimer = null;
 
   function status(message, error = false) {
@@ -272,9 +272,72 @@
   }
   function parseVariantLines(text,mode){const raw=text.split(/\r?\n/).map(line=>line.trim()).filter(Boolean),items=raw.map((line,index)=>{const parts=line.split("|").map(part=>part.trim()),color=parts[0]||"",talla=parts[1]||"",cantidad=Number(parts[2]||0);if(parts.length>3||!Number.isInteger(cantidad)||cantidad<0)throw new Error(`Revisa la línea ${index+1}; usa color | talla | unidades enteras.`);if(mode==="color"&&(!color||talla)||mode==="talla"&&(!talla||color)||mode==="color_talla"&&(!color||!talla))throw new Error(`Completa los campos de color/talla según el tipo seleccionado (línea ${index+1}).`);return {color:color||null,talla:talla||null,cantidad};}).filter(item=>item.color||item.talla);const keys=new Set();for(const item of items){const key=`${(item.color||"").toLocaleLowerCase("es")}::${(item.talla||"").toLocaleLowerCase("es")}`;if(keys.has(key))throw new Error("Hay una combinación de color/talla repetida.");keys.add(key);}return items;}
   function loadConfigFields(){const id=Number($("config-product").value),product=state.products.find(item=>item.id===id),cfg=state.config.get(id),prices=state.classPrices.get(id)||{};$("config-name").value=product?.nombre||"";$("config-category").value=product?.categoria||"";$("barcode").value=cfg?.codigo_barras||"";$("unit-cost").value=cfg?.costo_unitario??"";for(const level of ["A","B","C","D","E"])$(`edit-price-${level.toLowerCase()}`).value=prices[level]??"";}
+  function quotePayload(){
+    const type=$("delivery-type").value,selected=$("carrier-name").value;
+    return {cliente:{nombre:$('customer-name').value.trim(),documento:$('customer-document').value.trim(),telefono:$('customer-phone').value.trim(),ciudad:$('customer-city').value.trim(),barrio:$('customer-neighborhood').value.trim(),direccion:$('customer-address').value.trim()},nivel_precio:$('customer-price-level').value||null,items:[...state.cart.values()].map(item=>({producto_id:item.product.id,referencia:item.product.referencia,nombre:item.product.nombre||"",variante_id:item.variant?.id||null,color:item.variant?.color||null,talla:item.variant?.talla||null,cantidad:item.quantity,precio_unitario:item.unitPrice})),entrega:{tipo:type,transportadora:selected==="Otra"?$('carrier-other').value.trim():selected,guia:$('tracking-number').value.trim()},observacion:$('sale-note').value.trim()||null};
+  }
+  async function saveQuote(){
+    if(!state.cart.size){status("Agrega productos antes de guardar la cotización.",true);return;}
+    const button=$('save-quote');button.disabled=true;button.textContent="Guardando…";
+    const {data,error}=await db.rpc("pos_guardar_cotizacion",{p_cotizacion:quotePayload(),p_id:state.activeQuoteId});
+    button.disabled=false;button.textContent=state.activeQuoteId?"Actualizar cotización":"Guardar cotización";
+    if(error){status(error.code==="PGRST202"?"Falta ejecutar la migración de cotizaciones en Supabase.":`No se pudo guardar la cotización: ${error.message}`,true);return;}
+    state.activeQuoteId=Number(data.id);$('active-quote-label').hidden=false;$('active-quote-label').textContent=`Editando ${data.numero}. Puedes actualizarla o confirmar la venta.`;
+    status(`Cotización ${data.numero} guardada. No se descontó inventario.`);
+  }
+  async function refreshQuotes(){
+    const list=$('quotes-list');list.replaceChildren();list.append(Object.assign(document.createElement("p"),{className:"empty",textContent:"Cargando cotizaciones…"}));
+    const {data,error}=await db.from("pos_cotizaciones").select("id,numero,estado,cliente,nivel_precio,items,entrega,observacion,subtotal,venta_id,creada_en,actualizada_en").eq("estado","pendiente").order("creada_en",{ascending:false}).limit(200);
+    if(error){list.replaceChildren();list.append(Object.assign(document.createElement("p"),{className:"empty",textContent:error.code==="42P01"||error.code==="PGRST205"?"Ejecuta la migración de cotizaciones en Supabase para activar esta sección.":`No se pudieron cargar cotizaciones: ${error.message}`}));return;}
+    state.quotes=data||[];renderQuotes();
+  }
+  function renderQuotes(){
+    const list=$('quotes-list'),term=normalizeCustomerName($('quote-search').value);list.replaceChildren();
+    const matches=state.quotes.filter(quote=>normalizeCustomerName([quote.numero,quote.cliente?.nombre,quote.cliente?.documento,quote.cliente?.telefono].join(" ")).includes(term));
+    if(!matches.length){list.append(Object.assign(document.createElement("p"),{className:"empty",textContent:term?"No hay cotizaciones pendientes que coincidan.":"No hay cotizaciones pendientes."}));return;}
+    for(const quote of matches){
+      const card=document.createElement("article");card.className="sale-card";const header=document.createElement("div");header.className="sale-summary";
+      const title=document.createElement("strong");title.textContent=`${quote.numero} · ${quote.cliente?.nombre||"Cliente sin nombre"}`;
+      const count=document.createElement("span");const units=(quote.items||[]).reduce((sum,item)=>sum+(Number(item.cantidad)||0),0);count.textContent=`${units} prendas · ${money(quote.subtotal)}`;
+      const date=document.createElement("small");date.textContent=new Date(quote.creada_en).toLocaleString("es-CO");header.append(title,count,date);card.append(header);
+      const detail=document.createElement("p");detail.className="hint";detail.textContent=(quote.items||[]).map(item=>`${item.cantidad} × Ref ${item.referencia}${item.color||item.talla?` · ${[item.color,item.talla].filter(Boolean).join(" · ")}`:""}`).join("; ");card.append(detail);
+      const actions=document.createElement("div");actions.className="sale-actions";const load=document.createElement("button");load.type="button";load.className="btn btn-primary";load.textContent="Traer a venta";load.addEventListener("click",()=>loadQuote(quote));
+      const cancel=document.createElement("button");cancel.type="button";cancel.className="btn btn-secondary";cancel.textContent="Cancelar cotización";cancel.addEventListener("click",()=>cancelQuote(quote));actions.append(load,cancel);card.append(actions);list.append(card);
+    }
+  }
+  function loadQuote(quote){
+    const nextCart=new Map(),warnings=[];
+    for(const line of quote.items||[]){
+      const product=state.products.find(item=>Number(item.id)===Number(line.producto_id));
+      const variant=line.variante_id?(state.variants.get(Number(line.producto_id))||[]).find(item=>Number(item.id)===Number(line.variante_id)):null;
+      if(!product||(line.variante_id&&!variant)){warnings.push(`Ref ${line.referencia} (${line.color||line.talla||"variante"}) ya no está disponible`);continue;}
+      const key=cartKey(product,variant),available=variant?(state.variantStock.get(variant.id)||0):(state.stock.get(product.id)||0),quantity=Math.min(Number(line.cantidad)||0,available);
+      if(quantity<Number(line.cantidad))warnings.push(`Ref ${line.referencia}: ajusté la cantidad a ${quantity} por inventario actual`);
+      if(quantity>0)nextCart.set(key,{product,variant,quantity,unitPrice:Number(line.precio_unitario)||0,manualPrice:true});
+      else warnings.push(`Ref ${line.referencia} no tiene unidades disponibles y no se agregó`);
+    }
+    if(!nextCart.size){status("No se pudo traer la cotización: sus referencias no tienen existencias disponibles.",true);return;}
+    state.cart=nextCart;state.activeQuoteId=Number(quote.id);
+    const client=quote.cliente||{};for(const [field,key] of [["customer-name","nombre"],["customer-document","documento"],["customer-phone","telefono"],["customer-city","ciudad"],["customer-neighborhood","barrio"],["customer-address","direccion"]])$(field).value=client[key]||"";
+    $('customer-price-level').value=quote.nivel_precio||"";state.matchedCustomerIdentity=client.documento||client.telefono?customerIdentity():null;
+    $('customer-match').textContent=client.nombre?"Cliente cargado desde la cotización.":"La cotización no tiene un cliente registrado.";
+    $('delivery-type').value=quote.entrega?.tipo||"recoge_cliente";toggleDeliveryFields();const carrier=quote.entrega?.transportadora||"";const known=[...$('carrier-name').options].some(option=>option.value===carrier);$('carrier-name').value=known?carrier:(carrier?"Otra":"");$('carrier-other').value=known?"":carrier;$('tracking-number').value=quote.entrega?.guia||"";
+    $('shipping-fee').value="";$('shipping-method').value="efectivo";$('shipping-bank').value="";$('shipping-reference').value="";toggleDeliveryFields();$('sale-note').value=quote.observacion||"";
+    $('payment-rows').replaceChildren();addPaymentRow();$('save-quote').textContent="Actualizar cotización";$('active-quote-label').hidden=false;$('active-quote-label').textContent=`Cotización ${quote.numero} cargada. Puedes modificarla y actualizarla o confirmar la venta.`;
+    renderCart();renderProducts();$('product-search').focus();document.querySelector('.tab[data-panel="sale-panel"]').click();
+    status(warnings.length?`Cotización ${quote.numero} cargada con ajustes: ${warnings.join("; ")}.`:`Cotización ${quote.numero} cargada. Revisa los datos y los pagos antes de confirmar la venta.`,warnings.length>0);
+  }
+  async function cancelQuote(quote){
+    if(!window.confirm(`¿Cancelar la cotización ${quote.numero}?`))return;
+    const {error}=await db.rpc("pos_cancelar_cotizacion",{p_cotizacion_id:quote.id});
+    if(error){status(`No se pudo cancelar la cotización: ${error.message}`,true);return;}
+    if(state.activeQuoteId===Number(quote.id)){state.activeQuoteId=null;$('save-quote').textContent="Guardar cotización";$('active-quote-label').hidden=true;}
+    await refreshQuotes();status(`Cotización ${quote.numero} cancelada.`);
+  }
   async function submitSale(){
     const items=[...state.cart.values()].map(item=>({producto_id:item.product.id,variante_id:item.variant?.id||null,cantidad:item.quantity,precio_unitario:item.unitPrice}));
     const payments=paymentData(); if(!items.length){status("Agrega productos al carrito.",true);return;}
+    const quoteId=state.activeQuoteId;
     const button=$("complete-sale");button.disabled=true;button.textContent="Guardando venta…";
     const client={nombre:$("customer-name").value.trim(),documento:$("customer-document").value.trim(),telefono:$("customer-phone").value.trim(),ciudad:$("customer-city").value.trim(),barrio:$("customer-neighborhood").value.trim(),direccion:$("customer-address").value.trim()};
     const level=$("customer-price-level").value||null;
@@ -293,10 +356,12 @@
     }
     button.textContent="Confirmar venta";
     if(error){const detail=error.code==="PGRST202"?"Instala primero la extensión del POS para guardar los datos de entrega y vincular el cliente.":error.message;status(`No se registró la venta: ${detail}`,true);updatePaymentSummary();return;}
+    let quoteWarning="";
+    if(quoteId){const {error:quoteError}=await db.rpc("pos_marcar_cotizacion_vendida",{p_cotizacion_id:quoteId,p_venta_id:data.id});if(quoteError)quoteWarning=` La venta quedó guardada, pero no pude marcar la cotización como vendida: ${quoteError.message}.`;}
     const lines=[...state.cart.values()].map(item=>({reference:item.product.referencia,name:item.product.nombre,variant:item.variant?{color:item.variant.color,talla:item.variant.talla}:null,quantity:item.quantity,price:item.unitPrice}));
     showReceipt(data.numero,lines,totals()+shippingFee,payments,{client,level,delivery,shipping:{valor:shippingFee,medio:shippingMethod,banco:delivery.envio_banco,referencia:delivery.envio_referencia},creditApplied:Number(data.saldo_aplicado)||0,creditRemaining:Number(data.saldo_favor_restante)||0,change:Math.max(0,[...document.querySelectorAll(".payment-row")].filter(row=>row.querySelector(".payment-kind").value==="efectivo").reduce((sum,row)=>sum+(Number(row.querySelector(".cash-received").value)||0),0)-payments.filter(payment=>payment.medio==="efectivo").reduce((sum,payment)=>sum+payment.valor,0))});
-    state.cart.clear();$("payment-rows").replaceChildren();addPaymentRow();state.customerLookupRequest++;state.matchedCustomerIdentity=null;$("customer-name").value="";$("customer-document").value="";$("customer-phone").value="";$("customer-city").value="";$("customer-neighborhood").value="";$("customer-address").value="";$("customer-price-level").value="";$("customer-match").textContent="";state.customerCredit=0;$("customer-credit").textContent=`Saldo a favor disponible: ${money(0)}`;$("delivery-type").value="recoge_cliente";$("carrier-name").value="";$("carrier-other").value="";$("tracking-number").value="";$("shipping-fee").value="";$("shipping-method").value="efectivo";$("shipping-bank").value="";$("shipping-reference").value="";toggleDeliveryFields();$("sale-note").value="";
-    await refreshAll();await refreshCash();status(legacySave?`Venta ${data.numero} guardada e inventario actualizado. La extensión para guardar ficha del cliente y entrega aún no está instalada.`:`Venta ${data.numero} guardada. El inventario se actualizó.`);
+    state.cart.clear();state.activeQuoteId=null;$("save-quote").textContent="Guardar cotización";$("active-quote-label").hidden=true;$("payment-rows").replaceChildren();addPaymentRow();state.customerLookupRequest++;state.matchedCustomerIdentity=null;$("customer-name").value="";$("customer-document").value="";$("customer-phone").value="";$("customer-city").value="";$("customer-neighborhood").value="";$("customer-address").value="";$("customer-price-level").value="";$("customer-match").textContent="";state.customerCredit=0;$("customer-credit").textContent=`Saldo a favor disponible: ${money(0)}`;$("delivery-type").value="recoge_cliente";$("carrier-name").value="";$("carrier-other").value="";$("tracking-number").value="";$("shipping-fee").value="";$("shipping-method").value="efectivo";$("shipping-bank").value="";$("shipping-reference").value="";toggleDeliveryFields();$("sale-note").value="";
+    await refreshAll();await refreshCash();status((legacySave?`Venta ${data.numero} guardada e inventario actualizado. La extensión para guardar ficha del cliente y entrega aún no está instalada.`:`Venta ${data.numero} guardada. El inventario se actualizó.`)+quoteWarning);
     $("receipt-dialog").showModal();
   }
   function showReceipt(number,lines,total,payments,context={}){
@@ -548,7 +613,7 @@
   document.querySelectorAll("[data-password-toggle]").forEach(button=>button.addEventListener("click",()=>{const input=document.getElementById(button.dataset.passwordToggle);const visible=input.type==="password";input.type=visible?"text":"password";button.textContent=visible?"Ocultar":"Mostrar";button.setAttribute("aria-pressed",String(visible));input.focus();}));
   $("login-form").addEventListener("submit",async event=>{event.preventDefault();if(location.protocol==="file:"){status("No se puede iniciar sesión desde file://. En VS Code, abre pos.html con Live Server y entra por http://127.0.0.1:5500/pos.html.",true);return;}status("Validando acceso…");const {data,error}=await db.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});if(error){status(`No se pudo iniciar sesión: ${error.message}`,true);return;}await authorizeSession(data.session);});
   $("logout").addEventListener("click",async()=>{await db.auth.signOut();state.cart.clear();showView(false);status("");});
-  document.querySelectorAll(".tab").forEach(tab=>tab.addEventListener("click",async()=>{document.querySelectorAll(".tab").forEach(item=>item.classList.toggle("active",item===tab));document.querySelectorAll(".panel").forEach(panel=>panel.classList.toggle("active-panel",panel.id===tab.dataset.panel));if(tab.dataset.panel==="history-panel")await loadHistory();if(tab.dataset.panel==="stock-panel")renderStock();if(tab.dataset.panel==="cash-panel")await refreshCash();}));
+  document.querySelectorAll(".tab").forEach(tab=>tab.addEventListener("click",async()=>{document.querySelectorAll(".tab").forEach(item=>item.classList.toggle("active",item===tab));document.querySelectorAll(".panel").forEach(panel=>panel.classList.toggle("active-panel",panel.id===tab.dataset.panel));if(tab.dataset.panel==="history-panel")await loadHistory();if(tab.dataset.panel==="stock-panel")renderStock();if(tab.dataset.panel==="cash-panel")await refreshCash();if(tab.dataset.panel==="quotes-panel")await refreshQuotes();}));
   $("product-search").addEventListener("input",renderProducts);
   $("customer-price-level").addEventListener("change",()=>{for(const item of state.cart.values())if(!item.manualPrice)item.unitPrice=priceFor(item.product,item.quantity);renderCart();});
   $("customer-document").addEventListener("blur",lookupCustomer);
@@ -582,6 +647,10 @@
   $("product-search").addEventListener("keydown",event=>{if(event.key!=="Enter")return;event.preventDefault();const product=findProduct(event.currentTarget.value);if(product){if((state.variants.get(product.id)||[]).length){status(`Ref ${product.referencia} tiene colores o tallas; selecciónalos en la tarjeta del producto.`,true);return;}addToCart(product);event.currentTarget.value="";renderProducts();}else status("No encontramos ese código o referencia.",true);});
   $("clear-search").addEventListener("click",()=>{$("product-search").value="";renderProducts();$("product-search").focus();});
   $("add-payment").addEventListener("click",()=>addPaymentRow());
+  $("save-quote").addEventListener("click",saveQuote);
+  $("open-quotes").addEventListener("click",()=>document.querySelector('[data-panel="quotes-panel"]').click());
+  $("refresh-quotes").addEventListener("click",refreshQuotes);
+  $("quote-search").addEventListener("input",renderQuotes);
   $("complete-sale").addEventListener("click",submitSale);
   $("stock-form").addEventListener("submit",submitStock);
   $("adjust-stock-form").addEventListener("submit",adjustStock);
