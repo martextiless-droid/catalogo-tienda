@@ -6,7 +6,8 @@
   const $ = id => document.getElementById(id);
   const money = value => new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(Number(value) || 0);
   const safeText = value => String(value ?? "");
-  const state = { products: [], prices: new Map(), classPrices: new Map(), config: new Map(), stock: new Map(), variants: new Map(), variantStock: new Map(), inventoryEntries: [], entryHistoryError: null, customers: [], cart: new Map(), sales: [], report: null, expenses: [], expensesError: null, selectedReturn: null, selectedCancelSale: null, selectedCodSale: null, cashExpected: 0, customerCredit: 0, customerLookupRequest: 0, matchedCustomerIdentity: null };
+  const state = { products: [], prices: new Map(), classPrices: new Map(), config: new Map(), stock: new Map(), variants: new Map(), variantStock: new Map(), inventoryEntries: [], entryHistoryError: null, customers: [], cart: new Map(), sales: [], report: null, expenses: [], expensesError: null, selectedReturn: null, selectedCancelSale: null, selectedCodSale: null, cashExpected: 0, customerCredit: 0, customerLookupRequest: 0, customerSearchRequest: 0, matchedCustomerIdentity: null };
+  let customerNameSearchTimer = null;
 
   function status(message, error = false) {
     const box = $("status");
@@ -144,6 +145,20 @@
     else if (!item.manualPrice) item.unitPrice = priceFor(item.product, item.quantity);
     renderCart(); renderProducts();
   }
+  function setQuantityFromInput(id,input){
+    const item=state.cart.get(id);if(!item)return;
+    const available=item.variant?(state.variantStock.get(item.variant.id)||0):(state.stock.get(item.product.id)||0);
+    const value=input.value.trim();if(!value){input.value=String(item.quantity);return;}
+    item.quantity=Math.max(0,Math.min(available,Math.floor(Number(value))||0));
+    if(!item.quantity){state.cart.delete(id);renderCart();renderProducts();return;}
+    if(!item.manualPrice){item.unitPrice=priceFor(item.product,item.quantity);input.closest(".cart-row").querySelector(".price-input").value=String(item.unitPrice);}
+    input.value=String(item.quantity);input.max=String(available);input.title=`Disponible: ${available}`;
+    const row=input.closest(".cart-row");row.querySelector(".cart-meta").textContent=`${money(item.quantity*item.unitPrice)} total`;
+    row.querySelector('[aria-label="Restar unidad"]').disabled=item.quantity<=1;
+    row.querySelector('[aria-label="Sumar unidad"]').disabled=item.quantity>=available;
+    $("cart-count").textContent=String([...state.cart.values()].reduce((n,value)=>n+value.quantity,0));
+    $("sale-total").textContent=money(totals());updatePaymentSummary();renderProducts();
+  }
   function totals() { return [...state.cart.values()].reduce((sum, item) => sum + item.quantity * item.unitPrice, 0); }
   function renderCart() {
     const list = $("cart-items"); list.replaceChildren();
@@ -156,8 +171,12 @@
       info.append(name,meta,price,remove); row.append(info);
       const controls=document.createElement("div"); controls.className="qty-controls";
       const minus=document.createElement("button"); minus.type="button"; minus.setAttribute("aria-label","Restar unidad"); minus.textContent="−"; minus.addEventListener("click",()=>setQuantity(id,item.quantity-1));
-      const qty=document.createElement("span"); qty.textContent=String(item.quantity);
-      const plus=document.createElement("button"); plus.type="button"; plus.setAttribute("aria-label","Sumar unidad"); plus.textContent="+"; plus.disabled=item.quantity >= (item.variant?(state.variantStock.get(item.variant.id)||0):(state.stock.get(item.product.id)||0)); plus.addEventListener("click",()=>setQuantity(id,item.quantity+1));
+      const available=item.variant?(state.variantStock.get(item.variant.id)||0):(state.stock.get(item.product.id)||0);
+      const qty=document.createElement("input");qty.className="quantity-input";qty.type="number";qty.min="1";qty.max=String(available);qty.step="1";qty.inputMode="numeric";qty.value=String(item.quantity);qty.setAttribute("aria-label",`Cantidad de prendas para referencia ${item.product.referencia}`);qty.title=`Disponible: ${available}`;
+      qty.addEventListener("focus",()=>qty.select());
+      qty.addEventListener("change",()=>setQuantityFromInput(id,qty));
+      qty.addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();qty.blur();}});
+      const plus=document.createElement("button"); plus.type="button"; plus.setAttribute("aria-label","Sumar unidad"); plus.textContent="+"; plus.disabled=item.quantity >= available; plus.addEventListener("click",()=>setQuantity(id,item.quantity+1));
       controls.append(minus,qty,plus); row.append(controls); list.append(row);
     }
     $("cart-count").textContent=String([...state.cart.values()].reduce((n,item)=>n+item.quantity,0));
@@ -339,7 +358,37 @@
     row.push(cell);if(row.some(value=>value.trim()))rows.push(row);return rows;
   }  function toggleDeliveryFields(){const carrier=$("delivery-type").value==="transportadora";$("carrier-field").hidden=!carrier;$("tracking-field").hidden=!carrier;$("carrier-other-field").hidden=!carrier||$("carrier-name").value!=="Otra";$("shipping-prepayment").hidden=!carrier;$("shipping-fee").required=false;const shippingFee=Number($("shipping-fee").value)||0;const transfer=carrier&&shippingFee>0&&$("shipping-method").value==="transferencia";$("shipping-transfer-fields").hidden=!transfer;$("shipping-bank").required=transfer;$("shipping-reference").required=transfer;updatePaymentSummary();}
   function customerIdentity(){return `${$("customer-document").value.trim()}|${$("customer-phone").value.trim()}`;}
+  function normalizeCustomerName(value){return String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase("es").trim();}
+  function hideCustomerSuggestions(){const list=$("customer-name-suggestions");if(!list)return;list.hidden=true;list.replaceChildren();$("customer-name").setAttribute("aria-expanded","false");}
+  function renderCustomerSuggestions(customers){
+    const list=$("customer-name-suggestions");list.replaceChildren();
+    for(const customer of customers){
+      const option=document.createElement("button");option.type="button";option.className="customer-name-suggestion";option.setAttribute("role","option");
+      const name=document.createElement("strong");name.textContent=customer.nombre||"Cliente sin nombre";
+      const details=document.createElement("small");details.textContent=[customer.documento&&`CC/NIT ${customer.documento}`,customer.telefono&&`Tel. ${customer.telefono}`,customer.ciudad].filter(Boolean).join(" · ");
+      option.append(name,details);option.addEventListener("pointerdown",event=>event.preventDefault());option.addEventListener("click",()=>selectCustomer(customer));list.append(option);
+    }
+    list.hidden=!customers.length;$("customer-name").setAttribute("aria-expanded",String(customers.length>0));
+  }
+  async function searchCustomersByName(){
+    const query=$("customer-name").value.trim(),normalized=normalizeCustomerName(query),request=++state.customerSearchRequest;
+    if(query.length<2){hideCustomerSuggestions();return;}
+    const cached=state.customers.filter(customer=>customer.activo!==false&&normalizeCustomerName(customer.nombre).includes(normalized));
+    const result=await db.from("pos_clientes").select("id,nombre,documento,telefono,ciudad,barrio,direccion,nivel_precio,actualizado_en,activo").eq("activo",true).ilike("nombre",`%${query}%`).order("nombre").limit(12);
+    if(request!==state.customerSearchRequest||normalizeCustomerName($("customer-name").value)!==normalized)return;
+    const combined=[...cached,...(result.error?[]:(result.data||[]))],unique=new Map();
+    for(const customer of combined){if(customer.activo===false||!customer.nombre)continue;const key=customer.id??`${customer.documento||""}|${customer.telefono||""}|${normalizeCustomerName(customer.nombre)}`;if(!unique.has(key))unique.set(key,customer);}
+    renderCustomerSuggestions([...unique.values()].slice(0,12));
+  }
+  function selectCustomer(customer){
+    state.customerLookupRequest++;state.customerSearchRequest++;clearTimeout(customerNameSearchTimer);hideCustomerSuggestions();
+    $("customer-name").value=customer.nombre||"";$("customer-document").value=customer.documento||"";$("customer-phone").value=customer.telefono||"";$("customer-city").value=customer.ciudad||"";$("customer-neighborhood").value=customer.barrio||"";$("customer-address").value=customer.direccion||"";$("customer-price-level").value=customer.nivel_precio||"";
+    state.matchedCustomerIdentity=customerIdentity();$("customer-match").textContent="Cliente seleccionado; cargué sus datos guardados.";
+    for(const item of state.cart.values())if(!item.manualPrice)item.unitPrice=priceFor(item.product,item.quantity);renderCart();
+    if(customer.documento||customer.telefono){const request=++state.customerLookupRequest;refreshCustomerAccount(request);}
+  }
   function clearCustomerFields({keepFocusField=null}={}){
+    hideCustomerSuggestions();
     for(const id of ["customer-name","customer-document","customer-phone","customer-city","customer-neighborhood","customer-address"]){if(id!==keepFocusField)$(id).value="";}
     $("customer-price-level").value="";$("customer-match").textContent="";state.matchedCustomerIdentity=null;state.customerCredit=0;
     $("customer-credit").textContent=`Saldo a favor disponible: ${money(0)}`;$("customer-account-history").hidden=true;$("customer-account-movements").replaceChildren();
@@ -504,6 +553,11 @@
   $("customer-price-level").addEventListener("change",()=>{for(const item of state.cart.values())if(!item.manualPrice)item.unitPrice=priceFor(item.product,item.quantity);renderCart();});
   $("customer-document").addEventListener("blur",lookupCustomer);
   $("customer-phone").addEventListener("blur",lookupCustomer);
+  $("customer-name").addEventListener("input",()=>{state.customerSearchRequest++;state.customerLookupRequest++;clearTimeout(customerNameSearchTimer);if(state.matchedCustomerIdentity)clearCustomerFields({keepFocusField:"customer-name"});else{$("customer-match").textContent="";state.customerCredit=0;$('customer-credit').textContent=`Saldo a favor disponible: ${money(0)}`;$('customer-account-history').hidden=true;$('customer-account-movements').replaceChildren();updatePaymentSummary();}customerNameSearchTimer=setTimeout(searchCustomersByName,180);});
+  $("customer-name").addEventListener("focus",()=>{if($("customer-name").value.trim().length>=2){clearTimeout(customerNameSearchTimer);customerNameSearchTimer=setTimeout(searchCustomersByName,0);}});
+  $("customer-name").addEventListener("keydown",event=>{if(event.key==="Escape"){hideCustomerSuggestions();return;}if(event.key==="ArrowDown"&&!$("customer-name-suggestions").hidden){event.preventDefault();$("customer-name-suggestions").querySelector("button")?.focus();}});
+  $("customer-name-suggestions").addEventListener("keydown",event=>{if(event.key==="Escape"){hideCustomerSuggestions();$("customer-name").focus();}});
+  document.addEventListener("pointerdown",event=>{if(!$("customer-name-autocomplete").contains(event.target)){state.customerSearchRequest++;clearTimeout(customerNameSearchTimer);hideCustomerSuggestions();}});
   for(const field of [$('customer-document'),$('customer-phone')])field.addEventListener("input",event=>{state.customerLookupRequest++;if(state.matchedCustomerIdentity&&customerIdentity()!==state.matchedCustomerIdentity){clearCustomerFields({keepFocusField:event.currentTarget.id});}else{state.customerCredit=0;$('customer-credit').textContent=`Saldo a favor disponible: ${money(0)}`;$('customer-account-history').hidden=true;$('customer-account-movements').replaceChildren();updatePaymentSummary();}});
   $('clear-customer').addEventListener("click",()=>{state.customerLookupRequest++;clearCustomerFields();$('customer-match').textContent="Datos del cliente borrados. Puedes ingresar otro cliente; el carrito se conserva.";$('customer-document').focus();});
   $('register-advance').addEventListener("click",openAdvance);
