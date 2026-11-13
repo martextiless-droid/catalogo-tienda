@@ -279,11 +279,20 @@
   async function saveQuote(){
     if(!state.cart.size){status("Agrega productos antes de guardar la cotización.",true);return;}
     const button=$('save-quote');button.disabled=true;button.textContent="Guardando…";
-    const {data,error}=await db.rpc("pos_guardar_cotizacion",{p_cotizacion:quotePayload(),p_id:state.activeQuoteId});
-    button.disabled=false;button.textContent=state.activeQuoteId?"Actualizar cotización":"Guardar cotización";
+    const {data,error}=await db.rpc("pos_guardar_cotizacion",{p_cotizacion:quotePayload(),p_id:null});
+    button.disabled=false;button.textContent="Guardar cotización nueva";
     if(error){status(error.code==="PGRST202"?"Falta ejecutar la migración de cotizaciones en Supabase.":`No se pudo guardar la cotización: ${error.message}`,true);return;}
-    state.activeQuoteId=Number(data.id);$('active-quote-label').hidden=false;$('active-quote-label').textContent=`Editando ${data.numero}. Puedes actualizarla o confirmar la venta.`;
-    status(`Cotización ${data.numero} guardada. No se descontó inventario.`);
+    state.activeQuoteId=Number(data.id);$('update-quote').hidden=true;$('active-quote-label').hidden=false;$('active-quote-label').textContent=`${data.numero} guardada. Si llega otro cliente, “Guardar cotización nueva” creará otra independiente.`;
+    status(`Cotización ${data.numero} guardada como nueva. No se descontó inventario.`);
+  }
+  async function updateQuote(){
+    if(!state.activeQuoteId){status("Trae primero una cotización pendiente para actualizarla.",true);return;}
+    const button=$('update-quote');button.disabled=true;button.textContent="Actualizando…";
+    const {data,error}=await db.rpc("pos_guardar_cotizacion",{p_cotizacion:quotePayload(),p_id:state.activeQuoteId});
+    button.disabled=false;button.textContent="Actualizar cotización cargada";
+    if(error){status(`No se pudo actualizar la cotización: ${error.message}`,true);return;}
+    $('active-quote-label').hidden=false;$('active-quote-label').textContent=`${data.numero} actualizada. Puedes confirmar la venta o guardar una cotización nueva.`;
+    status(`Cotización ${data.numero} actualizada. No se descontó inventario.`);
   }
   async function refreshQuotes(){
     const list=$('quotes-list');list.replaceChildren();list.append(Object.assign(document.createElement("p"),{className:"empty",textContent:"Cargando cotizaciones…"}));
@@ -323,7 +332,7 @@
     $('customer-match').textContent=client.nombre?"Cliente cargado desde la cotización.":"La cotización no tiene un cliente registrado.";
     $('delivery-type').value=quote.entrega?.tipo||"recoge_cliente";toggleDeliveryFields();const carrier=quote.entrega?.transportadora||"";const known=[...$('carrier-name').options].some(option=>option.value===carrier);$('carrier-name').value=known?carrier:(carrier?"Otra":"");$('carrier-other').value=known?"":carrier;$('tracking-number').value=quote.entrega?.guia||"";
     $('shipping-fee').value="";$('shipping-method').value="efectivo";$('shipping-bank').value="";$('shipping-reference').value="";toggleDeliveryFields();$('sale-note').value=quote.observacion||"";
-    $('payment-rows').replaceChildren();addPaymentRow();$('save-quote').textContent="Actualizar cotización";$('active-quote-label').hidden=false;$('active-quote-label').textContent=`Cotización ${quote.numero} cargada. Puedes modificarla y actualizarla o confirmar la venta.`;
+    $('payment-rows').replaceChildren();addPaymentRow();$('save-quote').textContent="Guardar como cotización nueva";$('update-quote').hidden=false;$('active-quote-label').hidden=false;$('active-quote-label').textContent=`Cotización ${quote.numero} cargada. Usa “Actualizar cotización cargada” para modificarla; “Guardar como cotización nueva” crea otra.`;
     renderCart();renderProducts();$('product-search').focus();document.querySelector('.tab[data-panel="sale-panel"]').click();
     status(warnings.length?`Cotización ${quote.numero} cargada con ajustes: ${warnings.join("; ")}.`:`Cotización ${quote.numero} cargada. Revisa los datos y los pagos antes de confirmar la venta.`,warnings.length>0);
   }
@@ -331,7 +340,7 @@
     if(!window.confirm(`¿Cancelar la cotización ${quote.numero}?`))return;
     const {error}=await db.rpc("pos_cancelar_cotizacion",{p_cotizacion_id:quote.id});
     if(error){status(`No se pudo cancelar la cotización: ${error.message}`,true);return;}
-    if(state.activeQuoteId===Number(quote.id)){state.activeQuoteId=null;$('save-quote').textContent="Guardar cotización";$('active-quote-label').hidden=true;}
+    if(state.activeQuoteId===Number(quote.id)){state.activeQuoteId=null;$('save-quote').textContent="Guardar cotización nueva";$('update-quote').hidden=true;$('active-quote-label').hidden=true;}
     await refreshQuotes();status(`Cotización ${quote.numero} cancelada.`);
   }
   async function submitSale(){
@@ -360,7 +369,7 @@
     if(quoteId){const {error:quoteError}=await db.rpc("pos_marcar_cotizacion_vendida",{p_cotizacion_id:quoteId,p_venta_id:data.id});if(quoteError)quoteWarning=` La venta quedó guardada, pero no pude marcar la cotización como vendida: ${quoteError.message}.`;}
     const lines=[...state.cart.values()].map(item=>({reference:item.product.referencia,name:item.product.nombre,variant:item.variant?{color:item.variant.color,talla:item.variant.talla}:null,quantity:item.quantity,price:item.unitPrice}));
     showReceipt(data.numero,lines,totals()+shippingFee,payments,{client,level,delivery,shipping:{valor:shippingFee,medio:shippingMethod,banco:delivery.envio_banco,referencia:delivery.envio_referencia},creditApplied:Number(data.saldo_aplicado)||0,creditRemaining:Number(data.saldo_favor_restante)||0,change:Math.max(0,[...document.querySelectorAll(".payment-row")].filter(row=>row.querySelector(".payment-kind").value==="efectivo").reduce((sum,row)=>sum+(Number(row.querySelector(".cash-received").value)||0),0)-payments.filter(payment=>payment.medio==="efectivo").reduce((sum,payment)=>sum+payment.valor,0))});
-    state.cart.clear();state.activeQuoteId=null;$("save-quote").textContent="Guardar cotización";$("active-quote-label").hidden=true;$("payment-rows").replaceChildren();addPaymentRow();state.customerLookupRequest++;state.matchedCustomerIdentity=null;$("customer-name").value="";$("customer-document").value="";$("customer-phone").value="";$("customer-city").value="";$("customer-neighborhood").value="";$("customer-address").value="";$("customer-price-level").value="";$("customer-match").textContent="";state.customerCredit=0;$("customer-credit").textContent=`Saldo a favor disponible: ${money(0)}`;$("delivery-type").value="recoge_cliente";$("carrier-name").value="";$("carrier-other").value="";$("tracking-number").value="";$("shipping-fee").value="";$("shipping-method").value="efectivo";$("shipping-bank").value="";$("shipping-reference").value="";toggleDeliveryFields();$("sale-note").value="";
+    state.cart.clear();state.activeQuoteId=null;$("save-quote").textContent="Guardar cotización nueva";$("update-quote").hidden=true;$("active-quote-label").hidden=true;$("payment-rows").replaceChildren();addPaymentRow();state.customerLookupRequest++;state.matchedCustomerIdentity=null;$("customer-name").value="";$("customer-document").value="";$("customer-phone").value="";$("customer-city").value="";$("customer-neighborhood").value="";$("customer-address").value="";$("customer-price-level").value="";$("customer-match").textContent="";state.customerCredit=0;$("customer-credit").textContent=`Saldo a favor disponible: ${money(0)}`;$("delivery-type").value="recoge_cliente";$("carrier-name").value="";$("carrier-other").value="";$("tracking-number").value="";$("shipping-fee").value="";$("shipping-method").value="efectivo";$("shipping-bank").value="";$("shipping-reference").value="";toggleDeliveryFields();$("sale-note").value="";
     await refreshAll();await refreshCash();status((legacySave?`Venta ${data.numero} guardada e inventario actualizado. La extensión para guardar ficha del cliente y entrega aún no está instalada.`:`Venta ${data.numero} guardada. El inventario se actualizó.`)+quoteWarning);
     $("receipt-dialog").showModal();
   }
@@ -648,6 +657,7 @@
   $("clear-search").addEventListener("click",()=>{$("product-search").value="";renderProducts();$("product-search").focus();});
   $("add-payment").addEventListener("click",()=>addPaymentRow());
   $("save-quote").addEventListener("click",saveQuote);
+  $("update-quote").addEventListener("click",updateQuote);
   $("open-quotes").addEventListener("click",()=>document.querySelector('[data-panel="quotes-panel"]').click());
   $("refresh-quotes").addEventListener("click",refreshQuotes);
   $("quote-search").addEventListener("input",renderQuotes);
