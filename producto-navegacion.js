@@ -11,6 +11,16 @@
     return String(valor).replace(/^ref\s*:?\s*/i, "").trim().toLocaleUpperCase("es");
   }
 
+  function normalizarCategoria(valor){return String(valor||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().toLowerCase();}
+
+  async function agregarCategoriasAlPie(cliente){
+    const {data,error}=await cliente.from("catalogo_categorias").select("nombre").eq("activa",true).order("orden").order("nombre");
+    if(error){console.warn("No se cargaron las categorías del catálogo:",error.message);return;}
+    const nav=document.querySelector(".footer-links");if(!nav)return;
+    const conocidas=new Set(Array.from(nav.querySelectorAll('a[href*="cat="]')).map(link=>{try{return normalizarCategoria(new URL(link.href,location.href).searchParams.get("cat"));}catch{return "";}}));
+    for(const category of data||[]){const normalized=normalizarCategoria(category.nombre);if(conocidas.has(normalized))continue;const link=document.createElement("a");link.href=`index.html?cat=${encodeURIComponent(normalized)}`;link.textContent=category.nombre;nav.appendChild(link);conocidas.add(normalized);}
+  }
+
   async function cargarNavegacion() {
     const lista = new Map();
     try {
@@ -32,6 +42,7 @@
 
     try {
       const cliente = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      await agregarCategoriasAlPie(cliente);
       const { data, error } = await cliente
         .from("productos")
         .select("id, referencia, nombre")

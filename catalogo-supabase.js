@@ -9,6 +9,10 @@
     return String(valor || "").replace(/^ref(?:erencia)?\s*[:#]?\s*/i, "").trim().toLowerCase();
   }
 
+  function normalizarCategoria(valor) {
+    return String(valor||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().toLowerCase();
+  }
+
   function referenciasLocales() {
     return new Map(Array.from(galeria.querySelectorAll(".product"), tarjeta => {
       const titulo = tarjeta.querySelector("h3");
@@ -70,17 +74,28 @@
 
   function aplicarFiltroActual() {
     const parametros = new URLSearchParams(window.location.search);
-    const categoria = (parametros.get("cat") || "all").toLowerCase();
-    const subcategoria = (parametros.get("subcat") || "all").toLowerCase();
+    const categoria = normalizarCategoria(parametros.get("cat") || "all");
+    const subcategoria = normalizarCategoria(parametros.get("subcat") || "all");
 
     galeria.querySelectorAll(".product").forEach(tarjeta => {
       if (!tarjeta.dataset.supabaseProduct) return;
-      const categoriaProducto = (tarjeta.dataset.cat || "").toLowerCase();
-      const subcategoriaProducto = (tarjeta.dataset.subcat || "").toLowerCase();
+      const categoriaProducto = normalizarCategoria(tarjeta.dataset.cat || "");
+      const subcategoriaProducto = normalizarCategoria(tarjeta.dataset.subcat || "");
       const coincideCategoria = categoria === "all" || categoriaProducto === categoria;
       const coincideSubcategoria = categoria !== "pijamas" || subcategoria === "all" || subcategoriaProducto === subcategoria;
       tarjeta.style.display = coincideCategoria && coincideSubcategoria ? "" : "none";
     });
+  }
+
+  async function cargarCategoriasCatalogo(){
+    const {data,error}=await cliente.from("catalogo_categorias").select("nombre").eq("activa",true).order("orden").order("nombre");
+    if(error){console.warn("No se pudieron cargar las categorías del catálogo:",error.message);return;}
+    const categorias=data||[],select=document.getElementById("catalog-category"),selected=normalizarCategoria(new URLSearchParams(location.search).get("cat")||"all");
+    if(select){select.replaceChildren(new Option("Todas las categorías","all"));for(const category of categorias)select.add(new Option(category.nombre,normalizarCategoria(category.nombre)));if(Array.from(select.options).some(option=>option.value===selected))select.value=selected;select.dispatchEvent(new Event("change",{bubbles:true}));}
+    for(const nav of document.querySelectorAll(".catbar,.footer-links")){
+      const known=new Set(Array.from(nav.querySelectorAll('a[href*="cat="]')).map(link=>{try{return normalizarCategoria(new URL(link.href,location.href).searchParams.get("cat"));}catch{return "";}}));
+      for(const category of categorias){const value=normalizarCategoria(category.nombre);if(known.has(value))continue;const link=document.createElement("a");link.className=nav.classList.contains("catbar")?"cat-link":"";link.href=`index.html?cat=${encodeURIComponent(value)}`;link.textContent=category.nombre;nav.appendChild(link);known.add(value);}
+    }
   }
 
   async function cargarProductosPublicados() {
@@ -136,7 +151,7 @@
     aplicarFiltroActual();
   }
 
-  cargarProductosPublicados().catch(error => {
+  Promise.all([cargarCategoriasCatalogo(),cargarProductosPublicados()]).catch(error => {
     console.error("No se pudieron cargar los productos publicados desde Supabase:", error);
   });
 })();

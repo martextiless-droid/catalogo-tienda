@@ -6,7 +6,7 @@
   const $ = id => document.getElementById(id);
   const money = value => new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(Number(value) || 0);
   const safeText = value => String(value ?? "");
-  const state = { products: [], prices: new Map(), classPrices: new Map(), config: new Map(), stock: new Map(), variants: new Map(), variantStock: new Map(), inventoryEntries: [], entryHistoryError: null, customers: [], quotes: [], activeQuoteId: null, cart: new Map(), sales: [], report: null, expenses: [], expensesError: null, selectedReturn: null, selectedCancelSale: null, selectedCodSale: null, cashExpected: 0, customerCredit: 0, customerLookupRequest: 0, customerSearchRequest: 0, matchedCustomerIdentity: null };
+  const state = { products: [], prices: new Map(), classPrices: new Map(), config: new Map(), stock: new Map(), variants: new Map(), variantStock: new Map(), inventoryEntries: [], entryHistoryError: null, customers: [], categories: [], quotes: [], activeQuoteId: null, cart: new Map(), sales: [], report: null, expenses: [], expensesError: null, selectedReturn: null, selectedCancelSale: null, selectedCodSale: null, cashExpected: 0, customerCredit: 0, customerLookupRequest: 0, customerSearchRequest: 0, matchedCustomerIdentity: null };
   let customerNameSearchTimer = null;
 
   function status(message, error = false) {
@@ -33,6 +33,7 @@
   }
   async function refreshAll() {
     status("Cargando referencias e inventario…");
+    await refreshCategoryOptions();
     const [productResult, priceResult, classPriceResult, configResult, movementResult, variantResult, entryResult, customerResultInitial] = await Promise.all([
       db.from("productos").select("id,referencia,nombre,categoria,imagen_url,imagenes_url,eliminado").eq("eliminado", false).order("referencia"),
       db.from("precios").select("producto_id,cantidad_minima,precio_unitario").order("cantidad_minima"),
@@ -242,6 +243,31 @@
       if (previous) select.value=previous;
     }
     loadConfigFields();loadVariantEditor();fillVariantSelects();
+  }
+  async function refreshCategoryOptions(selectedName=null,targetSelect=null){
+    const {data,error}=await db.from("catalogo_categorias").select("nombre").eq("activa",true).order("orden").order("nombre");
+    if(!error)state.categories=data||[];
+    for(const select of document.querySelectorAll("[data-category-select]")){
+      const current=select===targetSelect?(selectedName||""):select.value;
+      const first=Array.from(select.options).find(option=>option.value==="")||new Option("Seleccionar","");
+      const fallback=Array.from(select.options).filter(option=>option.value&&option.value!=="__create_category__");
+      select.replaceChildren(first);
+      const categories=state.categories.length?state.categories:fallback.map(option=>({nombre:option.value,label:option.textContent}));
+      for(const category of categories)select.add(new Option(category.label||category.nombre,category.nombre));
+      select.add(new Option("＋ Crear categoría nueva…","__create_category__"));
+      if(current&&Array.from(select.options).some(option=>option.value===current))select.value=current;
+      select.dataset.previous=select.value;
+    }
+    return error;
+  }
+  async function handleCategorySelect(event){
+    const select=event.currentTarget;if(select.value!=="__create_category__"){select.dataset.previous=select.value;return;}
+    const previous=select.dataset.previous||"",name=window.prompt("Nombre de la nueva categoría:");
+    if(!name?.trim()){select.value=previous;return;}
+    const {data,error}=await db.rpc("catalogo_crear_categoria",{p_nombre:name.trim()});
+    if(error){select.value=previous;status(`No se pudo crear la categoría: ${error.message}. Ejecuta primero la migración de categorías en Supabase.`,true);return;}
+    await refreshCategoryOptions(data?.nombre||name.trim(),select);
+    status(`Categoría “${data?.nombre||name.trim()}” creada y seleccionada.`);
   }
   function fillVariantSelects(){
     for(const [productId,variantId,fieldId] of [["stock-product","stock-variant","stock-variant-field"],["adjust-stock-product","adjust-stock-variant","adjust-variant-field"]]){
@@ -668,6 +694,7 @@
   $("customer-edit-form").addEventListener("submit",saveCustomer);
   $("delete-customer").addEventListener("click",deleteCustomer);
   $("new-reference-form").addEventListener("submit",createReference);
+  document.querySelectorAll("[data-category-select]").forEach(select=>select.addEventListener("change",handleCategorySelect));
   $("configure-variants-form").addEventListener("submit",saveVariants);
   $("config-form").addEventListener("submit",saveConfig);
   $("import-prices").addEventListener("click",importClassPrices);

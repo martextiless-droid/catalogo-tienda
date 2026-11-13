@@ -18,6 +18,9 @@
     #producto-panel[hidden], #gestion-panel[hidden] { display:none; }
     #cerrar-sesion { float:right; }
     label { display:block; margin:.9rem 0; font-weight:600; }
+    .password-control { display:flex; gap:.5rem; max-width:620px; }
+    .password-control input { flex:1; min-width:0; }
+    .password-toggle { white-space:nowrap; padding:.5rem .8rem; border:1px solid var(--line); border-radius:7px; background:#edf3f0; color:#24342e; cursor:pointer; font:600 .9rem Arial,sans-serif; }
     input, select, textarea { display:block; width:100%; max-width:620px; border:1px solid #cbd5d0; border-radius:7px; padding:.7rem .75rem; margin-top:.35rem; font:inherit; background:#fff; }
     input:focus, select:focus, textarea:focus { outline:2px solid #83c8b2; border-color:var(--brand); }
     button { border:0; border-radius:7px; padding:.68rem 1rem; cursor:pointer; font:600 .92rem Arial,sans-serif; background:var(--brand); color:#fff; }
@@ -61,13 +64,14 @@
     <h2>Acceso administrador</h2>
     <form id="login-form">
       <label>Correo<input id="login-email" type="email" autocomplete="username" required></label>
-      <label>Contraseña<input id="login-password" type="password" autocomplete="current-password" required></label>
+      <label>Contraseña<span class="password-control"><input id="login-password" type="password" autocomplete="current-password" required><button class="password-toggle" type="button" data-password-toggle="login-password" aria-pressed="false">Mostrar</button></span></label>
       <button type="submit">Iniciar sesión</button>
     </form>
   </section>
 
   <section id="gestion-panel" hidden>
     <button id="cerrar-sesion" type="button">Cerrar sesión</button>
+    <p><a href="pos.html">Abrir punto de venta táctil</a></p>
     <h2>Productos existentes</h2>
     <p class="nota">¿Aún tienes referencias del catálogo anterior? Impórtalas una vez para poder editarlas aquí junto con sus fotos y precios. Se conservarán sus imágenes actuales y no se duplicarán las referencias ya registradas.</p>
     <button id="importar-referencias-antiguas" type="button" class="secondary">Incorporar referencias antiguas</button>
@@ -87,13 +91,13 @@
       <label>Referencia<input type="text" id="referencia" required></label>
       <label>Nombre<input type="text" id="nombre" required></label>
       <label>Categoría
-        <select id="categoria" required>
+        <select id="categoria" data-category-select required>
           <option value="">Seleccionar</option>
           <option value="pijamas">Pijamas</option>
           <option value="Niños">Niños</option>
           <option value="Niñas">Niñas</option>
           <option value="Joggers">Joggers</option>
-          <option value="Basicas">Básicas</option>
+          <option value="Basicas">Básicas</option><option value="__create_category__">＋ Crear categoría nueva…</option>
         </select>
       </label>
       <label>Subcategoría
@@ -126,3 +130,6 @@
   <script src="admin-producto.js"></script>
 </body>
 </html>
+
+
+

@@ -9,6 +9,7 @@
   const productoPanel = document.getElementById("producto-panel");
   const loginForm = document.getElementById("login-form");
   const formulario = document.getElementById("producto-form");
+  const selectorCategoria = document.getElementById("categoria");
   const selectorProducto = document.getElementById("producto-existente");
   const productoSeleccionado = document.getElementById("producto-seleccionado");
   const selectorImagenes = document.getElementById("imagenes");
@@ -21,6 +22,28 @@
   function mostrarEstado(mensaje, tipo = "info") {
     resultado.textContent = mensaje;
     resultado.dataset.tipo = tipo;
+  }
+
+  async function cargarCategorias(seleccion="") {
+    const actual=seleccion||selectorCategoria.value;
+    const {data,error}=await supabaseClient.from("catalogo_categorias").select("nombre").eq("activa",true).order("orden").order("nombre");
+    if(error){console.warn("No se pudieron cargar las categorías administrables:",error.message);if(!Array.from(selectorCategoria.options).some(option=>option.value==="__create_category__"))selectorCategoria.add(new Option("＋ Crear categoría nueva…","__create_category__"));selectorCategoria.dataset.previous=selectorCategoria.value;return;}
+    const placeholder=Array.from(selectorCategoria.options).find(option=>option.value==="")||new Option("Seleccionar","");
+    selectorCategoria.replaceChildren(placeholder);
+    for(const category of data||[])selectorCategoria.add(new Option(category.nombre,category.nombre));
+    selectorCategoria.add(new Option("＋ Crear categoría nueva…","__create_category__"));
+    if(actual&&Array.from(selectorCategoria.options).some(option=>option.value===actual))selectorCategoria.value=actual;
+    selectorCategoria.dataset.previous=selectorCategoria.value;
+  }
+
+  async function crearCategoriaDesdeSelector(){
+    if(selectorCategoria.value!=="__create_category__"){selectorCategoria.dataset.previous=selectorCategoria.value;return;}
+    const anterior=selectorCategoria.dataset.previous||"",nombre=window.prompt("Nombre de la nueva categoría:");
+    if(!nombre?.trim()){selectorCategoria.value=anterior;return;}
+    const {data,error}=await supabaseClient.rpc("catalogo_crear_categoria",{p_nombre:nombre.trim()});
+    if(error){selectorCategoria.value=anterior;mostrarEstado(`No se pudo crear la categoría: ${error.message}. Verifica que ejecutaste la migración de categorías en Supabase.`,"error");return;}
+    await cargarCategorias(data?.nombre||nombre.trim());
+    mostrarEstado(`Categoría “${data?.nombre||nombre.trim()}” lista para asignar al producto.`);
   }
 
   function imagenesDe(producto) {
@@ -134,7 +157,7 @@
     loginPanel.hidden = Boolean(autorizado);
     gestionPanel.hidden = !autorizado;
     productoPanel.hidden = !autorizado;
-    if (autorizado) await cargarProductos();
+    if (autorizado) { await cargarCategorias(); await cargarProductos(); }
     return Boolean(autorizado);
   }
 
@@ -514,8 +537,18 @@
     if (productoEditandoId && selectorProducto.value !== String(productoEditandoId)) cancelarEdicion();
     mostrarProductoSeleccionado();
   });
+  selectorCategoria.addEventListener("change", crearCategoriaDesdeSelector);
   document.getElementById("cancelar-edicion").addEventListener("click", cancelarEdicion);
   formulario.addEventListener("submit", guardarProducto);
+
+  document.querySelectorAll("[data-password-toggle]").forEach(button => button.addEventListener("click", () => {
+    const input = document.getElementById(button.dataset.passwordToggle);
+    const visible = input.type === "password";
+    input.type = visible ? "text" : "password";
+    button.textContent = visible ? "Ocultar" : "Mostrar";
+    button.setAttribute("aria-pressed", String(visible));
+    input.focus();
+  }));
 
   loginForm.addEventListener("submit", async event => {
     event.preventDefault();
@@ -555,3 +588,5 @@
 
   validarSesion().catch(error => mostrarEstado(`No se pudieron cargar los productos: ${error.message}`, "error"));
 })();
+
+
