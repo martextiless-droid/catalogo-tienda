@@ -31,6 +31,16 @@
     await refreshCash();
     $("product-search").focus();
   }
+  async function loadInventoryMovements(){
+    const rows=[];
+    for(let from=0;;from+=1000){
+      const page=await db.from("pos_movimientos_inventario").select("id,producto_id,variante_id,cantidad").order("id",{ascending:true}).range(from,from+999);
+      if(page.error)return page;
+      rows.push(...(page.data||[]));
+      if((page.data||[]).length<1000)break;
+    }
+    return {data:rows,error:null};
+  }
   async function refreshAll() {
     status("Cargando referencias e inventario…");
     await refreshCategoryOptions();
@@ -39,7 +49,7 @@
       db.from("precios").select("producto_id,cantidad_minima,precio_unitario").order("cantidad_minima"),
       db.from("pos_producto_precios_clase").select("producto_id,nivel,precio_unitario"),
       db.from("pos_producto_config").select("producto_id,codigo_barras,costo_unitario"),
-      db.from("pos_movimientos_inventario").select("producto_id,variante_id,cantidad"),
+      loadInventoryMovements(),
       db.from("pos_producto_variantes").select("id,producto_id,color,talla,activo").eq("activo", true),
       db.from("pos_movimientos_inventario").select("id,producto_id,variante_id,tipo,cantidad,nota,creado_en").order("creado_en", { ascending: false }).limit(1000),
       db.from("pos_clientes").select("id,nombre,documento,telefono,ciudad,barrio,direccion,nivel_precio,actualizado_en").eq("activo", true).order("actualizado_en", { ascending: false }).limit(1000)
